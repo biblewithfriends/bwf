@@ -381,7 +381,7 @@
     function single() { document.getElementById('prevVerse').hidden = document.getElementById('nextVerse').hidden = true; }
     document.getElementById('prevVerse').onclick = function () { if (verses.length) { i = (i - 1 + verses.length) % verses.length; show(); } };
     document.getElementById('nextVerse').onclick = function () { if (verses.length) { i = (i + 1) % verses.length; show(); } };
-    var q = '?verse=' + encodeURIComponent(label) + '&b=' + (40 + b) + '&n=' + NAMES[b] + '&c=' + chap;
+    var q = '?verse=' + encodeURIComponent(label) + '&book=' + (40 + b) + '&file=' + NAMES[b] + '&chapter=' + chap;
     fetch(SHEET_URL + q).then(function (r) { return r.json(); }).then(function (d) {
       // a verse picked by hand in the sheet's "Daily Bread" tab wins
       if (d && d.verse) { verses = [{ ref: d.reference || label, t: d.verse }]; i = 0; show(); single(); return; }
