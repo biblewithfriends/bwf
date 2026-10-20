@@ -1,7 +1,7 @@
 {
-  "name": "Bible with Friends · CSM",
+  "name": "Bible with Friends",
   "short_name": "Bible w/ Friends",
-  "description": "Christian students at CSM reading the Bible together.",
+  "description": "Read the Bible with friends.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
