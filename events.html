@@ -148,12 +148,12 @@
   .signup{background:var(--white);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
   .signup .fhead{font-weight:700;font-size:1.05rem}
   .signup .field{display:flex;flex-direction:column;gap:6px;border:0;padding:0;margin:0;min-width:0}
-  .signup .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+  .signup .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:14px}
   .signup input[type=text],.signup input[type=email],.signup input[type=tel],.signup textarea{font:inherit;font-size:.95rem;min-height:46px;padding:10px 14px;border-radius:10px;border:1.5px solid #C9D3E6;width:100%;color:var(--navy);background:var(--white)}
   .signup textarea{resize:vertical}
   .signup input,.signup textarea{flex:none}
   .signup legend{font-weight:600;font-size:.9rem;padding:0;margin-bottom:6px}
-  .signup .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px 14px}
+  .signup .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:6px 14px}
   .signup .checks label{display:flex;align-items:center;gap:10px;font-weight:400;font-size:.92rem;min-height:36px;cursor:pointer}
   .signup .checks input{width:18px;height:18px;accent-color:var(--navy)}
   .form-status{margin:0;font-size:.92rem;font-weight:500}
@@ -223,7 +223,21 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   html[lang="zh-Hans"] .eyebrow, html[lang="zh-Hans"] .when, html[lang="zh-Hans"] cite{letter-spacing:.06em}
   @media (max-width:860px){ .nav ul{order:3;width:100%;margin-left:0} .lang{margin-left:auto} }
-  section[id]{scroll-margin-top:88px}
+  section[id]{scroll-margin-top:calc(var(--header-height,72px) + 16px)}
+
+  @media (max-width:520px){
+    .wrap{padding-left:16px;padding-right:16px}
+    .connect-box{padding:24px 12px;gap:24px;border-radius:22px}
+    .signup{padding:16px}
+    .contact a.item{gap:10px;padding:12px;overflow-wrap:anywhere}
+    .signup .checks label{min-height:44px}
+    .signup .checks input{flex-shrink:0}
+    .daily{padding:20px}
+    .scripture{padding:16px}
+    .faith-card{padding:24px 16px}
+    .faith-points li{padding-left:24px}
+    .progress-label{flex-wrap:wrap;gap:4px 12px}
+  }
 </style>
 </head>
 <body>
@@ -623,6 +637,14 @@
   })();
 
   bwfApplyLang(BWF_LANG);
+
+  // Keep section links below the header when navigation wraps or the language changes.
+  var bwfHeader = document.querySelector('header');
+  function bwfUpdateHeaderHeight() {
+    document.documentElement.style.setProperty('--header-height', bwfHeader.offsetHeight + 'px');
+  }
+  bwfUpdateHeaderHeight();
+  new ResizeObserver(bwfUpdateHeaderHeight).observe(bwfHeader);
 
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
