@@ -224,7 +224,6 @@
   .tv-wind{position:absolute;left:0;will-change:transform;top:calc(var(--wl) - 150px);width:300px;height:120px;fill:none;stroke:var(--navy);stroke-width:3;stroke-linecap:round;opacity:0;z-index:0}
   .tv-wind path{stroke-dasharray:90 400;stroke-dashoffset:90}
   @media (prefers-reduced-motion:no-preference){
-    .tv-bob{animation:tv-bob 3.4s ease-in-out infinite}
     .tv-flow.go .tv-sails{animation:tv-billow 6s ease-out both}
     .tv-flow.go .tv-wind{animation:tv-wind-fade 6s ease-out both}
     .tv-flow.go .tv-wind path{animation:tv-gust 1.6s ease-in 3 both}
@@ -722,12 +721,42 @@
     });
   })();
 
-  // ---- Ship intro: the ship sails in from the left and the verse appears in its wake ----
+  // ---- Ship intro: the ship sails in from the left, the verse appears in its wake, and the ship rides the waves ----
   (function () {
     var band = document.querySelector('.tv-flow');
-    if (!band || !('IntersectionObserver' in window) || !window.requestAnimationFrame) return;
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var ship = band.querySelector('.tv-ship'), wind = band.querySelector('.tv-wind');
+    if (!band || !window.requestAnimationFrame) return;
+    var ship = band.querySelector('.tv-ship'), bob = band.querySelector('.tv-bob'), wind = band.querySelector('.tv-wind'), sea = band.querySelector('.tv-sea');
+    if (!ship || !sea) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // The two wave layers (same shapes as the water images): height of the water at x, in px from the band's top
+    var TAU = Math.PI * 2;
+    function waveBack(x) { return 48 + 16 * Math.sin(TAU * x / 800) + 6 * Math.sin(TAU * 3 * x / 800 + 1); }
+    function waveFront(x) { return 50 + 13 * Math.sin(TAU * x / 600 + 2) + 5 * Math.sin(TAU * 2 * x / 600 + .4); }
+    var seaAnim = null;
+    function seaTime() {   // seconds into the wave animation (14 s loop)
+      if (!seaAnim && sea.getAnimations) seaAnim = sea.getAnimations()[0] || null;
+      return seaAnim && seaAnim.currentTime != null ? (seaAnim.currentTime / 1000) % 14 : 0;
+    }
+    function surface(x) {
+      var f = seaTime() / 14, top = sea.offsetTop;
+      var b = waveBack((((x - 800 * f) % 800) + 800) % 800);           // back layer drifts right
+      var fr = waveFront((((x + 600 * f) % 600) + 600) % 600) + 10;    // front layer drifts left
+      return top + Math.min(b, fr);
+    }
+    var shipX = 0, shown = true;   // horizontal offset from the ship's resting place
+    function float() {
+      if (shown) {
+        var w = ship.offsetWidth, h = ship.offsetHeight, cx = ship.offsetLeft + shipX + w / 2;
+        var y = surface(cx), slope = (surface(cx + w * 0.3) - surface(cx - w * 0.3)) / (w * 0.6);
+        var ty = y - h * 0.9 - ship.offsetTop;   // the hull's waterline sits on the water
+        ship.style.transform = 'translate(' + shipX + 'px,' + ty + 'px)';
+        bob.style.transform = 'rotate(' + Math.max(-12, Math.min(12, Math.atan(slope) * 180 / Math.PI)) + 'deg)';
+        if (wind) wind.style.transform = 'translateX(' + (ship.offsetLeft + shipX - 220) + 'px)';
+      }
+      if (!reduce) requestAnimationFrame(float);
+    }
+    float();
+    if (reduce || !('IntersectionObserver' in window)) return;
     function reveal(px) { if (px === null) band.style.removeProperty('--reveal'); else band.style.setProperty('--reveal', px + 'px'); }
     function textRight() {   // right edge of the verse, in px from the band's left side
       var r = 0, b0 = band.getBoundingClientRect().left;
@@ -735,8 +764,7 @@
       return r;
     }
     function start() { return -(ship.offsetLeft + ship.offsetWidth + 30); }   // fully off the left edge
-    band.classList.add('wait');
-    ship.style.transform = 'translateX(' + start() + 'px)'; reveal(-200);
+    band.classList.add('wait'); shipX = start(); reveal(-200);
     var io = new IntersectionObserver(function (es) {
       if (!es.some(function (e) { return e.isIntersecting; })) return;
       io.disconnect(); band.classList.remove('wait'); band.classList.add('go');
@@ -746,13 +774,12 @@
       var extra = Math.max(0, textRight() + 200 - (ship.offsetLeft + to));   // words still to show once the ship stops
       function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
       (function frame(now) {
-        var t = Math.min(1, (now - t0) / dur), p = phone ? t : ease(t), x = from + (to - from) * p;
-        ship.style.transform = 'translateX(' + x + 'px)';
-        if (wind) wind.style.transform = 'translateX(' + (ship.offsetLeft + x - 220) + 'px)';
+        var t = Math.min(1, (now - t0) / dur), p = phone ? t : ease(t);
+        shipX = from + (to - from) * p;
         // the words fade in just behind the ship; as it slows to anchor, the last words fade in too
-        reveal(ship.offsetLeft + x + 20 + extra * Math.pow(p, 3));
+        reveal(ship.offsetLeft + shipX + 20 + extra * Math.pow(p, 3));
         if (t < 1) requestAnimationFrame(frame);
-        else { if (!phone) ship.style.transform = ''; else ship.style.visibility = 'hidden'; band.classList.remove('go'); band.classList.add('done'); reveal(null); }
+        else { if (phone) { shown = false; ship.style.visibility = 'hidden'; } band.classList.remove('go'); band.classList.add('done'); reveal(null); }
       })(t0);
     }, { threshold: 0.35 });
     io.observe(band);
