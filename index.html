@@ -246,6 +246,7 @@
     -webkit-mask-image:linear-gradient(90deg,#000 calc(var(--reveal, -200px) - 160px),transparent var(--reveal, -200px));
     mask-image:linear-gradient(90deg,#000 calc(var(--reveal, -200px) - 160px),transparent var(--reveal, -200px))}
   .tv-a, .tv-b{display:block}
+  .tv-ch{display:inline-block;white-space:pre;will-change:transform}
   .tv-text .tv-b{color:#B0864F}
   .tv-wet .tv-b{color:var(--gold)}
   /* the blue flows like a river: soft current lines drift through it */
@@ -746,6 +747,40 @@
       return top + Math.min(b, fr);
     }
     var shipX = 0, shown = true;   // horizontal offset from the ship's resting place
+    // "dwell in you richly" rides the waves letter by letter, then settles
+    var lines = band.querySelectorAll('.tv-b'), saved = null, chars = [], xs = [], amp = 0, calmFrom = 0;
+    function split() {
+      saved = []; chars = [];
+      lines.forEach(function (b, k) {
+        saved.push(Array.prototype.slice.call(b.childNodes));
+        var txt = b.textContent; b.textContent = ''; chars[k] = [];
+        Array.from(txt).forEach(function (ch) { var sp = document.createElement('span'); sp.className = 'tv-ch'; sp.textContent = ch; b.appendChild(sp); chars[k].push(sp); });
+      });
+      var b0 = band.getBoundingClientRect().left;
+      xs = chars[0].map(function (sp) { var r = sp.getBoundingClientRect(); return r.left - b0 + r.width / 2; });
+      amp = 1;
+    }
+    function unsplit() {   // put the original text back (the language switcher keeps working)
+      if (!saved) return;
+      lines.forEach(function (b, k) { b.textContent = ''; saved[k].forEach(function (n) { b.appendChild(n); }); });
+      saved = null; chars = []; amp = 0;
+    }
+    var relang = false;
+    document.addEventListener('bwf-lang', function () {
+      if (!saved || relang) return;
+      unsplit(); relang = true; bwfApplyLang(BWF_LANG); relang = false;
+    });
+    function floatLetters(now) {
+      if (!saved) return;
+      if (calmFrom) amp = Math.max(0, 1 - (now - calmFrom) / 2500);   // settle gently
+      var rest = sea.offsetTop + 46;
+      xs.forEach(function (x, i) {
+        var y = surface(x), sl = (surface(x + 12) - surface(x - 12)) / 24;
+        var t = 'translateY(' + ((y - rest) * 0.55 * amp).toFixed(2) + 'px) rotate(' + (Math.max(-14, Math.min(14, Math.atan(sl) * 57.3)) * amp).toFixed(2) + 'deg)';
+        chars.forEach(function (row) { if (row[i]) row[i].style.transform = t; });
+      });
+      if (calmFrom && amp === 0) unsplit();
+    }
     function float() {
       if (shown) {
         var w = ship.offsetWidth, h = ship.offsetHeight, cx = ship.offsetLeft + shipX + w / 2;
@@ -755,6 +790,7 @@
         bob.style.transform = 'rotate(' + Math.max(-12, Math.min(12, Math.atan(slope) * 180 / Math.PI)) + 'deg)';
         if (wind) wind.style.transform = 'translateX(' + (ship.offsetLeft + shipX - 220) + 'px)';
       }
+      floatLetters(performance.now());
       if (!reduce) requestAnimationFrame(float);
     }
     float();
@@ -769,7 +805,7 @@
     band.classList.add('wait'); shipX = start(); reveal(-200);
     var io = new IntersectionObserver(function (es) {
       if (!es.some(function (e) { return e.isIntersecting; })) return;
-      io.disconnect(); band.classList.remove('wait'); band.classList.add('go');
+      io.disconnect(); band.classList.remove('wait'); band.classList.add('go'); split();
       var phone = window.matchMedia('(max-width:560px)').matches;
       var t0 = performance.now(), dur = phone ? 7000 : 6500, from = start();
       var to = phone ? band.clientWidth + 30 - ship.offsetLeft : 0;   // phones: sail on past the right edge
@@ -781,7 +817,11 @@
         // the words fade in just behind the ship; as it slows to anchor, the last words fade in too
         reveal(ship.offsetLeft + shipX + 20 + extra * Math.pow(p, 3));
         if (t < 1) requestAnimationFrame(frame);
-        else { if (phone) { shown = false; ship.style.visibility = 'hidden'; } band.classList.remove('go'); band.classList.add('done'); reveal(null); }
+        else {
+          if (phone) { shown = false; ship.style.visibility = 'hidden'; }
+          band.classList.remove('go'); band.classList.add('done'); reveal(null);
+          calmFrom = performance.now() + 3500;   // keep riding the waves a little longer, then settle
+        }
       })(t0);
     }, { threshold: 0.35 });
     io.observe(band);
