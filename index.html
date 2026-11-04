@@ -191,6 +191,14 @@
   .video{background:#000}
   .video img{opacity:0;transition:opacity 1s ease}
   .video img.on{opacity:.92}
+  .cal .cal-list{display:block;width:100%;height:600px;border:0}
+  @media (max-width:700px){ .cal .cal-list{height:520px} }
+  /* Photos never cut off heads: small crops keep the top of the photo; bigger mismatches show the whole photo over a blurred copy */
+  .video img, .ph img{object-position:50% 25%;position:relative;z-index:1}
+  .ph img{position:absolute}
+  .video img.fit, .ph img.fit{object-fit:contain;object-position:50% 50%}
+  .ph-blur{position:absolute;inset:-24px;background:center/cover no-repeat;filter:blur(22px) brightness(.75);opacity:0;transition:opacity 1s ease;z-index:0}
+  .ph-blur.on{opacity:1}
   .ph{position:relative;height:180px;background:#000;overflow:hidden}
   .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
   .ph img.on{opacity:1}
@@ -508,9 +516,29 @@
     function url(id, w) { return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w' + w; }
     function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
     function norm(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+    // Decide how to show a photo in its box so faces are never cut off.
+    function frame(img, pre, src) {
+      var box = img.parentElement.getBoundingClientRect();
+      if (!box.width || !box.height || !pre.naturalWidth) return;
+      var boxR = box.width / box.height, picR = pre.naturalWidth / pre.naturalHeight;
+      // taller than the box (would cut top/bottom) by >8%, or much wider (would cut people at the sides) by >30%
+      var fit = picR < boxR * 0.92 || picR > boxR * 1.3;
+      img.classList.toggle('fit', fit);
+      var blur = img.parentElement.querySelector('.ph-blur');
+      if (!blur) { blur = document.createElement('div'); blur.className = 'ph-blur'; img.parentElement.insertBefore(blur, img); }
+      blur.style.backgroundImage = fit ? 'url("' + src + '")' : 'none';
+      blur.classList.toggle('on', fit);
+      img._bwf = { pre: pre, src: src };
+    }
+    window.addEventListener('resize', function () {
+      clearTimeout(window._bwfFit);
+      window._bwfFit = setTimeout(function () {
+        document.querySelectorAll('.video img, .ph img').forEach(function (im) { if (im._bwf) frame(im, im._bwf.pre, im._bwf.src); });
+      }, 200);
+    });
     function load(img, src, cb) {
       var pre = new Image();
-      pre.onload = function () { img.src = src; img.alt = 'Photo from a Bible with Friends gathering'; requestAnimationFrame(function () { img.classList.add('on'); }); if (cb) cb(true); };
+      pre.onload = function () { frame(img, pre, src); img.src = src; img.alt = 'Photo from a Bible with Friends gathering'; requestAnimationFrame(function () { img.classList.add('on'); }); if (cb) cb(true); };
       pre.onerror = function () { if (cb) cb(false); };
       pre.src = src;
     }
@@ -527,9 +555,10 @@
         var next = function () {
           var src = url(order[k++ % order.length], 1600), pre = new Image();
           pre.onload = function () {
-            if (!hero.classList.contains('on')) { hero.src = src; requestAnimationFrame(function () { hero.classList.add('on'); }); return; }
+            if (!hero.classList.contains('on')) { frame(hero, pre, src); hero.src = src; requestAnimationFrame(function () { hero.classList.add('on'); }); return; }
             hero.classList.remove('on');
-            setTimeout(function () { hero.src = src; hero.classList.add('on'); }, 1000);
+            var bl = hero.parentElement.querySelector('.ph-blur'); if (bl) bl.classList.remove('on');
+            setTimeout(function () { frame(hero, pre, src); hero.src = src; hero.classList.add('on'); }, 1000);
           };
           pre.src = src;
         };
