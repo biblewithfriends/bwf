@@ -9,6 +9,13 @@
 <meta property="og:title" content="Events · Bible with Friends">
 <meta property="og:description" content="Bible studies, worship, home dinners and retreats with Bible with Friends.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://biblewithfriends.github.io/bwf/">
+<meta property="og:image" content="https://biblewithfriends.github.io/bwf/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bible with Friends logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://biblewithfriends.github.io/bwf/og-image.png">
 <link rel="icon" href="favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png?v=4" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=4">
@@ -188,7 +195,7 @@
   .page-head{padding:56px 0 8px}
   .page-head p{color:var(--body);max-width:44rem;margin-top:12px;font-size:1.08rem}
   /* photos start black and fade in */
-  .video{background:#000}
+  .video{background:var(--navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='20 3 114 90'%3E%3Cpath d='M36.6 8.3 L68.2 19.4 Q72 20.7 72 24.7 L72 70 Q72 74 68 74.8 L42 79.8 C36.5 81.4 31.5 84.4 27.6 87.6 C25.4 89.4 23.2 88.3 24.4 86.4 C27.6 82.4 30 78.5 30 70 L30 13 Q30 6 36.6 8.3 Z' fill='%23FFFFFF'/%3E%3Cpath d='M117.4 8.3 L85.8 19.4 Q82 20.7 82 24.7 L82 70 Q82 74 86 74.8 L112 79.8 C117.5 81.4 122.5 84.4 126.4 87.6 C128.6 89.4 130.8 88.3 129.6 86.4 C126.4 82.4 124 78.5 124 70 L124 13 Q124 6 117.4 8.3 Z' fill='%23E8C796'/%3E%3C/svg%3E") center/120px auto no-repeat}
   .video img{opacity:0;transition:opacity 1s ease}
   .video img.on{opacity:.92}
   /* --wl: where the water starts (px from the top of the band). Waves roll in opposite directions. */
@@ -224,7 +231,6 @@
   .tv-wind{position:absolute;left:0;will-change:transform;top:calc(var(--wl) - 150px);width:300px;height:120px;fill:none;stroke:var(--navy);stroke-width:3;stroke-linecap:round;opacity:0;z-index:0}
   .tv-wind path{stroke-dasharray:90 400;stroke-dashoffset:90}
   @media (prefers-reduced-motion:no-preference){
-    .tv-bob{animation:tv-bob 3.4s ease-in-out infinite}
     .tv-flow.go .tv-sails{animation:tv-billow 6s ease-out both}
     .tv-flow.go .tv-wind{animation:tv-wind-fade 6s ease-out both}
     .tv-flow.go .tv-wind path{animation:tv-gust 1.6s ease-in 3 both}
@@ -695,8 +701,17 @@
     var prev = document.getElementById('flPrev'), next = document.getElementById('flNext'), dots = document.getElementById('flDots');
     var count = sec.querySelector('.fl-count'), slides = [];
     function thumb(id) { return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1200'; }
+    var all = [];
+    function isSpanish(f) { return /espa(n|ñ)ol|spanish/i.test(f.title || ''); }
+    function pick(list) {   // match the flyers to the visitor's language; show everything if nothing matches
+      var es = BWF_LANG === 'es', mine = list.filter(function (f) { return isSpanish(f) === es; });
+      return mine.length ? mine : list;
+    }
     function build(list) {
+      all = list || [];
+      list = pick(all);
       if (!list || !list.length) { sec.hidden = true; return; }
+      track.scrollLeft = 0;
       track.textContent = ''; dots.textContent = '';
       list.forEach(function (f, i) {
         f = { id: f.id, title: String(f.title || '').replace(/^\s*[a-z0-9]{1,3}\s*[.)\-_]\s*/i, '').trim() };   // '1 ', 'a. ', 'b) ' prefixes only set the order
@@ -732,6 +747,7 @@
     var ticking = false;
     track.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; update(); }); } });
     window.addEventListener('resize', update);
+    document.addEventListener('bwf-lang', function () { if (all.length) build(all); });
     var cached = null;
     try { cached = JSON.parse(localStorage.getItem('bwf-flyers') || 'null'); } catch (e) {}
     if (cached) build(cached);
