@@ -237,6 +237,23 @@
   .tv-sun svg{width:100%;height:100%;overflow:visible}
   .tv-sun circle{fill:#E8B964}
   .tv-rays{stroke:#D9A24E;stroke-width:5;stroke-linecap:round}
+  /* sky: the cream of the page turns a soft blue toward the horizon, behind the vine */
+  .tv-flow::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--wl) + 30px);z-index:0;
+    background:linear-gradient(to bottom, rgba(214,232,246,0) 0, rgba(214,232,246,0) 110px, #DCEBF7 46%, #C6DEF2 100%)}
+  /* wind: loose leaves drift across the sky, and the leaves on the plants flutter */
+  .tv-vine .blow{opacity:0}
+  @media (prefers-reduced-motion:no-preference){
+    .tv-flow.windy .tv-vine .blow{animation:tv-blow var(--t, 11s) linear var(--dl, 0s) infinite}
+    .tv-flow.windy .tv-vine .blow path{animation:tv-tumble var(--tt, 2.6s) ease-in-out infinite alternate}
+    .tv-flow.windy .tv-vine .sprout .leaf{transform-origin:0 0;animation:tv-flutter 2.4s ease-in-out infinite alternate}
+    .tv-flow.windy .tv-vine .sprout .leaf.l2{animation-duration:3.1s;animation-delay:-1.2s}
+    .tv-flow.windy .tv-vine .tendril{transform-origin:0 0}
+  }
+  @keyframes tv-blow{0%{transform:translate(-8vw,0);opacity:0}6%{opacity:1}
+    25%{transform:translate(22vw,calc(var(--up, 40px) * -1))}50%{transform:translate(52vw,calc(var(--up, 40px) * .4))}
+    75%{transform:translate(82vw,calc(var(--up, 40px) * -.7))}94%{opacity:1}100%{transform:translate(112vw,0);opacity:0}}
+  @keyframes tv-tumble{from{transform:rotate(-70deg)}to{transform:rotate(250deg)}}
+  @keyframes tv-flutter{from{transform:rotate(-5deg)}to{transform:rotate(7deg)}}
   /* the verse is the plant: its words are the roots, the stem and the leaves */
   .tv-vine{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;overflow:visible;pointer-events:none}
   .tv-flow.plant .tv-words{opacity:0}
@@ -857,6 +874,15 @@
       companion(xe + 150 * k, 'sprout', 30 * ks, .6);
       companion(xe + 150 * k + 80 * ks, 'flower', 100 * ks, .42, true);
       companion(xe + 150 * k + 170 * ks, 'young', 60 * ks, .25);
+      // loose leaves for the wind to carry (they only move once the plants have grown)
+      var sky = el('g', {}, svg), top = over + 60, span = Math.max(60, wl - 70 - top);
+      [[.08, 11, 0, 44, 16, 2.4, 0], [.36, 14.5, -5, 30, 13, 3.1, 1], [.62, 12.5, -8.5, 54, 18, 2.1, 0], [.86, 16, -2.5, 26, 12, 2.8, 2], [.5, 18, -12, 36, 15, 3.4, 1]].forEach(function (v, i) {
+        if (phone && i > 2) return;
+        var g = el('g', { class: 'blow', transform: 'translate(0 ' + (top + span * v[0]).toFixed(1) + ')' }, sky), n = v[4] * (phone ? 1.3 : 1.9);
+        var inner = el('g', { class: 'blow' }, g); g.removeAttribute('class');
+        inner.style.setProperty('--t', v[1] + 's'); inner.style.setProperty('--dl', v[2] + 's'); inner.style.setProperty('--up', v[3] + 'px'); inner.style.setProperty('--tt', v[5] + 's');
+        el('path', { d: 'M' + (-n / 2) + ' 0 Q0 ' + (-n * 0.5) + ' ' + (n / 2) + ' 0 Q0 ' + (n * 0.5) + ' ' + (-n / 2) + ' 0', fill: ['#5C8727', '#7FA34A', '#B0864F'][v[6]] }, inner);
+      });
       band.classList.add('plant');
       apply(state === 'wait' || state === 'go' ? 0 : 1);
     }
@@ -874,7 +900,7 @@
       (function frame(now) {
         var t = Math.max(0, Math.min(1, (now - t0) / dur));
         apply(ease(t));
-        if (t < 1) requestAnimationFrame(frame); else state = 'done';
+        if (t < 1) requestAnimationFrame(frame); else { state = 'done'; band.classList.add('windy'); }
       })(performance.now());
     }, { threshold: 0.3 });
     var armed = false; function arm() { if (!armed) { armed = true; io.observe(band); } }
