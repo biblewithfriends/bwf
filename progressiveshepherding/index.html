@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progressive Shepherding · Bible with Friends</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="../favicon.svg?v=4" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png?v=4" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png?v=4">
+<meta name="theme-color" content="#004990">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#004990;--navy-deep:#00376D;--gold:#E8C796;--honey:#B0864F;--gold-text:#7D5A2C;--parchment:#FAF7F0;--line:#EEE8DA;--slate:#5B6B85;--white:#fff;
+  --l1:#B0864F;--l2:#5C8727;--l3:#004990;--l4:#7D5A2C}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--parchment);color:var(--navy);font:400 16px/1.5 Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+header{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.bar-in{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;margin-right:auto}
+.brand .logo{height:38px;width:auto}
+.hbtn{border:1.5px solid var(--line);background:var(--white);border-radius:999px;min-height:40px;padding:0 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--navy)}
+.hbtn:hover{border-color:var(--navy)}
+.hbtn.round{width:40px;padding:0;font-size:17px}
+main{max-width:640px;margin:0 auto;padding:22px 16px 48px}
+.eyebrow{font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-text);margin:0 0 4px}
+h1{font-size:30px;line-height:1.12;margin:0 0 8px;font-weight:700;letter-spacing:-.01em}
+.verse{margin:0 0 18px;color:var(--slate);font-size:14.5px}
+.verse cite{font-style:normal;font-weight:600;color:var(--gold-text);font-size:12px;letter-spacing:.08em;margin-left:4px;white-space:nowrap}
+.sub{color:var(--slate);margin:0 0 14px;font-size:14.5px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:18px}
+/* connect */
+.connect h2{margin:0 0 6px;font-size:20px}
+.connect p{margin:0 0 12px;color:var(--slate);font-size:14.5px}
+.row{display:flex;gap:8px}
+.row input,.form input{flex:1;min-width:0;font:inherit;font-size:15px;padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--white);color:var(--navy)}
+.row input:focus,.form input:focus{outline:none;border-color:var(--navy)}
+.go{background:var(--navy);color:var(--white);border:0;border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer;flex:none}
+.go:hover{background:var(--navy-deep)}
+.go.gold{background:var(--gold);color:var(--navy)}
+.go.gold:hover{background:#EFD9B4}
+.go:disabled{opacity:.55;cursor:default}
+.link{background:none;border:0;padding:0;color:var(--navy);font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.err{color:#A23B2A;font-size:14px;margin:10px 0 0}
+.err:empty{display:none}
+/* people */
+.ppl{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 12px;padding:2px 16px 4px;scrollbar-width:none}
+.ppl::-webkit-scrollbar{display:none}
+.pc{flex:none;display:flex;gap:8px;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--white);color:var(--navy);font-weight:600;cursor:pointer}
+.pc small{color:var(--slate);font-weight:500;font-size:13px}
+.pc.on{background:var(--navy);border-color:var(--navy);color:var(--white)}
+.pc.on small{color:var(--gold)}
+.pc.add{border-style:dashed;color:var(--slate)}
+.form{display:flex;gap:8px;margin-bottom:14px}
+.form[hidden]{display:none}
+/* hero */
+.top{display:flex;gap:16px;align-items:center}
+.ring{width:96px;height:96px;flex:none}
+.rt{fill:none;stroke:var(--line);stroke-width:9}
+.rf{fill:none;stroke:var(--navy);stroke-width:9;stroke-linecap:round;stroke-dasharray:263.9;stroke-dashoffset:263.9;transition:stroke-dashoffset .6s ease}
+.ring text{fill:var(--navy);font:700 21px Poppins,system-ui,sans-serif}
+.msg b{display:block;font-size:19px;line-height:1.25}
+.msg span{color:var(--slate);font-size:14px}
+.stairs{display:flex;gap:6px;align-items:flex-end;margin-top:18px;height:150px}
+.stp{flex:1;border:0;padding:0;background:color-mix(in srgb,var(--c) 14%,var(--white));border-radius:12px 12px 6px 6px;position:relative;overflow:hidden;cursor:pointer;color:var(--navy)}
+.stp i{position:absolute;left:0;right:0;bottom:0;background:var(--c);transition:height .6s ease}
+.stp span{position:absolute;left:0;right:0;top:8px;text-align:center;font-weight:700;font-size:14px;line-height:1.15}
+.stp small{display:block;font-weight:500;font-size:11px;color:var(--slate)}
+.stp em{display:block;font-style:normal;font-size:10.5px;font-weight:600;color:var(--c);letter-spacing:.06em;text-transform:uppercase;margin-top:1px}
+.go.gold:focus-visible{outline-color:var(--navy)}
+.next{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:flex;gap:12px;align-items:center}
+.next div{flex:1;min-width:0}
+.next small{color:var(--slate);display:block;font-size:13px}
+.next b{font-size:16px;font-weight:600}
+/* levels */
+.lv{background:var(--white);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:18px;margin-top:14px;overflow:hidden}
+.lh{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:center;width:100%;padding:14px 14px 12px;cursor:pointer}
+.num{width:34px;height:34px;border-radius:50%;background:var(--c);color:var(--white);display:grid;place-items:center;font-weight:700;flex:none}
+.lt{flex:1;min-width:0}
+.lt b{display:block;font-size:17px;line-height:1.25;font-weight:600}
+.lt small{color:var(--slate);font-size:13px}
+.cnt{font-weight:600;font-size:14px;color:var(--slate)}
+.full .cnt{color:var(--c)}
+.chev{transition:transform .2s;color:var(--slate);font-size:18px}
+.open .chev{transform:rotate(180deg)}
+.pb{height:5px;background:color-mix(in srgb,var(--c) 14%,var(--white))}
+.pb i{display:block;height:100%;width:0;background:var(--c);transition:width .5s ease}
+.body{display:none;padding:6px 8px 10px}
+.open .body{display:block}
+h4{margin:12px 8px 2px;font-size:13px;color:var(--gold-text);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.it{display:flex;gap:12px;align-items:center;padding:10px 8px;border-radius:12px;cursor:pointer;min-height:48px;position:relative}
+.it:hover{background:color-mix(in srgb,var(--c) 7%,var(--white))}
+.it input{position:absolute;opacity:0;width:1px;height:1px}
+.bx{width:26px;height:26px;border-radius:8px;border:2px solid #DCD4C2;flex:none;display:grid;place-items:center;transition:all .15s;background:var(--white)}
+.it input:checked+.bx{background:var(--c);border-color:var(--c)}
+.it input:checked+.bx::after{content:"";width:6px;height:12px;border:solid var(--white);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.nm{flex:1;min-width:0}
+.nm small{display:block;color:var(--slate);font-size:12.5px}
+.nm .when{color:var(--c);font-weight:600}
+.it input:checked~.nm .t{color:var(--slate);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--c) 60%,transparent)}
+.fl{font-size:16px;flex:none}
+.leg{margin-top:22px;color:var(--slate);font-size:13.5px;display:grid;gap:6px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.rs{background:var(--white);border:1px solid var(--line);color:var(--slate);border-radius:999px;padding:9px 14px;cursor:pointer;font-size:14px}
+.rs:hover{border-color:var(--slate)}
+.rs[data-arm]{border-color:#A23B2A;color:#A23B2A}
+.foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);color:var(--slate);font-size:13px;display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.status::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#7FA34A;margin-right:7px;vertical-align:1px}
+.status.off::before{background:#C9A24E}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.it input:focus-visible+.bx{outline:3px solid var(--gold);outline-offset:2px}
+/* dialogs */
+dialog{border:0;border-radius:24px;padding:0;max-width:min(520px,calc(100vw - 24px));width:100%;color:var(--navy);background:var(--white);box-shadow:0 24px 60px rgba(0,30,70,.25)}
+dialog::backdrop{background:rgba(0,40,80,.45)}
+.dlg{padding:24px 22px 20px;max-height:calc(100dvh - 40px);overflow:auto}
+.dlg h2{margin:0 0 8px;font-size:22px;line-height:1.2}
+.dlg p{margin:0 0 12px;color:#3E4F6E;font-size:15px}
+.dlg ol{margin:0 0 14px;padding-left:22px;color:#3E4F6E;font-size:15px}
+.dlg ol li{margin-bottom:6px}
+.dlg .note{background:var(--parchment);border-radius:14px;padding:12px 14px;font-size:14px;color:#3E4F6E;margin:0 0 16px}
+.dlg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.x{float:right;border:0;background:none;font-size:24px;line-height:1;color:var(--slate);cursor:pointer;padding:4px 6px;margin:-8px -8px 0 0}
+.sprig{display:block;width:56px;height:56px;margin:0 0 8px}
+pre{background:#F4F1E8;border-radius:12px;padding:12px;font-size:11.5px;line-height:1.45;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word;color:#2B3A55;margin:10px 0 0}
+details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
+.hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.share-in{width:100%;font:inherit;font-size:13.5px;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);color:var(--navy);background:var(--parchment)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--navy);color:var(--white);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:20;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+@media (max-width:420px){h1{font-size:26px}.brand .logo{height:32px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="bar-in">
+  <a class="brand" href="../" aria-label="Bible with Friends home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 688 250" class="logo" role="img" aria-label="Bible with Friends"><g transform="translate(-32.949999999999996 32.425) scale(1.95)"><defs><mask id="moh" maskUnits="userSpaceOnUse" x="-10" y="-10" width="180" height="130"><rect x="-10" y="-10" width="180" height="130" fill="#fff"/><path d="" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></mask></defs><g mask="url(#moh)"><path d="M36.6 8.3 L68.2 19.4 Q72 20.7 72 24.7 L72 70 Q72 74 68 74.8 L42 79.8 C36.5 81.4 31.5 84.4 27.6 87.6 C25.4 89.4 23.2 88.3 24.4 86.4 C27.6 82.4 30 78.5 30 70 L30 13 Q30 6 36.6 8.3 Z" fill="#004990" stroke="#004990" stroke-width="3" stroke-linejoin="round"/><path d="M 117.4 8.3 L 85.8 19.4 Q 82 20.7 82 24.7 L 82 70 Q 82 74 86 74.8 L 112 79.8 C 117.5 81.4 122.5 84.4 126.4 87.6 C 128.6 89.4 130.8 88.3 129.6 86.4 C 126.4 82.4 124 78.5 124 70 L 124 13 Q 124 6 117.4 8.3 Z" fill="#E8C796" stroke="#E8C796" stroke-width="3" stroke-linejoin="round"/></g></g><g stroke-linejoin="round" stroke-width="5.5"><path d="M300.414 46.274Q309.14599999999996 46.274 316.10799999999995 50.404Q323.07 54.534000000000006 327.082 62.02700000000001Q331.094 69.52000000000001 331.094 79.432Q331.094 89.226 327.082 96.896Q323.07 104.566 316.049 108.814Q309.02799999999996 113.062 300.414 113.062Q292.03599999999994 113.062 285.72299999999996 109.404Q279.40999999999997 105.746 276.224 100.082V112.0H265.486V24.680000000000007H276.224V59.372Q279.52799999999996 53.59 285.9 49.932Q292.272 46.274 300.414 46.274ZM298.17199999999997 55.596000000000004Q292.272 55.596000000000004 287.25699999999995 58.487Q282.24199999999996 61.378 279.23299999999995 66.86500000000001Q276.224 72.352 276.224 79.55000000000001Q276.224 86.866 279.23299999999995 92.35300000000001Q282.24199999999996 97.84 287.25699999999995 100.731Q292.272 103.622 298.17199999999997 103.622Q304.19 103.622 309.205 100.731Q314.21999999999997 97.84 317.16999999999996 92.35300000000001Q320.12 86.866 320.12 79.432Q320.12 72.116 317.16999999999996 66.688Q314.21999999999997 61.260000000000005 309.205 58.428000000000004Q304.19 55.596000000000004 298.17199999999997 55.596000000000004Z M346.08 29.518Q346.08 26.450000000000003 348.204 24.326Q350.32800000000003 22.201999999999998 353.396 22.201999999999998Q356.346 22.201999999999998 358.411 24.326Q360.476 26.450000000000003 360.476 29.518Q360.476 32.586 358.411 34.71Q356.346 36.834 353.396 36.834Q350.32800000000003 36.834 348.204 34.71Q346.08 32.586 346.08 29.518ZM358.588 47.336V112.0H347.85V47.336Z M414.40200000000004 46.274Q423.134 46.274 430.096 50.404Q437.05800000000005 54.534000000000006 441.07000000000005 62.02700000000001Q445.08200000000005 69.52000000000001 445.08200000000005 79.432Q445.08200000000005 89.226 441.07000000000005 96.896Q437.05800000000005 104.566 430.03700000000003 108.814Q423.016 113.062 414.40200000000004 113.062Q406.024 113.062 399.711 109.404Q393.398 105.746 390.21200000000005 100.082V112.0H379.47400000000005V24.680000000000007H390.21200000000005V59.372Q393.516 53.59 399.88800000000003 49.932Q406.26000000000005 46.274 414.40200000000004 46.274ZM412.16 55.596000000000004Q406.26000000000005 55.596000000000004 401.245 58.487Q396.23 61.378 393.221 66.86500000000001Q390.21200000000005 72.352 390.21200000000005 79.55000000000001Q390.21200000000005 86.866 393.221 92.35300000000001Q396.23 97.84 401.245 100.731Q406.26000000000005 103.622 412.16 103.622Q418.17800000000005 103.622 423.19300000000004 100.731Q428.208 97.84 431.158 92.35300000000001Q434.10800000000006 86.866 434.10800000000006 79.432Q434.10800000000006 72.116 431.158 66.688Q428.208 61.260000000000005 423.19300000000004 58.428000000000004Q418.17800000000005 55.596000000000004 412.16 55.596000000000004Z M472.5760000000001 24.680000000000007V112.0H461.8380000000001V24.680000000000007Z M552.1080000000001 83.68H500.4240000000001Q501.01400000000007 93.238 506.97300000000007 98.607Q512.9320000000001 103.976 521.4280000000001 103.976Q528.3900000000001 103.976 533.0510000000002 100.731Q537.7120000000001 97.486 539.6000000000001 92.05799999999999H551.1640000000001Q548.5680000000001 101.38 540.7800000000001 107.221Q532.9920000000001 113.062 521.4280000000001 113.062Q512.224 113.062 504.9670000000001 108.932Q497.7100000000001 104.802 493.5800000000001 97.191Q489.4500000000001 89.58 489.4500000000001 79.55000000000001Q489.4500000000001 69.52000000000001 493.4620000000001 61.968Q497.4740000000001 54.416000000000004 504.7310000000001 50.345Q511.9880000000001 46.274 521.4280000000001 46.274Q530.6320000000001 46.274 537.7120000000001 50.286Q544.7920000000001 54.298 548.6270000000002 61.319Q552.4620000000001 68.34 552.4620000000001 77.19Q552.4620000000001 80.25800000000001 552.1080000000001 83.68ZM520.9560000000001 55.36Q512.8140000000001 55.36 507.0910000000001 60.552Q501.3680000000001 65.744 500.5420000000001 74.94800000000001H541.3700000000001Q541.3700000000001 68.81200000000001 538.6560000000002 64.387Q535.9420000000001 59.962 531.2810000000002 57.661Q526.6200000000001 55.36 520.9560000000001 55.36Z M291.79999999999995 160.186H278.22999999999996V216.0H267.49199999999996V160.186H259.114V151.336H267.49199999999996V146.734Q267.49199999999996 135.878 273.097 130.863Q278.702 125.848 291.092 125.848V134.816Q284.012 134.816 281.121 137.589Q278.22999999999996 140.36200000000002 278.22999999999996 146.734V151.336H291.79999999999995Z M338.52799999999996 150.156V161.248H335.69599999999997Q317.642 161.248 317.642 180.836V216.0H306.904V151.336H317.642V161.838Q320.474 156.292 325.725 153.224Q330.976 150.156 338.52799999999996 150.156Z M351.74399999999997 133.518Q351.74399999999997 130.45 353.868 128.326Q355.992 126.202 359.06 126.202Q362.01 126.202 364.075 128.326Q366.14 130.45 366.14 133.518Q366.14 136.586 364.075 138.71Q362.01 140.834 359.06 140.834Q355.992 140.834 353.868 138.71Q351.74399999999997 136.586 351.74399999999997 133.518ZM364.252 151.336V216.0H353.514V151.336Z M443.784 187.68H392.1Q392.69 197.238 398.649 202.607Q404.608 207.976 413.10400000000004 207.976Q420.06600000000003 207.976 424.72700000000003 204.731Q429.38800000000003 201.486 431.276 196.058H442.84000000000003Q440.244 205.38 432.456 211.221Q424.668 217.062 413.10400000000004 217.062Q403.90000000000003 217.062 396.64300000000003 212.93200000000002Q389.386 208.802 385.25600000000003 201.191Q381.12600000000003 193.58 381.12600000000003 183.55Q381.12600000000003 173.52 385.13800000000003 165.96800000000002Q389.15000000000003 158.416 396.40700000000004 154.345Q403.66400000000004 150.274 413.10400000000004 150.274Q422.308 150.274 429.38800000000003 154.286Q436.468 158.298 440.303 165.31900000000002Q444.13800000000003 172.34 444.13800000000003 181.19Q444.13800000000003 184.258 443.784 187.68ZM412.632 159.36Q404.49 159.36 398.76700000000005 164.55200000000002Q393.04400000000004 169.744 392.218 178.948H433.04600000000005Q433.04600000000005 172.812 430.332 168.387Q427.618 163.962 422.957 161.661Q418.29600000000005 159.36 412.632 159.36Z M518.832 177.886V216.0H508.212V179.42000000000002Q508.212 169.744 503.374 164.611Q498.536 159.478 490.158 159.478Q481.662 159.478 476.647 164.788Q471.632 170.098 471.632 180.246V216.0H460.894V151.336H471.632V160.54000000000002Q474.818 155.584 480.30499999999995 152.87Q485.792 150.156 492.4 150.156Q504.2 150.156 511.51599999999996 157.29500000000002Q518.832 164.434 518.832 177.886Z M565.7959999999999 150.274Q573.348 150.274 579.838 153.755Q586.328 157.236 589.75 162.9V128.68H600.606V216.0H589.75V203.846Q586.564 209.628 580.31 213.345Q574.0559999999999 217.062 565.678 217.062Q557.064 217.062 550.0429999999999 212.81400000000002Q543.0219999999999 208.566 539.01 200.89600000000002Q534.9979999999999 193.226 534.9979999999999 183.43200000000002Q534.9979999999999 173.52 539.01 166.027Q543.0219999999999 158.534 550.0429999999999 154.404Q557.064 150.274 565.7959999999999 150.274ZM567.802 159.596Q561.784 159.596 556.828 162.428Q551.872 165.26 548.922 170.688Q545.972 176.11599999999999 545.972 183.43200000000002Q545.972 190.86599999999999 548.922 196.353Q551.872 201.84 556.828 204.731Q561.784 207.622 567.802 207.622Q573.8199999999999 207.622 578.835 204.731Q583.85 201.84 586.8 196.353Q589.75 190.86599999999999 589.75 183.55Q589.75 176.234 586.8 170.80599999999998Q583.85 165.378 578.835 162.487Q573.8199999999999 159.596 567.802 159.596Z M617.8340000000001 197.002H628.926Q629.398 201.84 633.469 204.90800000000002Q637.54 207.976 644.148 207.976Q650.284 207.976 653.8240000000001 205.262Q657.364 202.548 657.364 198.418Q657.364 194.17000000000002 653.588 192.10500000000002Q649.812 190.04 641.9060000000001 188.034Q634.708 186.14600000000002 630.165 184.199Q625.622 182.252 622.377 178.417Q619.1320000000001 174.582 619.1320000000001 168.328Q619.1320000000001 163.372 622.0820000000001 159.24200000000002Q625.032 155.112 630.46 152.69299999999998Q635.888 150.274 642.85 150.274Q653.588 150.274 660.1959999999999 155.702Q666.804 161.13 667.2760000000001 170.57H656.538Q656.184 165.496 652.467 162.428Q648.75 159.36 642.496 159.36Q636.714 159.36 633.292 161.83800000000002Q629.87 164.316 629.87 168.328Q629.87 171.514 631.935 173.579Q634.0 175.644 637.127 176.883Q640.254 178.122 645.8 179.656Q652.7620000000001 181.544 657.128 183.373Q661.494 185.202 664.6210000000001 188.86Q667.748 192.518 667.866 198.418Q667.866 203.728 664.9159999999999 207.976Q661.966 212.224 656.597 214.643Q651.2280000000001 217.062 644.266 217.062Q636.832 217.062 630.932 214.525Q625.032 211.988 621.61 207.445Q618.188 202.902 617.8340000000001 197.002Z" fill="#004990" stroke="#004990"/><path d="M611.53092 84.84112 603.0561600000001 112.0H598.3975200000001L591.8556000000001 90.4414L585.3136800000001 112.0H580.6550400000001L572.1307200000001 84.84112H576.7398000000001L582.98436 107.63872L589.7245200000001 84.84112H594.3336L600.9250800000001 107.68828L607.0705200000001 84.84112Z M616.73472 77.35756Q616.73472 76.069 617.6268 75.17692Q618.5188800000001 74.28484 619.80744 74.28484Q621.0464400000001 74.28484 621.9137400000001 75.17692Q622.7810400000001 76.069 622.7810400000001 77.35756Q622.7810400000001 78.64612 621.9137400000001 79.5382Q621.0464400000001 80.43028000000001 619.80744 80.43028000000001Q618.5188800000001 80.43028000000001 617.6268 79.5382Q616.73472 78.64612 616.73472 77.35756ZM621.9880800000001 84.84112V112.0H617.47812V84.84112Z M636.65784 88.55812V104.566Q636.65784 106.5484 637.50036 107.36614Q638.34288 108.18388 640.4244 108.18388H643.74492V112.0H639.6809999999999Q635.91444 112.0 634.03116 110.2654Q632.14788 108.5308 632.14788 104.566V88.55812H628.62912V84.84112H632.14788V78.00184H636.65784V84.84112H643.74492V88.55812Z M675.01728 95.99212V112.0H670.55688V96.63640000000001Q670.55688 92.57248 668.5249200000001 90.41662Q666.49296 88.26076 662.9742 88.26076Q659.40588 88.26076 657.2995800000001 90.49096Q655.1932800000001 92.72116 655.1932800000001 96.98332V112.0H650.68332V75.32560000000001H655.1932800000001V88.7068Q656.5314000000001 86.62528 658.8855000000001 85.4854Q661.2396 84.34552000000001 664.16364 84.34552000000001Q667.23636 84.34552000000001 669.7143599999999 85.65886Q672.19236 86.9722 673.60482 89.59888000000001Q675.01728 92.22556 675.01728 95.99212Z" fill="#B0864F" stroke="#B0864F" stroke-width="2.31"/></g></svg></a>
+  <button class="hbtn" id="shareBtn" hidden>Share link</button>
+  <button class="hbtn round" id="helpBtn" aria-label="How this works">?</button>
+</div></header>
+
+<main>
+<p class="eyebrow">Bible with Friends</p>
+<h1>Progressive Shepherding</h1>
+<p class="verse">Having been rooted and being built up in Him <cite>COLOSSIANS 2:7</cite></p>
+
+<section class="card connect" id="connect" hidden>
+  <h2 id="cTitle">Open your group's link</h2>
+  <p id="cText">Your serving team shares one link, and everyone who opens it sees the same list. If someone sent you a link, open it, or paste it here.</p>
+  <form class="row" id="cForm"><input id="cIn" placeholder="Paste your group's link" autocomplete="off" aria-label="Group link or web app URL"><button class="go" id="cGo">Open</button></form>
+  <p class="err" id="cErr"></p>
+  <p style="margin:14px 0 0;font-size:14.5px;color:var(--slate)">Starting a new group? <button class="link" data-open="setup">Set up your own</button></p>
+</section>
+
+<div id="team" hidden>
+<p class="sub" id="sub"></p>
+<div class="ppl" id="ppl"></div>
+<form class="form" id="form" hidden><input id="nm" maxlength="40" placeholder="Believer's name" autocomplete="off" aria-label="Name"><button class="go" id="fs">Add</button></form>
+
+<div id="app">
+<div class="card">
+ <div class="top">
+  <svg class="ring" viewBox="0 0 100 100" role="img" aria-label="Overall progress"><circle class="rt" cx="50" cy="50" r="42"/><circle class="rf" id="rf" cx="50" cy="50" r="42" transform="rotate(-90 50 50)"/><text x="50" y="58" text-anchor="middle" id="pc">0%</text></svg>
+  <div class="msg"><b id="mh"></b><span id="ms"></span></div>
+ </div>
+ <div class="stairs" id="stairs"></div>
+ <div class="next" id="next"></div>
+</div>
+
+<div id="levels"></div>
+
+<div class="leg">
+ <div>📘 LSM book or booklet</div>
+ <div>📖 Prepare by reading the matching Life Studies with someone who serves you</div>
+ <div>🗣️ Gospel practice, including going out to speak with one person</div>
+</div>
+<div class="tools"><button class="rs" id="rn">Rename</button><button class="rs" id="rs">Reset progress</button><button class="rs" id="rm">Remove person</button></div>
+</div>
+</div>
+
+<div class="foot">
+  <span class="status" id="status" hidden></span>
+  <button class="link" data-open="setup" style="font-weight:500;font-size:13px">Use this for your own group</button>
+</div>
+</main>
+
+<dialog id="intro" aria-labelledby="iT"><div class="dlg">
+  <svg class="sprig" viewBox="0 0 56 56" aria-hidden="true"><ellipse cx="28" cy="46" rx="7" ry="5" fill="#E8B964" stroke="#B0864F" stroke-width="1.5"/><path d="M28 42 C28 30 27 22 28 12" fill="none" stroke="#4A7A1F" stroke-width="3" stroke-linecap="round"/><path d="M28 26 Q16 16 8 22 Q16 30 28 26Z" fill="#5C8727"/><path d="M28 18 Q38 6 48 10 Q42 20 28 18Z" fill="#7FA34A"/></svg>
+  <h2 id="iT">Welcome to Progressive Shepherding</h2>
+  <p>Walk with each believer step by step, from being saved to seeing the key visions, the way a seed takes root and grows.</p>
+  <ol>
+    <li><b>Add a believer</b> you're shepherding.</li>
+    <li><b>Open a level</b> and check off each item as you go through it together.</li>
+    <li><b>Next up</b> always shows the next step for that person.</li>
+  </ol>
+  <p class="note"><b>Shared with your team.</b> Everyone who opens your group's link sees the same list and can update it, so you all know where each believer is. Keep the link within your serving team.</p>
+  <div class="acts"><button class="go gold" id="iGo">Get started</button></div>
+</div></dialog>
+
+<dialog id="setup" aria-labelledby="sT"><div class="dlg">
+  <button class="x" data-close aria-label="Close">×</button>
+  <h2 id="sT">Use this for your own group</h2>
+  <p>Your group's list lives in your own Google Sheet. It takes about five minutes, and there's no password: whoever has your group's link can use it.</p>
+  <ol>
+    <li>Make a new Google Sheet at <b>sheets.new</b>.</li>
+    <li>In the sheet, open <b>Extensions › Apps Script</b>. Delete what's there and paste the backend code.</li>
+    <li>Click <b>Deploy › New deployment</b>, choose <b>Web app</b>, set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then Deploy and allow access.</li>
+    <li>Copy the <b>Web app URL</b>, paste it below and click Connect. You'll get your group's link to share.</li>
+  </ol>
+  <button class="go gold" id="copyCode">Copy backend code</button>
+  <details><summary>See the code</summary><pre id="codeView"></pre></details>
+  <hr class="hr">
+  <form class="row" id="sForm"><input id="sIn" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off" aria-label="Web app URL"><button class="go" id="sGo">Connect</button></form>
+  <p class="err" id="sErr"></p>
+</div></dialog>
+
+<dialog id="share" aria-labelledby="hT"><div class="dlg">
+  <button class="x" data-close aria-label="Close">×</button>
+  <h2 id="hT">Your group's link</h2>
+  <p id="hText">Send this to the people serving with you. Anyone with it can see and update the list, so keep it within your team.</p>
+  <input class="share-in" id="shareIn" readonly aria-label="Group link">
+  <div class="acts" style="margin-top:14px"><button class="go gold" id="copyLink">Copy link</button></div>
+</div></dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="text/plain" id="backendCode">// Progressive Shepherding: backend for your own group
+// ----------------------------------------------------
+// 1. Go to sheets.new to make a new Google Sheet (it will hold your list).
+// 2. In the sheet: Extensions > Apps Script. Delete what's there and paste all of this.
+// 3. Click Deploy > New deployment > Select type: Web app.
+//      Execute as: Me    Who has access: Anyone
+//    Click Deploy, allow access, and copy the Web app URL.
+// 4. Open biblewfriends.org/progressiveshepherding, choose "Set up your own",
+//    paste the Web app URL, and click Connect. You'll get your group's link.
+//    Share that link with your serving team. Anyone with it can see and edit the list.
+
+function doGet(e) { return psGet(e); }
+
+// ===================== Progressive Shepherding =====================
+// Backend for biblewfriends.org/progressiveshepherding
+// Keeps the shared list of believers in a "Shepherding" tab of a Google Sheet.
+// Everyone who opens your group's link reads and updates the same list.
+//
+// The first time someone connects the page to this web app, it creates a private
+// key and gives back your group's link. Only people with that link can see or edit
+// the list. To make a new link (and turn off the old one), run resetShepherdingLink
+// from the editor, then connect the page again.
+
+var PS_TAB = 'Shepherding';
+var PS_HEAD = ['ID', 'Name', 'Progress', 'Next step', 'Updated', 'Created', 'Checked (data)'];
+
+function psGet(e) {
+  var p = (e && e.parameter) || {};
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var key = props.getProperty('PS_KEY');
+    if (p.ps === 'claim') {                       // first connection makes the group's key
+      if (key) return psJson({ ok: false, claimed: true });
+      var lock = LockService.getScriptLock(); lock.waitLock(15000);
+      try {
+        key = props.getProperty('PS_KEY');
+        if (key) return psJson({ ok: false, claimed: true });
+        key = Utilities.getUuid().replace(/-/g, '').slice(0, 22);
+        props.setProperty('PS_KEY', key);
+        psSheet_();
+        return psJson({ ok: true, key: key });
+      } finally { lock.releaseLock(); }
+    }
+    if (!key || p.k !== key) return psJson({ ok: false, error: 'link' });
+    if (p.ps === 'op') {
+      var lock2 = LockService.getScriptLock(); lock2.waitLock(15000);
+      try { psApply_(JSON.parse(p.op)); } finally { lock2.releaseLock(); }
+    }
+    return psJson({ ok: true, people: psRead_() });
+  } catch (err) {
+    return psJson({ ok: false, error: String(err && err.message || err) });
+  }
+}
+
+function resetShepherdingLink() {
+  PropertiesService.getScriptProperties().deleteProperty('PS_KEY');
+  Logger.log('The old link no longer works. Open biblewfriends.org/progressiveshepherding and connect your web app URL again to get a new link. The list itself is kept.');
+}
+
+function psJson(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function psSheet_() {
+  var ss = null;
+  try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (e) {}
+  if (!ss) {                                       // a standalone script makes its own spreadsheet
+    var props = PropertiesService.getScriptProperties(), id = props.getProperty('PS_SHEET_ID');
+    if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
+    if (!ss) { ss = SpreadsheetApp.create('Progressive Shepherding'); props.setProperty('PS_SHEET_ID', ss.getId()); }
+  }
+  var sh = ss.getSheetByName(PS_TAB);
+  if (!sh) {
+    sh = ss.insertSheet(PS_TAB);
+    sh.getRange(1, 1, 1, PS_HEAD.length).setValues([PS_HEAD]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function psRows_(sh) {
+  var n = sh.getLastRow() - 1;
+  return n > 0 ? sh.getRange(2, 1, n, PS_HEAD.length).getValues() : [];
+}
+
+function psRead_() {
+  return psRows_(psSheet_()).filter(function (r) { return r[0]; }).map(function (r) {
+    var d = {}; try { d = JSON.parse(r[6] || '{}'); } catch (e) {}
+    return { id: String(r[0]), name: String(r[1]), d: d };
+  });
+}
+
+function psApply_(op) {
+  var sh = psSheet_(), rows = psRows_(sh), now = new Date();
+  var i = -1;
+  for (var j = 0; j < rows.length; j++) if (String(rows[j][0]) === String(op.id)) { i = j; break; }
+  var name = String(op.name || '').trim().slice(0, 40);
+  if (op.type === 'add') {
+    if (i >= 0 || !name) return;
+    sh.appendRow([String(op.id), name, op.prog || '', op.next || '', now, now, '{}']);
+    return;
+  }
+  if (i < 0) return;
+  var row = i + 2;
+  if (op.type === 'remove') { sh.deleteRow(row); return; }
+  if (op.type === 'rename') { if (name) sh.getRange(row, 2).setValue(name); }
+  else if (op.type === 'set' || op.type === 'reset') {
+    var d = {}; try { d = JSON.parse(rows[i][6] || '{}'); } catch (e) {}
+    if (op.type === 'reset') d = {};
+    else if (op.on) d[String(op.k)] = String(op.date || '').slice(0, 10) || 1;
+    else delete d[String(op.k)];
+    sh.getRange(row, 7).setValue(JSON.stringify(d));
+  }
+  if (op.prog != null) sh.getRange(row, 3).setValue(String(op.prog));
+  if (op.next != null) sh.getRange(row, 4).setValue(String(op.next));
+  sh.getRange(row, 5).setValue(now);
+}
+</script>
+<script>
+(function () {
+const L=[
+{n:"Salvation",sub:"How to be saved and knowing you’re saved",s:"Seed",c:"--l1",h:64,g:[{t:"",i:[["How to be saved"],["Mystery of the Human Life"],["Assurance of Salvation"],["Security of Salvation"],["Joy of Salvation"],["Baptism"],["Consecration","*"]]}]},
+{n:"Growth: Personal",sub:"Basic truths and life practices",s:"Root",c:"--l2",h:92,g:[{t:"",i:[["Precious Blood of Christ","*"],["Calling on the Name of the Lord","*"],["Companionships"],["Functions of the Bible","","light, milk"],["Confession"],["Conscience"],["Sense of Life and Death"],["Mingled Spirit"],["Pray-reading"],["Fellowship","","horizontal and vertical"],["Morning Revival"],["The Fall of Man"],["Human spirit: feeding (1)"],["Human spirit: exercise (2)"],["Human spirit: following (3)"],["Gospel Workshop","#"],["Prayer"],["Judicial Redemption","","Salvation: A Lesson, level one"],["Organic Salvation","","Salvation: A Lesson, level one"]]},
+ {t:"Focused reading of a book of the Bible",i:[["Gospel of John","^"],["Romans","^"],["Genesis 1–6","^"]]}]},
+{n:"Growth: Corporate",sub:"Church-related matters",s:"Grow",c:"--l3",h:120,g:[{t:"",i:[["The Vision of the Church","*"],["Satan’s Strategy Against the Church","*"],["The Ground of the Church","*"],["The Speciality, Generality, and Practicality of the Church Life","*"],["The Practical Expression of the Church","*"],["7 Aspects of the Church in Ephesians"],["Vital Groups"],["GOW"],["Prayer Meeting"],["Lord’s Table Meeting"]]}]},
+{n:"Key Visions",sub:"The big-picture visions",s:"Fruit",c:"--l4",h:148,g:[{t:"",i:[["Vision of God’s Economy"],["Vision of the Lord’s Recovery"],["Vision of the NT Ministry"]]},
+ {t:"Going deeper",i:[["The Glorious Church","*"],["Orthodoxy of the Church","*"],["The Apostles’ Teaching and NT Ministry","*"],["High Peak Truth"]]}]}
+];
+const FL={"*":["📘","LSM book or booklet"],"^":["📖","Prepare with Life Studies"],"#":["🗣️","Gospel practice"]};
+const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const keys=L.map((l,a)=>l.g.flatMap((g,b)=>g.i.map((_,c)=>a+"."+b+"."+c))), all=keys.flat();
+const item=k=>{const[a,b,c]=k.split(".");return L[a].g[b].i[c]};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const BACKEND=$("#backendCode").textContent.replace(/^\n/,"");
+$("#codeView").textContent=BACKEND;
+
+// ---------- connection: the group's link carries the web app and its key ----------
+let conn=null;            // {url, key}
+let people=[], cur=store.get("ps-cur",null), pending=0, mode=null, lastSync=0, offline=false;
+function appUrl(s){s=String(s||"").trim();const m=s.match(/^https:\/\/script\.google\.com\/(?:a\/macros\/[^/]+|macros)\/s\/[\w-]+\/exec/);return m?m[0]:null}
+function fromParams(q){const k=q.get("k");if(!k)return null;const g=q.get("g"),u=q.get("u");
+  const url=g&&/^[\w-]+$/.test(g)?"https://script.google.com/macros/s/"+g+"/exec":appUrl(u);return url?{url,key:k}:null}
+function linkFor(c){const base=location.origin+location.pathname,m=c.url.match(/^https:\/\/script\.google\.com\/macros\/s\/([\w-]+)\/exec$/);
+  return base+"?"+(m?"g="+m[1]:"u="+encodeURIComponent(c.url))+"&k="+encodeURIComponent(c.key)}
+function setConn(c){conn=c;store.set("ps-conn",c);history.replaceState(null,"",linkFor(c))}
+async function call(params){
+  const q=new URLSearchParams(Object.assign({},params,{t:Date.now()}));
+  const r=await fetch(conn.url+"?"+q.toString(),{redirect:"follow"});
+  return r.json();
+}
+
+// ---------- UI ----------
+$("#stairs").innerHTML=L.map((l,a)=>`<button class="stp" data-j="${a}" style="--c:var(${l.c});height:${l.h}px" aria-label="Go to level ${a+1}, ${l.n}"><i id="sf${a}"></i><span>${a+1}<small id="sp${a}">0%</small><em>${l.s}</em></span></button>`).join("");
+$("#levels").innerHTML=L.map((l,a)=>`<section class="lv" id="lv${a}" style="--c:var(${l.c})"><button class="lh" data-lv="${a}" aria-expanded="false"><span class="num">${a+1}</span><span class="lt"><b>${l.n}</b><small>${l.sub}</small></span><span class="cnt" id="cn${a}"></span><span class="chev" aria-hidden="true">⌄</span></button><div class="pb"><i id="bf${a}"></i></div><div class="body">${l.g.map((g,b)=>(g.t?`<h4>${g.t}</h4>`:"")+g.i.map((it,c)=>`<label class="it"><input type="checkbox" data-k="${a}.${b}.${c}"><span class="bx"></span><span class="nm"><span class="t">${it[0]}</span>${it[2]?`<small>${it[2]}</small>`:""}<small class="when" id="w${a}-${b}-${c}"></small></span>${[...(it[1]||"")].map(f=>`<span class="fl" title="${FL[f][1]}">${FL[f][0]}</span>`).join("")}</label>`).join("")).join("")}</div></section>`).join("");
+
+const fmt=v=>{if(typeof v!=="string"||!/^\d{4}-\d\d-\d\d$/.test(v))return"";const d=new Date(v+"T12:00:00");return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:d.getFullYear()==new Date().getFullYear()?undefined:"numeric"})};
+const person=()=>people.find(p=>p.id==cur)||people[0];
+const pct=p=>Math.round(all.filter(k=>p.d[k]).length/all.length*100);
+const nextOf=d=>{for(const ks of keys){const k=ks.find(k=>!d[k]);if(k)return k}return null};
+const summary=d=>({prog:all.filter(k=>d[k]).length+" of "+all.length,next:(k=>k?item(k)[0]:"Finished")(nextOf(d))});
+function setOpen(a,v){const s=$("#lv"+a);s.classList.toggle("open",v);s.querySelector(".lh").setAttribute("aria-expanded",v)}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2600)}
+
+function update(){
+  const p=person();if(!p)return null;const done=p.d;let tot=0,dn=0;
+  L.forEach((l,a)=>{const ks=keys[a],d=ks.filter(k=>done[k]).length,q=Math.round(d/ks.length*100);tot+=ks.length;dn+=d;
+    $("#cn"+a).textContent=d==ks.length?"Done ✓":d+"/"+ks.length;$("#bf"+a).style.width=q+"%";$("#sf"+a).style.height=q+"%";$("#sp"+a).textContent=q+"%";
+    $("#lv"+a).classList.toggle("full",d==ks.length)});
+  const f=dn/tot,pc=Math.round(f*100),nx=nextOf(done);
+  $("#rf").style.strokeDashoffset=263.9*(1-f);$("#pc").textContent=pc+"%";
+  const m=pc==0?["A seed is planted","Start anywhere in Level 1."]:pc<25?["Taking root","Every step counts."]:pc<50?["Sprouting","Keep walking together."]:pc<75?["Growing strong","Past the halfway mark."]:pc<100?["Bearing fruit","The finish line is close."]:["Grown unto maturity","Time for them to shepherd someone else."];
+  $("#mh").textContent=m[0];$("#ms").textContent=dn+" of "+tot+" done. "+m[1];
+  $("#next").innerHTML=nx?`<div><small>Next up in Level ${+nx[0]+1}</small><b>${esc(item(nx)[0])}</b></div><button class="go" data-do="${nx}">Mark done</button>`:"<div><b>Every step is checked off 🎉</b></div>";
+  document.querySelectorAll("[data-k]").forEach(c=>{const v=done[c.dataset.k];c.checked=!!v;$("#w"+c.dataset.k.replace(/\./g,"-")).textContent=v&&fmt(v)?"✓ "+fmt(v):""});
+  chips();return nx;
+}
+function chips(){$("#ppl").innerHTML=people.map(p=>`<button class="pc${p.id==(person()||{}).id?" on":""}" data-p="${esc(p.id)}">${esc(p.name)}<small>${pct(p)}%</small></button>`).join("")+`<button class="pc add" data-add="1">+ Add believer</button>`}
+function disarm(){for(const id of["rm","rs"]){const b=$("#"+id);if(b.dataset.arm){delete b.dataset.arm;b.textContent=id=="rm"?"Remove person":"Reset progress"}}}
+function showForm(m){mode=m;$("#form").hidden=!m;if(m){$("#nm").value=m=="rename"?person().name:"";$("#fs").textContent=m=="rename"?"Save":"Add";$("#nm").focus()}}
+function render(openNext){
+  disarm();const p=person();$("#app").hidden=!p;
+  if(!p){$("#sub").textContent="Add the first believer you're shepherding to get started.";chips();if(!mode)showForm("add");return}
+  if(cur!=p.id){cur=p.id;store.set("ps-cur",cur)}
+  $("#sub").textContent="Shepherding "+p.name+". Check off each step as you go through it together.";
+  const nx=update();if(openNext)L.forEach((_,a)=>setOpen(a,nx?a==+nx[0]:false));
+}
+function status(){const s=$("#status");s.hidden=!conn;if(!conn)return;s.classList.toggle("off",offline);
+  s.textContent=offline?"Can't reach your group's sheet. Changes may not save.":"Shared with your group"+(lastSync?" · updated "+new Date(lastSync).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}):"")}
+function showTeam(on){$("#team").hidden=!on;$("#connect").hidden=on;$("#shareBtn").hidden=!on;status()}
+function showConnect(title,text){showTeam(false);$("#cTitle").textContent=title||"Open your group's link";
+  $("#cText").textContent=text||"Your serving team shares one link, and everyone who opens it sees the same list. If someone sent you a link, open it, or paste it here."}
+
+// ---------- syncing ----------
+function take(list,first){people=list.map(p=>({id:String(p.id),name:String(p.name),d:p.d||{}}));lastSync=Date.now();offline=false;
+  store.set("ps-cache",{url:conn.url,people});showTeam(true);render(first)}
+async function load(first){
+  if(!conn)return;
+  try{const r=await call({ps:"list",k:conn.key});
+    if(!r.ok){if(r.error=="link"){conn=null;store.set("ps-conn",null);showConnect("This link isn't working","It may have been replaced with a new one. Ask your team for the current link, or paste it here.");return}throw new Error(r.error)}
+    if(pending==0)take(r.people,first)}
+  catch(e){offline=true;status();if(first&&!people.length){const c=store.get("ps-cache",null);if(c&&c.url==conn.url){people=c.people;showTeam(true);render(true)}else showTeam(true),render(true)}}
+}
+async function send(op){
+  pending++;
+  try{const r=await call({ps:"op",k:conn.key,op:JSON.stringify(op)});pending--;
+    if(!r.ok)throw new Error(r.error||"Not saved");if(pending==0)take(r.people,false)}
+  catch(e){pending=Math.max(0,pending-1);offline=true;status();toast("That change didn't save. Check your connection and try again.");load(false)}
+}
+function op(type,extra){const p=person();const o=Object.assign({type,id:p.id},extra||{});if(type!="remove"&&type!="rename")Object.assign(o,summary(p.d));send(o)}
+setInterval(()=>{if(conn&&!document.hidden&&pending==0)load(false)},20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&conn&&Date.now()-lastSync>5000)load(false)});
+
+// ---------- actions ----------
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function mark(k,on){const p=person();if(on)p.d[k]=today();else delete p.d[k];update();op("set",{k,on,date:today()})}
+document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.k;if(k)mark(k,e.target.checked)});
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const pp=t.closest("[data-p]");if(pp){cur=pp.dataset.p;store.set("ps-cur",cur);showForm(null);render(true);return}
+  if(t.closest("[data-add]")){showForm(mode=="add"?null:"add");return}
+  const lv=t.closest("[data-lv]");if(lv){setOpen(lv.dataset.lv,!lv.closest(".lv").classList.contains("open"));return}
+  const j=t.closest("[data-j]");if(j){L.forEach((_,a)=>setOpen(a,a==+j.dataset.j));$("#lv"+j.dataset.j).scrollIntoView({behavior:"smooth",block:"start"});return}
+  const d=t.closest("[data-do]");if(d){mark(d.dataset.do,true);return}
+  const o=t.closest("[data-open]");if(o){openDlg(o.dataset.open);return}
+  if(t.closest("[data-close]")){t.closest("dialog").close();return}
+});
+$("#rn").onclick=()=>showForm(mode=="rename"?null:"rename");
+$("#form").onsubmit=e=>{e.preventDefault();const n=$("#nm").value.trim().slice(0,40);if(!n)return;
+  if(mode=="rename"){person().name=n;op("rename",{name:n})}
+  else{const id="p"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);people.push({id,name:n,d:{}});cur=id;store.set("ps-cur",cur);op("add",{name:n})}
+  showForm(null);render(true)};
+function confirmBtn(b,label,ask,go){let t;b.onclick=function(){if(b.dataset.arm){clearTimeout(t);delete b.dataset.arm;b.textContent=label;go()}
+  else{b.dataset.arm=1;b.textContent=ask;t=setTimeout(()=>{b.textContent=label;delete b.dataset.arm},3500)}}}
+confirmBtn($("#rs"),"Reset progress","Tap again to reset for everyone",()=>{person().d={};update();op("reset")});
+confirmBtn($("#rm"),"Remove person","Tap again to remove for everyone",()=>{const p=person();op("remove");people=people.filter(q=>q!==p);cur=people[0]?people[0].id:null;store.set("ps-cur",cur);showForm(null);render(true)});
+
+// ---------- dialogs, connecting, sharing ----------
+function openDlg(id){const d=$("#"+id);if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}}
+document.querySelectorAll("dialog").forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.close()}));
+$("#helpBtn").onclick=()=>openDlg("intro");
+$("#iGo").onclick=()=>{$("#intro").close()};
+$("#intro").addEventListener("close",()=>store.set("ps-intro",1));
+async function copy(text,btn,done){try{await navigator.clipboard.writeText(text);toast(done)}catch(e){const a=document.createElement("textarea");a.value=text;document.body.appendChild(a);a.select();
+  let ok=false;try{ok=document.execCommand("copy")}catch(x){}a.remove();toast(ok?done:"Select and copy it by hand")}}
+$("#copyCode").onclick=e=>copy(BACKEND,e.target,"Backend code copied");
+$("#copyLink").onclick=e=>copy($("#shareIn").value,e.target,"Link copied");
+$("#shareBtn").onclick=()=>{$("#shareIn").value=linkFor(conn);$("#hT").textContent="Your group's link";openDlg("share")};
+async function connect(text,errEl,btn){
+  errEl.textContent="";text=String(text||"").trim();
+  let c=null;try{c=fromParams(new URL(text).searchParams)}catch(e){}
+  if(c){conn=c;btn.disabled=true;await load(true);btn.disabled=false;if(conn){setConn(conn);$("#setup").close();return}errEl.textContent="That link isn't working. Ask your team for the current one.";return}
+  const url=appUrl(text);
+  if(!url){errEl.textContent="Paste a group link, or a web app URL that starts with https://script.google.com/ and ends in /exec.";return}
+  btn.disabled=true;conn={url,key:""};
+  try{const r=await call({ps:"claim"});
+    if(r.ok&&r.key){setConn({url,key:r.key});await load(true);$("#setup").close();$("#shareIn").value=linkFor(conn);$("#hT").textContent="You're set up";openDlg("share")}
+    else if(r.claimed){conn=null;errEl.textContent="This web app is already set up. Ask whoever set it up for your group's link."}
+    else{conn=null;errEl.textContent="That web app didn't answer as expected. Check that it has the Progressive Shepherding code and a new deployment."}}
+  catch(e){conn=null;errEl.textContent="Couldn't reach that web app. Check the URL, and that it's deployed with access set to Anyone."}
+  btn.disabled=false;
+}
+$("#cForm").onsubmit=e=>{e.preventDefault();connect($("#cIn").value,$("#cErr"),$("#cGo"))};
+$("#sForm").onsubmit=e=>{e.preventDefault();connect($("#sIn").value,$("#sErr"),$("#sGo"))};
+
+// ---------- start ----------
+const fromUrl=fromParams(new URLSearchParams(location.search));
+conn=fromUrl||store.get("ps-conn",null);
+if(conn){setConn(conn);const c=store.get("ps-cache",null);if(c&&c.url==conn.url&&c.people){people=c.people;showTeam(true);render(true)}load(true)}
+else showConnect();
+if(!store.get("ps-intro",0))openDlg("intro");
+})();
+</script>
+</body>
+</html>
