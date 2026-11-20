@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overcomers 🧗 · The Daily Climb to Zion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/common.css">
+<link rel="icon" type="image/svg+xml" href="../assets/icons/logo-rounded.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#24402f">
+<meta name="apple-mobile-web-app-title" content="CiB YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png">
+<style>
+  :root { --pix: var(--font-display); --sky: 0; }
+  /* the page warms from morning paper to sunset as you climb */
+  body { min-height: 100vh; overflow-x: hidden; transition: background-color 1s;
+    background-color: hsl(calc(88 - var(--sky) * 62), calc(45% + var(--sky) * 45%), calc(90% - var(--sky) * 4%)); }
+  .scene { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .scene .cl { position: absolute; font-size: 70px; opacity: .5; filter: grayscale(1); animation: drift linear infinite; }
+  .scene .mtn { position: absolute; left: 0; right: 0; bottom: 0; height: 32vh; transition: transform 1.2s; transform: translateY(calc(var(--sky) * 30vh)); }
+  @keyframes drift { from { transform: translateX(-140px); } to { transform: translateX(110vw); } }
+  /* altitude = the y-axis of a graph */
+  .alti { position: fixed; right: 12px; top: 90px; bottom: 70px; width: 46px; z-index: 2; border-left: 3px dotted var(--soft); }
+  .alti::before { content: ""; position: absolute; left: -8px; top: -14px; font-size: 12px; color: var(--ink); }
+  .alti .mark { position: absolute; left: -5px; font: 600 .85rem var(--font-display); white-space: nowrap; transform: translateY(50%); color: var(--soft); }
+  .alti .me { position: absolute; left: -22px; font-size: 28px; transition: bottom 1.2s cubic-bezier(.2,.9,.3,1.2); transform: translateY(50%); }
+  .app { position: relative; z-index: 1; width: min(640px, 100% - 28px); margin: 0 auto; padding: 8px 0 60px; }
+  .title { text-align: center; margin: 24px 0 4px; }
+  .title h1 { display: inline-block; font-size: clamp(2.8rem, 12vw, 4.6rem); margin: 0; padding: 0 12px; }
+  .title .tag { font-weight: 700; margin-top: 4px; color: var(--soft); }
+  .rules { text-align: center; font-weight: 700; color: var(--soft); margin: 8px 0 18px; }
+  .panel { background: var(--paper); border: 1.5px solid var(--line); border-radius: var(--wob); box-shadow: var(--shadow); padding: 22px; }
+  .how { margin: 0; padding-left: 20px; } .how li { margin: 3px 0; }
+  .days { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 16px 0; }
+  .day { border: 1.5px solid var(--line); background: var(--paper); border-radius: var(--wob); padding: 5px 12px; font: 700 .8rem var(--font-body); cursor: pointer; line-height: 1.2; color: var(--ink); }
+  .day small { display: block; font-weight: 400; color: var(--soft); }
+  .day[aria-pressed="true"] { background: var(--ink); color: #fff; } .day[aria-pressed="true"] small { color: #cfd8ff; }
+  .go { width: 100%; font: 600 1.7rem var(--font-display); padding: 15px; background: var(--ink); color: #fff; border: 0; border-radius: var(--wob2); box-shadow: var(--shadow); cursor: pointer; }
+  .go:hover { }
+  .note { text-align: center; font-weight: 700; margin: 10px 0 0; font-size: .9rem; color: var(--soft); }
+  .hud { display: flex; justify-content: space-between; font: 600 1.3rem var(--font-display); margin: 18px 0 8px; }
+  .ref { font-weight: 700; font-size: .85rem; color: var(--matcha); }
+  .prompt { font-family: var(--font-display); font-size: clamp(1.6rem, 5.5vw, 2.1rem); line-height: 1.15; margin: 2px 0 14px; }
+  .timer { height: 12px; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; background: #fff; margin-bottom: 14px; }
+  .timer i { display: block; height: 100%; width: 100%; background: repeating-linear-gradient(-55deg, var(--red) 0 6px, #f07a7e 6px 12px); }
+  .answer-row { display: flex; gap: 8px; }
+  .answer-row input { flex: 1; min-width: 0; font-size: 1.1rem; border-radius: var(--wob); }
+  .answer-row .btn { flex: none; min-width: 72px; }
+  .result { text-align: center; }
+  .result .pts { font: 600 3rem var(--font-display); margin: 4px 0; }
+  .result .tier { font-weight: 700; font-size: 1.05rem; }
+  .result .yours { color: var(--soft); margin: 6px 0 12px; overflow-wrap: anywhere; }
+  .others { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 8px 0 16px; }
+  .others span { border: 1.5px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: .85rem; background: #fff; }
+  .others span.hit { background: #a9e39a; font-weight: 700; }
+  .others span b { font-family: var(--font-display); font-weight: 400; margin-left: 5px; color: var(--red); }
+  .final .big { font: 600 3.4rem var(--font-display); text-align: center; margin: 0; }
+  .final .zone { text-align: center; font-weight: 700; font-size: 1.15rem; }
+  .final .bar { text-align: center; font-size: 1.8rem; letter-spacing: 4px; margin: 10px 0; }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  @media (max-width: 520px) { .alti { width: 30px; right: 6px; } .alti .mark { display: none; } .app { width: calc(100% - 54px); margin-left: 12px; } }
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true" id="scene">
+  <svg class="mtn" viewBox="0 0 1200 300" preserveAspectRatio="none"><path d="M0 300 L0 210 L170 120 L300 190 L470 60 L620 170 L760 90 L900 180 L1060 70 L1200 160 L1200 300Z" fill="#7fa86b"/><path d="M430 95 L470 60 L510 95 L490 88 L470 100 L452 88Z M1025 100 L1060 70 L1095 100 L1075 94 L1060 104 L1045 94Z" fill="#fff"/></svg>
+</div>
+<div class="alti" aria-hidden="true" id="alti"><span class="me" id="me">🧗</span></div>
+
+<nav class="topnav" style="position:relative;z-index:3"><div class="wrap">
+  <a class="logo" href="../"><img src="../assets/icons/logo-rounded.svg" alt="" width="30" height="30">CiB <b>YP</b></a>
+  <div class="links">
+    <a href="../">🏠<span class="t"> Home</span></a>
+    <a href="../tree.html">🍂<span class="t"> Tree</span></a>
+    <a href="../qbox.html">📮<span class="t"> Q Box</span></a>
+    <a href="../#games" aria-current="page">🎮<span class="t"> Games</span></a>
+    <a href="scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<div class="app">
+  <section id="start">
+    <div class="title"><h1>Overcomers</h1><div class="tag">the daily climb to Zion</div></div>
+    <p class="rules">5 prompts · 25 seconds each · rarer answers climb higher</p>
+    <div class="panel">
+      <ul class="how">
+        <li>5 prompts from the day’s chapter. Same for everyone.</li>
+        <li>25 seconds to name ONE thing.</li>
+        <li>Obvious answers barely leave base camp. Deep cuts climb fast. 🧗</li>
+        <li>That clever pick? Someone in small group thought of it too. 😏</li>
+        <li>Every point = 10 m. 5,000 m = Mount Zion, where the overcomers stand with the Lamb (Rev. 14:1).</li>
+      </ul>
+      <div class="days" id="days"></div>
+      <button class="go" type="button" id="goBtn">Start climbing ▲</button>
+      <p class="note" id="playedNote"></p>
+    </div>
+  </section>
+
+  <section id="play" hidden>
+    <div class="hud"><span id="qnum">1 / 5</span><span id="alt">0 m</span></div>
+    <div class="panel">
+      <div class="ref" id="qref"></div>
+      <div class="prompt" id="qtext"></div>
+      <div id="askBox">
+        <div class="timer"><i id="timerBar"></i></div>
+        <div class="answer-row">
+          <label class="sr-only" for="ans">Your answer</label>
+          <input id="ans" maxlength="60" placeholder="Type one answer…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+          <button class="btn green" type="button" id="goAns">Go</button>
+        </div>
+      </div>
+      <div class="result" id="resultBox" hidden>
+        <div class="pts" id="rpts"></div>
+        <div class="tier" id="rtier"></div>
+        <div class="yours" id="ryours"></div>
+        <div style="font-weight:900">All the answers:</div>
+        <div class="others" id="rothers"></div>
+        <button class="btn" type="button" id="nextBtn">Next ▸</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="end" hidden>
+    <div class="title"><h1>Summit!</h1></div>
+    <div class="panel final">
+      <div class="big" id="fAlt"></div>
+      <div class="zone" id="fZone"></div>
+      <div class="bar" id="fBar"></div>
+      <div id="saveBox"></div>
+      <div class="btns">
+        <button class="btn" type="button" id="shareBtn">📋 Copy my climb</button>
+        <a class="btn white" id="readLink" target="_blank" rel="noopener">📖 Read the chapter</a>
+      </div>
+      <div class="btns"><button class="btn white small" type="button" id="againBtn">↺ Back to start</button></div>
+    </div>
+  </section>
+</div>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/bible.js"></script>
+<script src="../assets/api.js"></script>
+<script src="../assets/fun.js"></script>
+<script src="bank.js"></script>
+<script src="scoreboard.js"></script>
+<script>
+(() => {
+  const { API, DATES, FUN, GAMEBANK, SCORES } = window;
+  const SECS = 25, MAX = 5000;
+  const ZONES = [[0, "🏕️ Base camp"], [300, "🌲 Foothills"], [800, "🪨 Rocky trail"], [1500, "🦅 Eagle heights"],
+    [2500, "☁️ Above the clouds"], [3500, "🏔️ Near the summit"], [4500, "✨ Mount Zion with the overcomers"]];
+  const $ = id => document.getElementById(id);
+  let days = [], dayIdx = 0, prompts = [], qi = 0, total = 0, results = [], timer = null, t0 = 0, practice = false, locked = false;
+
+  // scenery
+  [0, 1, 2, 3].forEach(i => { const s = document.createElement("span"); s.className = "cl"; s.textContent = "☁️";
+    s.style.top = 10 + i * 17 + "%"; s.style.animationDuration = 40 + i * 13 + "s"; s.style.animationDelay = -i * 9 + "s"; s.style.fontSize = 50 + (i % 3) * 25 + "px"; $("scene").appendChild(s); });
+  ZONES.forEach(([m, label]) => { const d = document.createElement("div"); d.className = "mark"; d.style.bottom = m / MAX * 100 + "%"; d.textContent = "— " + (m >= 1000 ? m / 1000 + "k" : m); d.title = label; $("alti").appendChild(d); });
+  function setAlt(m) {
+    $("me").style.bottom = Math.min(100, m / MAX * 100) + "%";
+    document.documentElement.style.setProperty("--sky", Math.min(1, m / MAX).toFixed(3));
+    $("alt").textContent = m.toLocaleString() + " m";
+  }
+  const zoneFor = m => ZONES.filter(z => m >= z[0]).pop()[1];
+  const dayKey = d => "oc_" + d.date + "_" + (d.ref || "mix");
+
+  function renderDays() {
+    const box = $("days"); box.innerHTML = "";
+    days.forEach((d, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "day"; b.setAttribute("aria-pressed", i === dayIdx);
+      b.textContent = (d.date === DATES.today() ? "Today" : DATES.label(d.date, { weekday: "short" })) + (API.store.get(dayKey(d), null) ? " ✓" : "");
+      const sm = document.createElement("small"); sm.textContent = d.ref || "Bible mix"; b.appendChild(sm);
+      b.onclick = () => { dayIdx = i; renderDays(); };
+      box.appendChild(b);
+    });
+    const s = API.store.get(dayKey(days[dayIdx]), null);
+    $("playedNote").textContent = s ? `You reached ${s.meters.toLocaleString()} m on this one. Play again for practice (won’t change your score).` : "";
+  }
+
+  // ---------- grading ----------
+  const norm = s => " " + String(s).toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9\s-]/g, " ").replace(/\s+/g, " ").trim() + " ";
+  function lev(a, b) {
+    const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  function keyHits(input, key) {
+    const k = key.toLowerCase();
+    if (k.includes(" ")) return input.includes(" " + k);
+    return input.trim().split(" ").some(w => w.startsWith(k) || (k.length >= 5 && (lev(w, k) <= 1 || lev(w.slice(0, k.length), k) <= 1)));
+  }
+  function grade(raw, p) { const inp = norm(raw); let best = null; p.a.forEach(a => { if (a.k.some(k => keyHits(inp, k)) && (!best || a.s > best.s)) best = a; }); return best; }
+  const tier = s => !s ? "🫧 Didn’t find that one in the chapter" : s >= 85 ? "🌟 LEGENDARY — almost nobody gets that" : s >= 60 ? "💎 Deep cut!" : s >= 35 ? "👍 Solid pick" : "😴 Popular pick — small step up";
+  const emo = s => !s ? "🫧" : s >= 85 ? "🌟" : s >= 60 ? "💎" : s >= 35 ? "🧗" : "🌱";
+
+  // ---------- flow ----------
+  $("goBtn").addEventListener("click", () => {
+    const d = days[dayIdx];
+    prompts = GAMEBANK.pick(d.ref, d.date).climb;
+    practice = !!API.store.get(dayKey(d), null);
+    qi = 0; total = 0; results = []; setAlt(0);
+    $("start").hidden = true; $("end").hidden = true; $("play").hidden = false;
+    ask();
+  });
+
+  function ask() {
+    const d = days[dayIdx], p = prompts[qi];
+    $("qnum").textContent = (qi + 1) + " / " + prompts.length;
+    $("qref").textContent = (d.ref || GAMEBANK.pick(null, d.date).climbName) + (practice ? " · practice" : "");
+    $("qtext").textContent = p.q;
+    $("askBox").hidden = false; $("resultBox").hidden = true;
+    const inp = $("ans"); inp.value = ""; inp.disabled = false; $("goAns").disabled = false; locked = false;
+    setTimeout(() => inp.focus(), 30);
+    t0 = Date.now(); clearInterval(timer);
+    $("timerBar").style.width = "100%";
+    timer = setInterval(() => {
+      const left = SECS - (Date.now() - t0) / 1000;
+      $("timerBar").style.width = Math.max(0, left / SECS * 100) + "%";
+      if (left <= 0) finishPrompt($("ans").value);
+    }, 100);
+  }
+
+  function submitAnswer() { const v = $("ans").value.trim(); if (!v) { $("ans").focus(); return; } finishPrompt(v); }
+  $("goAns").addEventListener("click", submitAnswer);
+  $("ans").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(); } });
+
+  function finishPrompt(raw) {
+    if (locked) return; locked = true;
+    clearInterval(timer);
+    raw = String(raw || "").trim();
+    $("ans").disabled = true; $("goAns").disabled = true;
+    const p = prompts[qi], hit = raw ? grade(raw, p) : null, s = hit ? hit.s : 0;
+    total += s; results.push(s); setAlt(total * 10);
+    $("rpts").textContent = (s ? "+" : "") + s * 10 + " m";
+    $("rtier").textContent = raw ? tier(s) : "⏰ Time’s up!";
+    $("ryours").textContent = raw ? `You said: “${raw}”${hit ? " → " + hit.t : ""}` : "";
+    const o = $("rothers"); o.innerHTML = "";
+    p.a.slice().sort((a, b) => b.s - a.s).forEach(a => {
+      const sp = document.createElement("span"); if (a === hit) sp.className = "hit";
+      sp.textContent = a.t; const b = document.createElement("b"); b.textContent = a.s * 10; sp.appendChild(b); o.appendChild(sp);
+    });
+    $("nextBtn").textContent = qi === prompts.length - 1 ? "See my climb ▸" : "Next ▸";
+    $("askBox").hidden = true; $("resultBox").hidden = false;
+    setTimeout(() => $("nextBtn").focus(), 30);
+  }
+  $("nextBtn").addEventListener("click", () => { qi++; qi < prompts.length ? ask() : end(); });
+
+  function end() {
+    const d = days[dayIdx], m = total * 10, bar = results.map(emo).join("");
+    if (!practice) API.store.set(dayKey(d), { meters: m, bar });
+    $("play").hidden = true; $("end").hidden = false;
+    $("fAlt").textContent = m.toLocaleString() + " m";
+    $("fZone").textContent = zoneFor(m) + (practice ? " (practice)" : "");
+    $("fBar").textContent = results.map(emo).join(" ");
+    $("readLink").href = d.link || window.BIBLE.BASE; $("readLink").hidden = !d.ref;
+    const sb = $("saveBox");
+    if (!practice) SCORES.mountSave(sb, { game: "overcomers", day: d.date, reading: d.ref || "Bible mix", score: m, detail: bar });
+    else { sb.innerHTML = ""; sb.className = ""; }
+    $("shareBtn").onclick = () => FUN.copy(`🧗 Overcomers · ${d.ref || "Bible mix"}\n${m.toLocaleString()} m — ${zoneFor(m)}\n${bar}`, "Copied! Flex on the group chat 📲");
+    if (m >= 2500) FUN.confetti(["☁️", "✨", "🧗", "🕊️", "⛰️"], 24);
+  }
+  $("againBtn").onclick = () => { $("end").hidden = true; $("start").hidden = false; setAlt(0); renderDays(); };
+
+  function start(readings) { days = SCORES.days(readings); dayIdx = days.findIndex(d => d.date === DATES.today()); renderDays(); setAlt(0); }
+  API.public().then(d => start(d.readings)).catch(() => start([]));
+})();
+</script>
+</body>
+</html>

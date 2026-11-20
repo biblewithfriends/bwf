@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tree of Life 🍂 · CiB YP</title>
+<meta name="description" content="Hang your enjoyment of the Lord as a leaf on the Tree of Life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/common.css">
+<link rel="icon" type="image/svg+xml" href="assets/icons/logo-rounded.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#24402f">
+<meta name="apple-mobile-web-app-title" content="CiB YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png">
+<style>
+  :root { --rust: #b5481f; --amber: #e39a2d; --bark: #5e3a22; }
+  body { background-color: #fbefdc; }
+  section { padding: 34px 0 10px; }
+
+  .head { text-align: center; padding: 30px 0 8px; }
+  .head h1 { font-size: clamp(2.6rem, 9vw, 4.4rem); margin: 0; color: var(--bark); }
+  .head p { margin: 6px auto 0; font-weight: 700; color: #7a5a3f; max-width: 560px; }
+
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; margin: 16px 0 14px; }
+  .chip { font: 700 .9rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 14px; background: var(--paper); color: var(--ink); cursor: pointer; box-shadow: var(--shadow); }
+  .chip[aria-pressed="true"] { background: var(--bark); color: #fff; }
+  .count { font-weight: 700; color: #7a5a3f; width: 100%; text-align: center; margin-top: 2px; }
+
+  /* ---------- the tree ---------- */
+  .scene { position: relative; width: 100%; aspect-ratio: 1000 / 800; border-radius: 34px; overflow: hidden; box-shadow: 0 24px 50px -30px rgba(94, 58, 34, .6); user-select: none; -webkit-user-select: none; }
+  .scene svg.art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .leaves, .falling { position: absolute; inset: 0; }
+  .falling { pointer-events: none; overflow: hidden; }
+  .leaf { position: absolute; width: clamp(26px, 4.4%, 44px); aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer;
+    transform: translate(-50%, -50%) rotate(var(--r)); transform-origin: 50% 50%; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+    animation: sway var(--sw, 4s) ease-in-out infinite alternate; animation-delay: var(--dl, 0s); transition: opacity .3s, filter .2s; }
+  .leaf svg { width: 100%; height: 100%; display: block; overflow: visible; filter: drop-shadow(0 2px 2px rgba(60, 30, 10, .25)); }
+  .leaf:hover, .leaf:focus-visible { filter: brightness(1.12) saturate(1.15); z-index: 3; }
+  .leaf:hover svg, .leaf:focus-visible svg { transform: scale(1.35); transition: transform .18s cubic-bezier(.3, 1.8, .5, 1); }
+  .leaf:focus-visible { outline: 3px solid #fff; outline-offset: 2px; border-radius: 50%; }
+  .leaf.so svg { filter: drop-shadow(0 0 5px rgba(255, 214, 107, .95)) drop-shadow(0 2px 2px rgba(60, 30, 10, .25)); }
+  .leaf.ground { animation: none; }
+  .leaf.dim { opacity: .14; pointer-events: none; }
+  .leaf.new { animation: drop 1.6s cubic-bezier(.3, .7, .4, 1) both, sway var(--sw, 4s) ease-in-out 1.6s infinite alternate; z-index: 4; }
+  .leaf.new::after { content: ""; position: absolute; inset: -40%; border-radius: 50%; border: 3px solid rgba(255, 214, 107, .95);
+    opacity: 0; animation: ring 1s ease-out 1.5s 2; pointer-events: none; }
+  @keyframes ring { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
+  @keyframes sway { from { transform: translate(-50%, -50%) rotate(calc(var(--r) - 7deg)); } to { transform: translate(-50%, -50%) rotate(calc(var(--r) + 7deg)); } }
+  @keyframes drop { 0% { transform: translate(-50%, -700%) rotate(-140deg) scale(1.6); opacity: 0; } 20% { opacity: 1; }
+    60% { transform: translate(-30%, -40%) rotate(40deg) scale(1.25); } 100% { transform: translate(-50%, -50%) rotate(var(--r)) scale(1); } }
+  .fall { position: absolute; top: -8%; width: 26px; opacity: .85; animation: fall var(--d) linear forwards; }
+  @keyframes fall { 0% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(40px, 30vh) rotate(120deg); } 50% { transform: translate(-20px, 60vh) rotate(220deg); }
+    100% { transform: translate(60px, 120vh) rotate(420deg); opacity: .2; } }
+  .tip { position: absolute; z-index: 6; pointer-events: none; transform: translate(-50%, calc(-100% - 20px)); background: #fffdf8; color: var(--ink);
+    padding: 7px 12px; border-radius: 14px; font-weight: 700; font-size: .85rem; max-width: 220px; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .legend { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin: 12px 0 0; font-weight: 700; color: #7a5a3f; font-size: .9rem; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend svg { width: 20px; height: 20px; }
+  .empty-tree { position: absolute; left: 50%; top: 36%; transform: translate(-50%, -50%); background: rgba(255, 253, 248, .92); padding: 12px 20px; border-radius: 18px; font-weight: 700; text-align: center; }
+
+  /* ---------- hang a leaf ---------- */
+  .form-card { padding: 26px; max-width: 760px; margin: 0 auto; background: linear-gradient(160deg, #fff1d9, var(--paper) 70%); }
+  .form-card h2 { margin: 0 0 4px; font-size: clamp(1.8rem, 5vw, 2.4rem); color: var(--bark); }
+  .form-card .sub { margin: 0 0 16px; color: var(--soft); font-weight: 600; }
+  .lbl { display: block; font-weight: 700; margin: 12px 0 6px; }
+  .feelings { display: flex; flex-wrap: wrap; gap: 6px; }
+  .feelings button { font: 700 .9rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 13px; background: #fff; color: var(--ink); cursor: pointer; box-shadow: inset 0 0 0 1.5px var(--line); }
+  .feelings button[aria-pressed="true"] { background: var(--amber); color: #fff; box-shadow: none; }
+  textarea#msg { min-height: 130px; resize: vertical; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
+  .hint { font-size: .85rem; font-weight: 600; color: var(--soft); margin: 6px 0 0; }
+  .send { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 18px; }
+  .send .btn { background: var(--rust); color: #fff; }
+  .err { color: var(--red); font-weight: 700; margin: 0; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+  /* ---------- calm reading view ---------- */
+  body.calm { overflow: hidden; }
+  body.calm .leaf, body.calm .fall, body.calm .ticker-track { animation-play-state: paused !important; }
+  .calm-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 14px;
+    background: rgba(251, 239, 220, .6); backdrop-filter: blur(18px) saturate(.5); -webkit-backdrop-filter: blur(18px) saturate(.5); animation: calmIn .3s ease; }
+  @keyframes calmIn { from { opacity: 0; } }
+  .calm-panel { width: min(640px, 100%); max-height: calc(100vh - 28px); overflow: auto; background: #fffdf8; border: 1.5px solid #ecdcc4; border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(80, 50, 20, .18); padding: 20px 22px 24px; color: #2b2a26; }
+  .calm-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .calm-head .who { display: flex; gap: 12px; align-items: center; }
+  .calm-head .who svg { width: 46px; height: 46px; flex: none; }
+  .calm-head h3 { margin: 0; font: 600 1.25rem var(--font-display); }
+  .calm-head p { margin: 0; color: #7a7466; font-weight: 700; font-size: .88rem; }
+  .calm-done { font: 700 1rem var(--font-body); background: var(--bark); color: #fff; border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer; flex: none; }
+  .feel { display: inline-flex; align-items: center; gap: 8px; background: #fff1d9; border-radius: 999px; padding: 4px 14px 4px 8px; font-weight: 700; }
+  .feel b { font-size: 1.5rem; line-height: 1; }
+  .calm-msg { font-size: 1.12rem; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; margin: 14px 0 12px; }
+  .calm-verse { display: inline-block; background: var(--note-yellow); border-radius: 12px; padding: 6px 12px; font-weight: 600; }
+  .calm-body img { display: block; width: 100%; height: auto; border-radius: 14px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div id="demoBanner" class="demo-banner" hidden>👀 Preview mode — sample leaves, saved only in this browser</div>
+
+<nav class="topnav"><div class="wrap">
+  <a class="logo" href="./"><img src="assets/icons/logo-rounded.svg" alt="" width="30" height="30">CiB <b>YP</b></a>
+  <div class="links">
+    <a href="./">🏠<span class="t"> Home</span></a>
+    <a href="tree.html" aria-current="page">🍂<span class="t"> Tree</span></a>
+    <a href="qbox.html">📮<span class="t"> Q Box</span></a>
+    <a href="./#games">🎮<span class="t"> Games</span></a>
+    <a href="games/scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<div class="ticker"><div class="lbl">YP be like</div><div class="viewport"><div class="ticker-track" id="ticker"></div></div></div>
+
+<main class="wrap">
+  <header class="head">
+    <h1>The Tree of Life 🍂</h1>
+    <p>Every leaf is someone’s enjoyment of the Lord. Tap a leaf to read it, then hang your own.</p>
+  </header>
+
+  <div class="bar" role="group" aria-label="Show leaves">
+    <button class="chip" type="button" data-f="all" aria-pressed="true">🍂 All leaves</button>
+    <button class="chip" type="button" data-f="week" aria-pressed="false">📅 This week</button>
+    <button class="chip" type="button" data-f="yp" aria-pressed="false">🍁 YP</button>
+    <button class="chip" type="button" data-f="so" aria-pressed="false">✨ Serving ones</button>
+    <div class="count" id="count" aria-live="polite"></div>
+  </div>
+
+  <div class="scene" id="scene">
+    <svg class="art" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9b0"/><stop offset=".55" stop-color="#ffecd2"/><stop offset="1" stop-color="#fff6e6"/></linearGradient>
+        <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe08a" stop-opacity=".9"/><stop offset="1" stop-color="#ffe08a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="bark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f301b"/><stop offset=".5" stop-color="#6e4628"/><stop offset="1" stop-color="#4f301b"/></linearGradient>
+      </defs>
+      <rect width="1000" height="800" fill="url(#sky)"/>
+      <circle cx="830" cy="150" r="150" fill="url(#glow)"/>
+      <circle cx="830" cy="150" r="56" fill="#ffd66b"/>
+      <path d="M0 560 C140 500 260 520 380 548 C520 580 640 500 800 520 C900 532 960 548 1000 556 V800 H0Z" fill="#efc896"/>
+      <path d="M0 610 C160 570 300 590 440 600 C600 612 760 572 1000 600 V800 H0Z" fill="#e3b072"/>
+      <path d="M0 690 C200 668 380 676 520 684 C700 694 860 670 1000 680 V800 H0Z" fill="#c98a4b"/>
+      <ellipse cx="500" cy="728" rx="300" ry="34" fill="#b0703a" opacity=".55"/>
+      <!-- soft autumn foliage -->
+      <g opacity=".16">
+        <ellipse cx="500" cy="270" rx="330" ry="190" fill="#f0a041"/><ellipse cx="500" cy="180" rx="210" ry="120" fill="#e9783a"/>
+      </g>
+      <!-- trunk and branches -->
+      <g fill="none" stroke="#5e3a22" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M480 470 C430 420 360 382 270 362" stroke-width="22"/>
+        <path d="M352 384 C320 340 290 300 236 276" stroke-width="12"/>
+        <path d="M292 368 C244 378 206 400 160 392" stroke-width="10"/>
+        <path d="M520 462 C582 410 652 382 736 370" stroke-width="22"/>
+        <path d="M640 392 C670 344 700 302 762 278" stroke-width="12"/>
+        <path d="M706 376 C754 390 792 410 842 402" stroke-width="10"/>
+        <path d="M500 450 C506 384 502 320 490 246" stroke-width="20"/>
+        <path d="M495 322 C452 282 422 242 398 196" stroke-width="11"/>
+        <path d="M497 298 C540 258 572 220 604 186" stroke-width="11"/>
+        <path d="M490 250 C482 208 486 170 498 128" stroke-width="8"/>
+        <path d="M236 276 C220 252 214 232 216 210 M762 278 C780 254 788 232 786 210 M398 196 C384 176 380 156 386 136 M604 186 C622 168 630 148 628 128" stroke-width="6"/>
+      </g>
+      <g id="deco"></g>
+      <path d="M432 730 C452 640 470 556 476 470 C478 452 490 440 500 440 C510 440 522 452 524 470 C530 556 548 640 568 730 Z" fill="url(#bark)"/>
+      <path d="M432 730 C400 736 380 744 372 752 L628 752 C620 744 600 736 568 730 Z" fill="#4f301b"/>
+      <path d="M488 560 C494 600 492 640 486 680 M512 520 C520 560 518 600 514 640" stroke="#3f2614" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+    </svg>
+    <div class="leaves" id="leaves"></div>
+    <div class="falling" id="falling" aria-hidden="true"></div>
+  </div>
+  <div class="legend">
+    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> a YP’s enjoyment</span>
+    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legSO"></svg> from the serving ones</span>
+    <span>🍂 older leaves fall to the ground</span>
+  </div>
+
+  <section id="hang">
+    <div class="card form-card">
+      <h2>Hang a leaf 🍁</h2>
+      <p class="sub" id="prompt">What did you enjoy of the Lord this week?</p>
+      <span class="lbl" id="feelLbl">How are you feeling? (optional)</span>
+      <div class="feelings" id="feelings" role="group" aria-labelledby="feelLbl"></div>
+      <label class="lbl" for="msg">Your enjoyment</label>
+      <textarea id="msg" maxlength="600" placeholder="A verse that stood out, a hymn line, something the Lord did…"></textarea>
+      <div class="row2">
+        <div><label class="lbl" for="verse">Verse (optional)</label><input id="verse" maxlength="80" placeholder="e.g. Heb. 12:2"></div>
+        <div><label class="lbl" for="name">Name (optional)</label><input id="name" maxlength="30" placeholder="Leave blank to stay anonymous" autocomplete="off"></div>
+      </div>
+      <p class="hint">Your leaf shows on the tree for everyone to see. Use a first name or nickname, or leave it blank.</p>
+      <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="send"><button class="btn" type="button" id="hangBtn">🍂 Hang my leaf</button><p class="err" id="err" role="alert"></p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <p>“…on this side and on that side of the river was the tree of life…” — Rev. 22:2</p>
+  <p><a href="./">🏠 Back to home</a></p>
+  <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p>
+</div></footer>
+
+<div class="calm-overlay" id="calm" hidden role="dialog" aria-modal="true" aria-labelledby="calmTitle">
+  <div class="calm-panel">
+    <div class="calm-head">
+      <div class="who"><svg viewBox="0 0 40 40" aria-hidden="true" id="calmLeaf"></svg><div><h3 id="calmTitle"></h3><p id="calmDate"></p></div></div>
+      <button class="calm-done" type="button" id="calmClose">Done ✓</button>
+    </div>
+    <div class="calm-body" id="calmBody"></div>
+  </div>
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/bible.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/fun.js"></script>
+<script>
+(() => {
+  const { API, DATES, FUN } = window;
+  const $ = id => document.getElementById(id);
+  const T = DATES.today();
+  if (API.demo) $("demoBanner").hidden = false;
+
+  // ---------- leaf drawing ----------
+  const YP_COLORS = ["#d9482b", "#c0392b", "#d0611e", "#a8401b", "#cf5a2a", "#b8572a", "#9c3b1b", "#e06a2c"];
+  const SO_COLOR = "#f4bf2e";
+  const hash = s => { let h = 2166136261; for (const c of String(s)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+  function leafSVG(color, vein) {
+    return `<path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${color}"/>` +
+      `<path d="M20 6 V37 M20 15 L27 11 M20 22 L29 18 M20 29 L27 26 M20 15 L13 11 M20 22 L11 18 M20 29 L13 26" stroke="${vein}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".55"/>` +
+      `<path d="M20 37 V40" stroke="#5e3a22" stroke-width="2" stroke-linecap="round"/>`;
+  }
+  const colorOf = l => l.so ? SO_COLOR : YP_COLORS[hash(l.id) % YP_COLORS.length];
+  $("legYP").innerHTML = leafSVG(YP_COLORS[0], "#7a1f0c");
+  $("legSO").innerHTML = leafSVG(SO_COLOR, "#8a5a00");
+
+  // ---------- spots on the branches (fixed, so a leaf never moves) ----------
+  function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
+  const CANOPY = [[500, 270, 300, 175], [300, 335, 165, 95], [705, 330, 165, 95], [500, 150, 190, 90], [215, 370, 70, 45], [800, 370, 70, 45]];
+  const TREE_SPOTS = [], GROUND_SPOTS = [];
+  (() => {
+    const r = rng(7);
+    let guard = 0;
+    while (TREE_SPOTS.length < 160 && guard++ < 20000) {
+      const e = CANOPY[(r() * CANOPY.length) | 0];
+      const a = r() * Math.PI * 2, d = Math.sqrt(r());
+      const x = e[0] + Math.cos(a) * e[2] * d, y = e[1] + Math.sin(a) * e[3] * d;
+      if (y > 445 || x < 70 || x > 930 || y < 60) continue;
+      if (TREE_SPOTS.some(p => (p[0] - x) ** 2 + ((p[1] - y) * 1.2) ** 2 < 34 * 34)) continue;
+      TREE_SPOTS.push([x, y]);
+    }
+    const g = rng(11);
+    guard = 0;
+    while (GROUND_SPOTS.length < 70 && guard++ < 20000) {
+      const x = 220 + g() * 560, y = 704 + g() * 50 - Math.abs(x - 500) * 0.04;
+      if (GROUND_SPOTS.some(p => (p[0] - x) ** 2 + ((p[1] - y) * 2) ** 2 < 26 * 26)) continue;
+      GROUND_SPOTS.push([x, y]);
+    }
+  })();
+
+  // faint background leaves so the tree looks full, in autumn colours (not tappable)
+  (() => {
+    const r = rng(3), cols = ["#f0a041", "#e9783a", "#d9572f", "#f4b54a", "#c9542a", "#e7a24a"];
+    let out = "";
+    for (let i = 0; i < 260; i++) {
+      const e = CANOPY[(r() * CANOPY.length) | 0], a = r() * Math.PI * 2, d = Math.sqrt(r());
+      const x = e[0] + Math.cos(a) * e[2] * d * 1.05, y = e[1] + Math.sin(a) * e[3] * d * 1.05;
+      if (y > 470) continue;
+      const sc = 0.45 + r() * 0.45, rot = r() * 360;
+      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)}) scale(${sc.toFixed(2)}) translate(-20 -20)" opacity="${(0.28 + r() * 0.3).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${cols[(r() * cols.length) | 0]}"/></g>`;
+    }
+    const g2 = rng(5);
+    for (let i = 0; i < 46; i++) {
+      const x = 230 + g2() * 540, y = 712 + g2() * 40;
+      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(g2() * 360).toFixed(0)}) scale(${(0.4 + g2() * 0.3).toFixed(2)}) translate(-20 -20)" opacity=".5"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${cols[(g2() * cols.length) | 0]}"/></g>`;
+    }
+    $("deco").innerHTML = out;
+  })();
+
+  // ---------- render ----------
+  let leaves = [], filter = "all", newId = null;
+  const OLD_DAYS = 21;
+  function place(list, spots) {
+    const used = new Set(), out = new Map();
+    // oldest first, so a leaf keeps its spot as new ones arrive
+    list.slice().sort((a, b) => a.id - b.id).forEach(l => {
+      let i = hash(l.id) % spots.length, n = 0;
+      while (used.has(i) && n++ < spots.length) i = (i + 1) % spots.length;
+      if (n >= spots.length) return;
+      used.add(i); out.set(l.id, spots[i]);
+    });
+    return out;
+  }
+  function render() {
+    const box = $("leaves"); box.innerHTML = "";
+    const cutoff = DATES.addDays(T, -OLD_DAYS);
+    const onTree = leaves.filter(l => l.day >= cutoff).slice(0, TREE_SPOTS.length);
+    const onGround = leaves.filter(l => l.day < cutoff || !onTree.includes(l)).slice(0, GROUND_SPOTS.length);
+    const pos = new Map([...place(onTree, TREE_SPOTS), ...place(onGround, GROUND_SPOTS)]);
+    const weekStart = DATES.monday(T);
+    const match = l => filter === "all" || (filter === "week" && l.day >= weekStart) || (filter === "yp" && !l.so) || (filter === "so" && l.so);
+    let shown = 0;
+    [...onGround, ...onTree].forEach(l => {
+      const p = pos.get(l.id); if (!p) return;
+      const ground = onGround.includes(l);
+      const b = document.createElement("button"); b.type = "button";
+      b.className = "leaf" + (l.so ? " so" : "") + (ground ? " ground" : "") + (match(l) ? "" : " dim") + (l.id === newId ? " new" : "");
+      const h = hash(l.id);
+      b.style.left = p[0] / 10 + "%"; b.style.top = p[1] / 8 + "%";
+      b.style.setProperty("--r", (ground ? (h % 180) - 90 : (h % 70) - 35) + "deg");
+      b.style.setProperty("--sw", 3 + (h % 30) / 10 + "s"); b.style.setProperty("--dl", -(h % 40) / 10 + "s");
+      if (l.so) b.style.width = "clamp(30px, 5.2%, 52px)";
+      b.setAttribute("aria-label", (l.so ? "Leaf from the serving ones" : "Leaf from " + (l.name || "a YP")) + (l.feeling ? ", feeling " + l.feeling.replace(/^\S+\s/, "") : "") + ". Tap to read.");
+      b.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(colorOf(l), l.so ? "#8a5a00" : "#6e1c0a")}</svg>`;
+      b.onclick = () => openLeaf(l);
+      b.onmouseenter = () => showTip(b, l); b.onmouseleave = hideTip; b.onfocus = () => showTip(b, l); b.onblur = hideTip;
+      box.appendChild(b);
+      if (match(l)) shown++;
+    });
+    if (!leaves.length) box.innerHTML = '<div class="empty-tree">🍂 The tree is waiting for its first leaf.<br>Hang yours below!</div>';
+    const week = leaves.filter(l => l.day >= weekStart).length;
+    $("count").textContent = leaves.length ? `${leaves.length} leaves on the tree · ${week} this week` + (filter !== "all" ? ` · showing ${shown}` : "") : "";
+    newId = null;
+  }
+  let tipEl = null;
+  function showTip(b, l) {
+    hideTip(); if (matchMedia("(hover: none)").matches) return;
+    tipEl = document.createElement("div"); tipEl.className = "tip";
+    tipEl.textContent = (l.feeling ? l.feeling.split(" ")[0] + " " : "") + l.message.slice(0, 60);
+    tipEl.style.left = b.style.left; tipEl.style.top = b.style.top;
+    $("scene").appendChild(tipEl);
+  }
+  function hideTip() { if (tipEl) { tipEl.remove(); tipEl = null; } }
+  document.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+    filter = c.dataset.f; document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c)); render(); FUN.tick && FUN.tick();
+  });
+
+  // ---------- read a leaf ----------
+  let lastFocus = null;
+  function openLeaf(l) {
+    hideTip();
+    $("calmLeaf").innerHTML = leafSVG(colorOf(l), l.so ? "#8a5a00" : "#6e1c0a");
+    $("calmTitle").textContent = l.so ? (l.name || "The serving ones") : (l.name || "A YP");
+    $("calmDate").textContent = (l.so ? "Serving ones · " : "") + DATES.label(l.day, { weekday: "long", month: "long", day: "numeric" });
+    const body = $("calmBody"); body.innerHTML = "";
+    if (l.feeling) { const f = document.createElement("span"); f.className = "feel"; const e = document.createElement("b"); const parts = l.feeling.split(" "); e.textContent = parts[0]; f.append(e, parts.slice(1).join(" ")); body.appendChild(f); }
+    const m = document.createElement("p"); m.className = "calm-msg"; m.textContent = l.message; body.appendChild(m);
+    if (l.verse) { const v = document.createElement("div"); v.className = "calm-verse"; v.textContent = "📖 " + l.verse; body.appendChild(v); }
+    if (l.url) {
+      const img = document.createElement("img"); img.src = l.url; img.alt = "Photo from the serving ones"; img.loading = "lazy";
+      img.onerror = () => { const mm = l.url.match(/id=([^&]+)/); if (mm && !img.dataset.f) { img.dataset.f = 1; img.src = "https://lh3.googleusercontent.com/d/" + mm[1]; } };
+      body.appendChild(img);
+    }
+    lastFocus = document.activeElement;
+    document.body.classList.add("calm"); $("calm").hidden = false; $("calmClose").focus();
+    FUN.note && FUN.note(l.so ? 7 : (hash(l.id) % 5) + 2, 0.12);
+  }
+  function closeLeaf() { document.body.classList.remove("calm"); $("calm").hidden = true; if (lastFocus) lastFocus.focus(); }
+  $("calmClose").onclick = closeLeaf;
+  $("calm").addEventListener("click", e => { if (e.target.id === "calm") closeLeaf(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("calm").hidden) closeLeaf(); });
+
+  // ---------- a few leaves drifting down (just for looks) ----------
+  if (!FUN.reduced) setInterval(() => {
+    if (document.hidden || document.body.classList.contains("calm") || $("falling").childElementCount > 5) return;
+    const s = document.createElement("div"); s.className = "fall";
+    s.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(YP_COLORS[(Math.random() * YP_COLORS.length) | 0], "#6e1c0a")}</svg>`;
+    s.style.left = 10 + Math.random() * 80 + "%"; s.style.setProperty("--d", 7 + Math.random() * 5 + "s");
+    s.addEventListener("animationend", () => s.remove());
+    $("falling").appendChild(s);
+  }, 1800);
+
+  // ---------- hang a leaf ----------
+  const FEELINGS = ["😊 Joyful", "🙏 Thankful", "🔥 Burning", "🌱 Growing", "💧 Refreshed", "🕊️ Peaceful", "💪 Strengthened", "🤔 Pondering", "😴 Tired but trusting"];
+  let feeling = "";
+  FEELINGS.forEach(f => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = f; b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { feeling = feeling === f ? "" : f; document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.textContent === feeling)); };
+    $("feelings").appendChild(b);
+  });
+  let sending = false;
+  $("hangBtn").onclick = async () => {
+    if (sending) return;
+    const message = $("msg").value.trim(); $("err").textContent = "";
+    if (!message) { $("err").textContent = "Write your enjoyment first ✍️"; $("msg").focus(); return; }
+    sending = true; $("hangBtn").disabled = true; $("hangBtn").textContent = "Hanging…";
+    try {
+      const before = new Set(leaves.map(l => l.id));
+      const res = await API.post({ action: "leaf", message, feeling, verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
+      $("msg").value = ""; $("verse").value = ""; feeling = "";
+      document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", "false"));
+      if (res.waiting) { FUN.toast("🍂 Thanks! Your leaf will appear once a serving one says it’s ready."); }
+      else {
+        // scroll up to the tree first, then hang the new leaf so they see it happen (no sound)
+        const d = await API.public();
+        $("scene").scrollIntoView({ behavior: FUN.reduced ? "auto" : "smooth", block: "center" });
+        await new Promise(r => setTimeout(r, FUN.reduced ? 0 : 650));
+        leaves = (d.leaves || []).slice().sort((a, b) => b.id - a.id);
+        const mine = leaves.find(l => !before.has(l.id));
+        if (mine) { newId = mine.id; filter = "all"; document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === "all")); }
+        render();
+        FUN.toast("🍁 Your leaf is on the tree!");
+      }
+    } catch (e) { $("err").textContent = e.message; }
+    sending = false; $("hangBtn").disabled = false; $("hangBtn").textContent = "🍂 Hang my leaf";
+  };
+
+  // ---------- data ----------
+  async function load() {
+    const d = await API.public();
+    leaves = (d.leaves || []).slice().sort((a, b) => b.id - a.id);
+    FUN.ticker($("ticker"), d.quotes);
+    const tr = API.readingsFor(d.readings || [], T)[0];
+    if (tr) { $("prompt").textContent = `Today’s reading is ${tr.ref}. What did you enjoy of the Lord?`; $("msg").placeholder = `Something from ${tr.ref} that stood out to you…`; }
+    render();
+  }
+  FUN.ticker($("ticker"), []);
+  load().catch(() => { $("leaves").innerHTML = '<div class="empty-tree">Couldn’t load the tree right now. Refresh in a bit!</div>'; });
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>

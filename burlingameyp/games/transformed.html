@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Transformed 🦋 · Daily Word Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/common.css">
+<link rel="icon" type="image/svg+xml" href="../assets/icons/logo-rounded.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#24402f">
+<meta name="apple-mobile-web-app-title" content="CiB YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png">
+<style>
+  body { min-height: 100vh; }
+  .wrap { width: min(560px, 100% - 24px); }
+  .head { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px 0 0; position: relative; padding: 0 46px; }
+  .head h1 { font-size: clamp(1.9rem, 8vw, 3rem); margin: 0; padding: 0 10px; }
+  .help { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--paper); font: 600 1.3rem var(--font-display); cursor: pointer; color: var(--ink); }
+  .sub { text-align: center; font-weight: 700; color: var(--soft); margin: 6px 0 14px; }
+  .days { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .day { border: 1.5px solid var(--line); background: var(--paper); border-radius: var(--wob); padding: 5px 12px; font: 700 .8rem var(--font-body); cursor: pointer; line-height: 1.2; color: var(--ink); }
+  .day small { display: block; font-weight: 400; color: var(--soft); }
+  .day[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .day[aria-pressed="true"] small { color: #cfd8ff; }
+  .goal { text-align: center; font-weight: 700; margin-bottom: 12px; }
+  .goal b { font-family: var(--font-display); font-weight: 400; font-size: 1.15rem; background: var(--yellow); padding: 1px 10px; border-radius: 999px; }
+  /* tiles sit on the 26px grid like filled-in graph squares */
+  .board { display: grid; gap: 0; justify-content: center; margin-bottom: 10px; }
+  .row { display: grid; grid-template-columns: 22px repeat(4, 52px) 96px; gap: 0 4px; align-items: center; margin-bottom: 6px; }
+  .row .n { text-align: right; font-family: var(--font-display); color: var(--soft); padding-right: 4px; }
+  .tile { width: 52px; height: 52px; display: grid; place-items: center; font: 600 2rem var(--font-display); text-transform: uppercase;
+    background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; transition: background .2s; }
+  .tile.hit { background: #a9e39a; }
+  .tile.near { background: var(--yellow); }
+  .row.input .tile { border-style: dashed; border-color: var(--blue); }
+  .row.input .tile.filled { border-style: solid; animation: pop .12s ease; }
+  .row.goalrow .tile { background: transparent; border-style: dotted; color: var(--matcha); }
+  .row.win .tile { animation: pop .4s ease both; }
+  .row.shake { animation: shake .35s; }
+  .hint { font-weight: 700; font-size: .82rem; text-align: left; padding-left: 6px; white-space: nowrap; color: var(--soft); }
+  .hint.hot { color: var(--red); } .hint.cold { color: var(--blue); } .hint.dead { color: var(--red); text-decoration: line-through; } .hint.goal { color: var(--matcha); }
+  @keyframes pop { 50% { transform: scale(1.12) rotate(-3deg); } }
+  @keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+  .dots { text-align: center; color: var(--soft); letter-spacing: 6px; }
+  @media (max-width: 400px) { .row { grid-template-columns: 18px repeat(4, 46px) 88px; } .tile { width: 46px; height: 46px; font-size: 1.7rem; } .hint { font-size: .9rem; } }
+  .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: .82rem; color: var(--soft); margin-bottom: 10px; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border: 1.5px solid var(--line); border-radius: 3px; vertical-align: -2px; margin-right: 4px; }
+  .legend span:nth-child(1) i { background: #a9e39a !important; }
+  .msg { text-align: center; font-weight: 700; min-height: 1.5em; margin: 0 0 8px; color: var(--red); }
+  .tools { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .kb { max-width: 520px; margin: 0 auto 30px; display: grid; gap: 6px; }
+  .kb .r { display: flex; gap: 5px; justify-content: center; }
+  .kb button { flex: 1; max-width: 44px; height: 52px; border: 0; border-radius: 12px; background: var(--paper); color: var(--ink);
+    font: 600 1.3rem var(--font-display); cursor: pointer; box-shadow: var(--shadow); padding: 0; }
+  .kb button.wide { max-width: 72px; flex: 1.6; font-size: 1rem; }
+  .kb button:active { transform: translate(1px, 2px); box-shadow: none; }
+  .kb button.hit { background: #a9e39a; }
+  dialog { border: 1.5px solid var(--line); border-radius: var(--wob); box-shadow: var(--shadow); max-width: 440px; width: calc(100% - 28px); padding: 22px; color: var(--ink); background: var(--paper); }
+  dialog::backdrop { background: rgba(251, 251, 246, .78); }
+  dialog h2 { margin: 0 0 8px; font-size: 2rem; }
+  dialog p { color: var(--soft); }
+  .mini { display: flex; gap: 4px; justify-content: center; margin: 4px 0; }
+  .mini span { width: 32px; height: 32px; display: grid; place-items: center; border: 1.5px solid var(--line); border-radius: 5px; font: 600 1.2rem var(--font-display); background: #fff; }
+  .mini span.hit { background: #a9e39a; } .mini span.near { background: var(--yellow); }
+  .verse { background: var(--matcha-light); border-radius: 16px; padding: 10px 12px; font-weight: 700; }
+  .row-btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  .row.fresh .tile { animation: flip .5s cubic-bezier(.3, 1.4, .5, 1) both; }
+  .row.fresh .tile:nth-child(3) { animation-delay: .07s; } .row.fresh .tile:nth-child(4) { animation-delay: .14s; } .row.fresh .tile:nth-child(5) { animation-delay: .21s; }
+  @keyframes flip { 0% { transform: rotateX(90deg) scale(.8); } 60% { transform: rotateX(-12deg) scale(1.08); } }
+  .row.win .tile { animation: winHop .7s cubic-bezier(.3, 1.8, .5, 1) both; }
+  .row.win .tile:nth-child(3) { animation-delay: .08s; } .row.win .tile:nth-child(4) { animation-delay: .16s; } .row.win .tile:nth-child(5) { animation-delay: .24s; }
+  @keyframes winHop { 40% { transform: translateY(-18px) rotate(-8deg) scale(1.1); } }
+  .head h1 { animation: flutter 3s ease-in-out infinite; }
+  @keyframes flutter { 50% { transform: translateY(-4px) rotate(-1.5deg); } }
+  .kb button { transition: transform .12s cubic-bezier(.3, 2, .5, 1); }
+  .kb button:active { transform: scale(.85); }
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="wrap" style="width:min(1040px,100% - 32px)">
+  <a class="logo" href="../"><img src="../assets/icons/logo-rounded.svg" alt="" width="30" height="30">CiB <b>YP</b></a>
+  <div class="links">
+    <a href="../">🏠<span class="t"> Home</span></a>
+    <a href="../tree.html">🍂<span class="t"> Tree</span></a>
+    <a href="../qbox.html">📮<span class="t"> Q Box</span></a>
+    <a href="../#games" aria-current="page">🎮<span class="t"> Games</span></a>
+    <a href="scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<div class="wrap">
+  <div class="head"><h1>🦋 Transformed</h1><button class="help" id="helpBtn" aria-label="How to play">?</button></div>
+  <p class="sub">One letter at a time, be transformed (Rom. 12:2)</p>
+  <div class="days" id="days"></div>
+  <p class="goal" id="goal">Loading…</p>
+  <div class="legend">
+    <span><i style="background:var(--matcha)"></i>right letter, right spot</span>
+    <span><i style="background:var(--yellow)"></i>in the goal word</span>
+    <span>🔥 closer · 🧊 farther</span>
+  </div>
+  <div class="board" id="board"></div>
+  <p class="msg" id="msg" role="status"></p>
+  <div class="tools">
+    <button class="btn white small" id="undo" type="button">↩️ Undo step</button>
+    <button class="btn white small" id="giveup" type="button">🏳️ Show a path</button>
+  </div>
+  <div class="kb" id="kb"></div>
+</div>
+
+<dialog id="howDlg">
+  <h2>How to play 🦋</h2>
+  <p>Transform the start word into the goal word in as few steps as you can.</p>
+  <p>Each step changes <b>exactly one letter</b> and must be a real word:</p>
+  <div class="mini"><span>R</span><span>E</span><span>S</span><span>T</span></div>
+  <div class="mini"><span>F</span><span>E</span><span>S</span><span>T</span></div>
+  <div class="mini"><span>F</span><span class="hit">A</span><span>S</span><span>T</span></div>
+  <p>🟩 Green = that letter already matches the goal. 🟨 Yellow = the goal has that letter somewhere else. 🔥 means your new word is closer to the goal, 🧊 means farther.</p>
+  <div class="row-btns"><button class="btn green" type="button" data-close>Let’s go!</button></div>
+</dialog>
+
+<dialog id="giveDlg">
+  <h2>Show a path? 🏳️</h2>
+  <p>This ends today’s puzzle and you can’t save a high score for it.</p>
+  <div class="row-btns"><button class="btn white" type="button" data-close>Keep trying</button><button class="btn" type="button" id="giveYes">Show me</button></div>
+</dialog>
+
+<dialog id="winDlg">
+  <h2 id="winTitle">🎉 Transformed!</h2>
+  <p id="winText"></p>
+  <div class="verse" id="winVerse"></div>
+  <p style="margin-bottom:4px">One best path:</p>
+  <div id="winPath"></div>
+  <div id="saveBox"></div>
+  <div class="row-btns">
+    <button class="btn" type="button" id="shareBtn">📋 Copy my result</button>
+    <a class="btn white" id="readLink" target="_blank" rel="noopener">📖 Read the chapter</a>
+  </div>
+  <div class="row-btns"><button class="btn white small" type="button" data-close>Close</button></div>
+</dialog>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/bible.js"></script>
+<script src="../assets/api.js"></script>
+<script src="../assets/fun.js"></script>
+<script src="words.js"></script>
+<script src="bank.js"></script>
+<script src="scoreboard.js"></script>
+<script>
+(() => {
+  const { API, DATES, FUN, GAMEBANK, SCORES } = window;
+  const $ = id => document.getElementById(id);
+  const WORDS = window.WORDS4;
+  let days = [], dayIdx = 0, P, D, key, st, cur = "", fresh = false;
+
+  document.querySelectorAll("[data-close]").forEach(b => b.onclick = () => b.closest("dialog").close());
+
+  // ---------- word graph ----------
+  function nbrs(w) {
+    const out = [];
+    for (let i = 0; i < 4; i++) for (let c = 97; c < 123; c++) {
+      const ch = String.fromCharCode(c); if (ch === w[i]) continue;
+      const x = w.slice(0, i) + ch + w.slice(i + 1); if (WORDS.has(x)) out.push(x);
+    }
+    return out;
+  }
+  function distFrom(target) {
+    const d = new Map([[target, 0]]), q = [target];
+    for (let h = 0; h < q.length; h++) for (const x of nbrs(q[h])) if (!d.has(x)) { d.set(x, d.get(q[h]) + 1); q.push(x); }
+    return d;
+  }
+  const dist = w => { const v = D.get(w.toLowerCase()); return v === undefined ? Infinity : v; };
+
+  // ---------- load a day ----------
+  function load(i) {
+    dayIdx = i;
+    const day = days[i], pick = GAMEBANK.pick(day.ref, day.date);
+    P = { ...pick.ladder, par: pick.ladder.path.length - 1, ref: day.ref, link: day.link, date: day.date };
+    P.path.forEach(w => WORDS.add(w.toLowerCase()));
+    D = distFrom(P.target.toLowerCase());
+    key = "tf_" + day.date + "_" + P.start + P.target;
+    st = API.store.get(key, null) || { steps: [P.start], done: false, gaveUp: false, t0: 0, t1: 0 };
+    cur = ""; $("msg").textContent = "";
+    renderDays(); render();
+  }
+  const save = () => API.store.set(key, st);
+
+  function renderDays() {
+    const box = $("days"); box.innerHTML = "";
+    days.forEach((d, i) => {
+      const s = API.store.get("tf_" + d.date + "_" + GAMEBANK.pick(d.ref, d.date).ladder.start + GAMEBANK.pick(d.ref, d.date).ladder.target, null);
+      const b = document.createElement("button"); b.type = "button"; b.className = "day"; b.setAttribute("aria-pressed", i === dayIdx);
+      b.textContent = (d.date === DATES.today() ? "Today" : DATES.label(d.date, { weekday: "short" })) + (s && s.done ? " ✓" : "");
+      const sm = document.createElement("small"); sm.textContent = d.ref || "Bible mix"; b.appendChild(sm);
+      b.onclick = () => load(i); box.appendChild(b);
+    });
+    const g = $("goal"); g.textContent = "";
+    const a = document.createElement("b"); a.textContent = P.start;
+    const b = document.createElement("b"); b.textContent = P.target;
+    g.append("Transform ", a, " into ", b, " · Par " + P.par);
+  }
+
+  // ---------- render ----------
+  function colorFor(word) {
+    const t = P.target;
+    return [...word].map((ch, i) => !ch ? "" : ch === t[i] ? "hit" : t.includes(ch) ? "near" : "");
+  }
+  function hintFor(i) {
+    const w = st.steps[i];
+    if (i === 0) return ["📍 start", ""];
+    if (w === P.target) return ["🎯 goal!", "goal"];
+    const a = dist(st.steps[i - 1]), b = dist(w);
+    if (b === Infinity) return ["🚧 dead end", "dead"];
+    if (b < a) return ["🔥 closer", "hot"];
+    if (b > a) return ["🧊 farther", "cold"];
+    return ["↔️ same", "same"];
+  }
+  function row(word, cls, n, colors, hint) {
+    const r = document.createElement("div"); r.className = "row " + (cls || "");
+    const num = document.createElement("span"); num.className = "n"; num.textContent = n; r.appendChild(num);
+    for (let i = 0; i < 4; i++) {
+      const t = document.createElement("div"); t.className = "tile " + ((colors && colors[i]) || "");
+      t.textContent = (word[i] || "").toUpperCase();
+      if (cls === "input" && word[i]) t.classList.add("filled");
+      r.appendChild(t);
+    }
+    const h = document.createElement("span");
+    if (hint) { h.className = "hint " + hint[1]; h.textContent = hint[0]; }
+    r.appendChild(h);
+    return r;
+  }
+  function render() {
+    const b = $("board"); b.innerHTML = "";
+    st.steps.forEach((w, i) => b.appendChild(row(w, st.done && i === st.steps.length - 1 && !st.gaveUp ? "win" : (fresh && i === st.steps.length - 1 ? "fresh" : ""), i || "", colorFor(w), hintFor(i))));
+    fresh = false;
+    if (!st.done) {
+      b.appendChild(row(cur, "input", st.steps.length, null, null));
+      const d = document.createElement("div"); d.className = "dots"; d.textContent = "· · ·"; b.appendChild(d);
+      b.appendChild(row(P.target, "goalrow", "🏁", null, null));
+    }
+    $("undo").disabled = st.done || st.steps.length < 2;
+    $("giveup").disabled = st.done;
+    // green keys = letters of the goal word
+    document.querySelectorAll(".kb button[data-k]").forEach(k => k.classList.toggle("hit", P.target.includes(k.dataset.k)));
+  }
+
+  // ---------- input ----------
+  const say = m => $("msg").textContent = m;
+  function shake() { FUN.bonk(); const r = document.querySelector(".row.input"); if (r) { r.classList.remove("shake"); void r.offsetWidth; r.classList.add("shake"); } }
+  function press(k) {
+    if (st.done || !P) return;
+    if (!st.t0) { st.t0 = Date.now(); save(); }
+    if (k === "ENTER") return submit();
+    if (k === "BACK") { cur = cur.slice(0, -1); say(""); return render(); }
+    if (/^[A-Z]$/.test(k) && cur.length < 4) { cur += k; say(""); FUN.tick(); render(); }
+  }
+  function submit() {
+    const w = cur.toUpperCase(), prev = st.steps[st.steps.length - 1];
+    if (w.length < 4) { say("Need 4 letters"); return shake(); }
+    let diff = 0; for (let i = 0; i < 4; i++) if (w[i] !== prev[i]) diff++;
+    if (diff !== 1) { say(diff === 0 ? "That’s the same word 😅" : "Change exactly ONE letter"); return shake(); }
+    if (!WORDS.has(w.toLowerCase())) { say("Not in our word list"); return shake(); }
+    if (st.steps.includes(w)) { say("Already used that word"); return shake(); }
+    st.steps.push(w); cur = "";
+    if (w === P.target) { st.done = true; st.t1 = Date.now(); save(); render(); renderDays(); FUN.fanfare(); FUN.confetti(["🦋", "✨", "🌿", "🦋"], 30); setTimeout(showWin, 900); return; }
+    fresh = true;
+    const h = hintFor(st.steps.length - 1);
+    h[1] === "hot" ? FUN.note(Math.max(0, 8 - dist(w)), 0.18) : h[1] === "cold" || h[1] === "dead" ? FUN.bonk() : FUN.note(1, 0.12);
+    if (h[1] === "dead") say("Heads up: no path to the goal from that word. Try ↩️ Undo.");
+    save(); render();
+  }
+
+  function showWin() {
+    const n = st.steps.length - 1, secs = st.t1 && st.t0 ? Math.round((st.t1 - st.t0) / 1000) : 0;
+    if (st.gaveUp) { $("winTitle").textContent = "Here’s a path 🦋"; $("winText").textContent = "No worries — try again tomorrow!"; }
+    else {
+      $("winTitle").textContent = n < P.par ? "🤯 You BEAT par!" : n === P.par ? "🎯 Par! Perfect transformation!" : "🦋 Transformed!";
+      $("winText").textContent = `${n} step${n === 1 ? "" : "s"} · Par is ${P.par} · ${SCORES.fmtTime(secs)}`;
+    }
+    $("winVerse").textContent = P.verse;
+    const pb = $("winPath"); pb.innerHTML = "";
+    P.path.forEach(w => {
+      const m = document.createElement("div"); m.className = "mini"; const c = colorFor(w);
+      [...w].forEach((ch, j) => { const s = document.createElement("span"); s.textContent = ch; if (c[j]) s.className = c[j]; m.appendChild(s); });
+      pb.appendChild(m);
+    });
+    $("readLink").href = P.link || window.BIBLE.BASE;
+    $("readLink").hidden = !P.ref;
+    const sb = $("saveBox");
+    if (!st.gaveUp) SCORES.mountSave(sb, { game: "transformed", day: P.date, reading: P.ref || "Bible mix", score: n, detail: secs });
+    else { sb.innerHTML = ""; sb.className = ""; }
+    $("shareBtn").onclick = () => FUN.copy(
+      `🦋 Transformed · ${P.ref || "Bible mix"}\n${P.start} → ${P.target}: ${st.gaveUp ? "needed help" : n + " steps (par " + P.par + ")"} ${st.steps.slice(1).map(w => w === P.target ? "🦋" : "🟩".repeat(colorFor(w).filter(c => c === "hit").length) || "⬜").join(" ")}`,
+      "Copied! Paste it in the group chat 📲");
+    $("winDlg").showModal();
+  }
+
+  $("undo").onclick = () => { if (st.steps.length > 1 && !st.done) { st.steps.pop(); save(); say(""); render(); } };
+  $("giveup").onclick = () => $("giveDlg").showModal();
+  $("giveYes").onclick = () => { $("giveDlg").close(); st.done = true; st.gaveUp = true; save(); render(); renderDays(); showWin(); };
+  $("helpBtn").onclick = () => $("howDlg").showModal();
+
+  // keyboard
+  ["QWERTYUIOP", "ASDFGHJKL", "+ZXCVBNM-"].forEach(r => {
+    const div = document.createElement("div"); div.className = "r";
+    [...r].forEach(c => {
+      const b = document.createElement("button"); b.type = "button";
+      if (c === "+") { b.textContent = "Enter"; b.className = "wide"; b.onclick = () => press("ENTER"); }
+      else if (c === "-") { b.textContent = "⌫"; b.className = "wide"; b.setAttribute("aria-label", "Delete"); b.onclick = () => press("BACK"); }
+      else { b.textContent = c; b.dataset.k = c; b.onclick = () => press(c); }
+      div.appendChild(b);
+    });
+    $("kb").appendChild(div);
+  });
+  document.addEventListener("keydown", e => {
+    if (document.querySelector("dialog[open]") || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "Enter") { e.preventDefault(); press("ENTER"); }
+    else if (e.key === "Backspace") press("BACK");
+    else if (/^[a-z]$/i.test(e.key)) press(e.key.toUpperCase());
+  });
+
+  // ---------- start ----------
+  function start(readings) {
+    days = SCORES.days(readings);
+    load(days.findIndex(d => d.date === DATES.today()));
+    if (!API.store.get("tf_seen_help", false)) { API.store.set("tf_seen_help", true); $("howDlg").showModal(); }
+  }
+  API.public().then(d => start(d.readings)).catch(() => start([]));
+})();
+</script>
+</body>
+</html>

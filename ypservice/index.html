@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YP Serving Ones</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../burlingameyp/assets/icons/serve-logo-rounded.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../burlingameyp/assets/icons/serve-favicon-32.png">
+<link rel="apple-touch-icon" href="../burlingameyp/assets/icons/serve-apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#6e2443">
+<meta name="apple-mobile-web-app-title" content="YP Serving">
+<meta property="og:title" content="CiB YP · Serving Ones">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/serve-icon-512.png">
+<style>
+  :root { --ink: #222; --soft: #666; --line: #ddd; --bg: #f6f6f4; --green: #3f7d3a; --green-l: #e6f2e2; --blue: #2563eb; --red: #b42318; --yellow: #fff4c2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+  .wrap { width: min(860px, 100% - 28px); margin: 0 auto; }
+  header { background: #fff; border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 0; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+  header h1 img { border-radius: 9px; display: block; }
+  header a, .linkbtn { color: var(--blue); font-weight: 600; text-decoration: none; background: none; border: 0; cursor: pointer; font: inherit; padding: 0; }
+  .demo { background: var(--yellow); text-align: center; padding: 6px 10px; font-size: .9rem; }
+  nav.tabs { display: flex; gap: 4px; overflow-x: auto; padding: 12px 0 0; }
+  nav.tabs button { border: 1px solid var(--line); background: #fff; padding: 9px 14px; border-radius: 10px 10px 0 0; font: 600 .95rem system-ui; cursor: pointer; white-space: nowrap; color: var(--ink); }
+  nav.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 0 12px 12px 12px; padding: 18px; margin-bottom: 40px; }
+  h2 { margin: 0 0 4px; font-size: 1.2rem; }
+  .help { color: var(--soft); margin: 0 0 16px; font-size: .95rem; }
+  button.b { font: 600 .95rem system-ui; border: 1px solid var(--ink); background: #fff; color: var(--ink); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+  button.b.primary { background: var(--green); border-color: var(--green); color: #fff; }
+  button.b.danger { color: var(--red); border-color: #e4b4ae; }
+  button.b:disabled { opacity: .5; cursor: wait; }
+  input, select, textarea { font: inherit; padding: 8px 10px; border: 1px solid #bbb; border-radius: 8px; background: #fff; color: var(--ink); max-width: 100%; }
+  textarea { width: 100%; min-height: 90px; resize: vertical; }
+  label.lbl { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+  .gate { max-width: 380px; margin: 50px auto; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 24px; text-align: center; }
+  .gate input { width: 100%; margin: 12px 0; }
+  .err { color: var(--red); font-weight: 600; min-height: 1.4em; margin: 6px 0 0; }
+
+  /* questions */
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chips button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 12px; font: 600 .9rem system-ui; cursor: pointer; color: var(--ink); }
+  .chips button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .q { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .q .meta { font-size: .85rem; color: var(--soft); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .pill { font-size: .75rem; font-weight: 700; border-radius: 999px; padding: 1px 8px; background: #eee; }
+  .pill.New { background: var(--yellow); } .pill.Approved { background: var(--green-l); color: var(--green); }
+  .who { font-weight: 700; color: var(--ink); }
+  .q .text { font-size: 1.1rem; font-weight: 600; margin: 8px 0 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* readings */
+  .weeknav { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .weeknav strong { min-width: 170px; text-align: center; }
+  .fill { background: var(--bg); border-radius: 10px; padding: 12px; display: flex; gap: 8px; align-items: end; flex-wrap: wrap; margin-bottom: 14px; }
+  table.rd { width: 100%; border-collapse: collapse; }
+  table.rd td { padding: 6px 4px; border-bottom: 1px solid #eee; vertical-align: middle; }
+  table.rd td.d { font-weight: 600; white-space: nowrap; width: 92px; }
+  table.rd tr.today td.d { color: var(--green); }
+  table.rd select { width: 100%; min-width: 120px; }
+  table.rd input.ch { width: 70px; }
+  table.rd input.nt { width: 100%; }
+  @media (max-width: 640px) {
+    table.rd, table.rd tbody, table.rd tr, table.rd td { display: block; width: 100%; }
+    table.rd tr { border-bottom: 1px solid #eee; padding: 8px 0; display: grid; grid-template-columns: 1fr 80px; gap: 6px; }
+    table.rd td { border: 0; padding: 0; } table.rd td.d { grid-column: 1 / -1; width: auto; }
+    table.rd td.nt-cell, table.rd td.ln { grid-column: 1 / -1; } table.rd input.ch { width: 100%; }
+  }
+  .save-bar { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  .ok { color: var(--green); font-weight: 600; }
+
+  /* weekly enjoyment */
+  .enj-form { display: grid; gap: 12px; background: var(--bg); padding: 14px; border-radius: 10px; margin-bottom: 16px; }
+  .enj-form .row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .enj-form input, .enj-form select { width: 100%; }
+  .feelings { display: flex; flex-wrap: wrap; gap: 6px; }
+  .feelings button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 12px; font: 600 .9rem system-ui; cursor: pointer; color: var(--ink); }
+  .feelings button[aria-pressed="true"] { background: var(--green-l); border-color: var(--green); color: var(--green); }
+  .post { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+  .post .wk { font-weight: 700; } .post .meta { color: var(--soft); font-size: .88rem; }
+  .post .msg { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .post .actions button { margin-right: 6px; }
+  button.b.small { padding: 5px 12px; font-size: .88rem; }
+  .post img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; display: block; }
+  .up { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; background: var(--bg); padding: 12px; border-radius: 10px; margin-bottom: 16px; }
+  .up input { width: 100%; }
+  .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .thumb { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+  .thumb img { width: 100%; height: 190px; object-fit: cover; object-position: top; display: block; background: #f2f2f2; }
+  .thumb div { padding: 8px; font-size: .85rem; }
+  .thumb .t { color: var(--soft); overflow-wrap: anywhere; }
+
+  /* scores */
+  table.sc { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  table.sc th, table.sc td { text-align: left; padding: 7px 6px; border-bottom: 1px solid #eee; }
+  table.sc th { font-size: .8rem; color: var(--soft); text-transform: uppercase; }
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; display: none; z-index: 9; }
+  .toast.show { display: block; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="demo" id="demo" hidden>Preview mode — sample data, saved only in this browser. Add the Apps Script link in assets/config.js to go live.</div>
+<header><div class="wrap">
+  <h1 class="brand"><img src="../burlingameyp/assets/icons/serve-logo-rounded.svg" alt="" width="34" height="34"> YP Serving Ones <small style="font-size:.75rem;font-weight:600;color:#888">Version <span class="site-ver"></span></small></h1>
+  <div><a href="../burlingameyp/" target="_blank" rel="noopener">View YP site ↗</a> &nbsp; <button class="linkbtn" id="lock" hidden>Lock</button></div>
+</div></header>
+
+<main class="wrap">
+  <div class="gate" id="gate">
+    <img src="../burlingameyp/assets/icons/serve-logo-rounded.svg" alt="" width="64" height="64" style="display:block;margin:0 auto 10px">
+    <h2>Serving ones only</h2>
+    <p class="help">Enter the passcode.</p>
+    <label for="code" style="position:absolute;left:-9999px">Passcode</label>
+    <input id="code" type="password" autocomplete="current-password" placeholder="Passcode">
+    <button class="b primary" type="button" id="enter" style="width:100%">Open</button>
+    <p class="err" id="gateErr"></p>
+  </div>
+
+  <div id="app" hidden>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="questions" aria-selected="true">💬 Questions <span id="newCount"></span></button>
+      <button role="tab" data-tab="reading" aria-selected="false">📖 Reading plan</button>
+      <button role="tab" data-tab="revival" aria-selected="false">🍂 Tree of Life <span id="waitCount"></span></button>
+      <button role="tab" data-tab="scores" aria-selected="false">🏆 Scores</button>
+    </nav>
+
+    <!-- QUESTIONS -->
+    <section class="panel" id="tab-questions">
+      <h2>Questions</h2>
+      <p class="help">Write an answer and post it to the YP site, or hide it. Names are never shown on the YP site.</p>
+      <div class="chips" id="qChips">
+        <button data-f="New" aria-pressed="true">New</button><button data-f="Approved" aria-pressed="false">Posted</button>
+        <button data-f="Hidden" aria-pressed="false">Hidden</button><button data-f="All" aria-pressed="false">All</button>
+      </div>
+      <div id="qList"></div>
+    </section>
+
+    <!-- READING -->
+    <section class="panel" id="tab-reading" hidden>
+      <h2>Reading plan</h2>
+      <p class="help">Pick a chapter for each day. It shows on the YP home page and sets the daily games.</p>
+      <div class="weeknav">
+        <button class="b" type="button" id="prevWk">◀</button><strong id="wkLabel"></strong><button class="b" type="button" id="nextWk">▶</button>
+        <button class="linkbtn" type="button" id="thisWk">This week</button>
+      </div>
+      <div class="fill">
+        <div><label class="lbl" for="fillBook">Quick fill — start at</label><select id="fillBook"></select></div>
+        <div><label class="lbl" for="fillCh">Chapter</label><input id="fillCh" type="number" min="1" value="1" style="width:80px"></div>
+        <label style="display:flex;gap:6px;align-items:center;font-size:.9rem"><input type="checkbox" id="fillWknd"> Include Sat & Sun</label>
+        <button class="b" type="button" id="fillBtn">Fill the week</button>
+      </div>
+      <table class="rd"><tbody id="rdRows"></tbody></table>
+      <div class="save-bar"><button class="b primary" type="button" id="saveWk">Save this week</button><span id="rdMsg"></span></div>
+    </section>
+
+    <!-- TREE OF LIFE -->
+    <section class="panel" id="tab-revival" hidden>
+      <h2>Tree of Life</h2>
+      <p class="help">Hang a leaf with your enjoyment. Serving ones’ leaves are gold on the tree. YP leaves are listed below, where you can hide or delete any of them.</p>
+      <div class="enj-form">
+        <div><label class="lbl" for="enFrom">From (optional)</label><input id="enFrom" maxlength="60" placeholder="e.g. The serving ones"></div>
+        <div>
+          <span class="lbl" id="feelLbl">Feeling (optional)</span>
+          <div class="feelings" id="feelings" role="group" aria-labelledby="feelLbl"></div>
+        </div>
+        <div><label class="lbl" for="enMsg">Your enjoyment</label><textarea id="enMsg" maxlength="3000" placeholder="What touched you this week? A verse, a hymn line, something the Lord did…"></textarea></div>
+        <div class="row2">
+          <div><label class="lbl" for="enVerse">Verse (optional)</label><input id="enVerse" maxlength="80" placeholder="e.g. Heb. 12:2"></div>
+          <div><label class="lbl" for="enFile">Photo (optional)</label><input id="enFile" type="file" accept="image/*"></div>
+        </div>
+        <div><button class="b primary" type="button" id="enPost">Hang leaf on the tree</button> <span id="enMsgOut"></span></div>
+      </div>
+      <div class="chips" id="leafChips">
+        <button data-f="All" aria-pressed="true">All</button><button data-f="YP" aria-pressed="false">YP</button>
+        <button data-f="SO" aria-pressed="false">Serving ones</button><button data-f="Waiting" aria-pressed="false">Waiting</button><button data-f="Hidden" aria-pressed="false">Hidden</button>
+      </div>
+      <div id="enList"></div>
+    </section>
+
+    <!-- SCORES -->
+    <section class="panel" id="tab-scores" hidden>
+      <h2>High scores</h2>
+      <p class="help">Remove any entry with an unkind nickname.</p>
+      <table class="sc"><thead><tr><th>Day</th><th>Game</th><th>Name</th><th>Score</th><th></th></tr></thead><tbody id="scRows"></tbody></table>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="../burlingameyp/assets/config.js"></script>
+<script src="../burlingameyp/assets/bible.js"></script>
+<script src="../burlingameyp/assets/api.js"></script>
+<script>
+(() => {
+  const { API, DATES, BIBLE } = window;
+  const $ = id => document.getElementById(id);
+  let code = "", questions = [], qFilter = "New", readings = [], leaves = [], leafFilter = "All", wk = DATES.monday(DATES.today());
+  if (API.demo) $("demo").hidden = false;
+
+  const toast = m => { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2500); };
+  const post = p => API.post({ ...p, code });
+  async function busy(btn, fn) { btn.disabled = true; try { await fn(); } catch (e) { toast("⚠️ " + e.message); } btn.disabled = false; }
+
+  // ---------- gate ----------
+  async function open() {
+    $("gateErr").textContent = "";
+    code = API.demo ? "demo" : $("code").value.trim();
+    try {
+      await loadQuestions();
+      try { sessionStorage.setItem("serve_code", code); } catch (e) {}
+      $("gate").hidden = true; $("app").hidden = false; $("lock").hidden = API.demo;
+      loadPublic(); loadScores();
+    } catch (e) { $("gateErr").textContent = e.message === "Wrong passcode" ? "That passcode didn’t work." : "Couldn’t connect: " + e.message; }
+  }
+  $("enter").onclick = open;
+  $("code").addEventListener("keydown", e => { if (e.key === "Enter") open(); });
+  $("lock").onclick = () => { try { sessionStorage.removeItem("serve_code"); } catch (e) {} location.reload(); };
+
+  // ---------- tabs ----------
+  document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
+    document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
+    ["questions", "reading", "revival", "scores"].forEach(t => $("tab-" + t).hidden = t !== b.dataset.tab);
+  });
+
+  // ---------- questions ----------
+  async function loadQuestions() { const d = await post({ action: "list" }); questions = d.items || []; renderQ(); }
+  document.querySelectorAll("#qChips button").forEach(b => b.onclick = () => {
+    qFilter = b.dataset.f; document.querySelectorAll("#qChips button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderQ();
+  });
+  function renderQ() {
+    const n = questions.filter(q => q.status === "New").length;
+    $("newCount").textContent = n ? "(" + n + ")" : "";
+    const list = $("qList"); list.innerHTML = "";
+    const shown = questions.filter(q => qFilter === "All" || q.status === qFilter);
+    if (!shown.length) { list.innerHTML = '<p class="help">' + (qFilter === "New" ? "All caught up 🎉" : "Nothing here.") + "</p>"; return; }
+    shown.forEach(q => {
+      const el = document.createElement("div"); el.className = "q";
+      el.innerHTML = '<div class="meta"><span class="pill"></span><span class="who"></span><span class="when"></span></div><div class="text"></div>' +
+        '<label class="lbl">Answer (shown on the YP site)</label><textarea></textarea><div class="actions"></div>';
+      const pill = el.querySelector(".pill"); pill.classList.add(q.status); pill.textContent = q.status === "Approved" ? "Posted" : q.status;
+      el.querySelector(".who").textContent = q.name ? "From: " + q.name : "Anonymous";
+      el.querySelector(".when").textContent = q.time || "";
+      el.querySelector(".text").textContent = q.question;
+      const ta = el.querySelector("textarea"); ta.value = q.answer || "";
+      const acts = el.querySelector(".actions");
+      const btn = (label, cls, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "b " + cls; b.textContent = label; b.onclick = () => busy(b, fn); acts.appendChild(b); };
+      const upd = async (status, msg) => { await post({ action: "update", id: q.id, status, answer: ta.value.trim() }); q.status = status; q.answer = ta.value.trim(); renderQ(); toast(msg); };
+      btn(q.status === "Approved" ? "Update answer" : "Post to YP site", "primary", () => { if (!ta.value.trim()) { toast("Write an answer first"); return Promise.resolve(); } return upd("Approved", "Posted ✓"); });
+      if (q.status !== "Approved") btn("Save draft", "", () => upd(q.status, "Draft saved"));
+      if (q.status === "Approved") btn("Take down", "", () => upd("New", "Taken down"));
+      if (q.status === "Hidden") btn("Move back to New", "", () => upd("New", "Moved to New")); else btn("Hide", "danger", () => upd("Hidden", "Hidden"));
+      list.appendChild(el);
+    });
+  }
+
+  // ---------- public data (readings) + all leaves ----------
+  async function loadPublic() { const d = await API.public(); readings = d.readings; renderWeek(); await loadLeaves(); }
+
+  // ---------- reading plan ----------
+  function bookSelect(sel, value, blank) {
+    sel.innerHTML = (blank ? '<option value="">— none —</option>' : "") +
+      '<optgroup label="New Testament">' + BIBLE.books.slice(BIBLE.NT_START).map(b => `<option>${b[0]}</option>`).join("") + "</optgroup>" +
+      '<optgroup label="Old Testament">' + BIBLE.books.slice(0, BIBLE.NT_START).map(b => `<option>${b[0]}</option>`).join("") + "</optgroup>";
+    sel.value = value || "";
+  }
+  bookSelect($("fillBook"), "Hebrews", false);
+  function renderWeek() {
+    $("wkLabel").textContent = "Week of " + DATES.label(wk, { month: "short", day: "numeric", year: "numeric" });
+    const tb = $("rdRows"); tb.innerHTML = ""; $("rdMsg").textContent = "";
+    for (let i = 0; i < 7; i++) {
+      const date = DATES.addDays(wk, i), r = readings.find(x => x.date === date) || {};
+      const tr = document.createElement("tr"); tr.dataset.date = date; if (date === DATES.today()) tr.className = "today";
+      tr.innerHTML = '<td class="d"></td><td><select aria-label="Book"></select></td><td><input class="ch" type="number" min="1" placeholder="Ch." aria-label="Chapter"></td>' +
+        '<td class="nt-cell"><input class="nt" placeholder="Note (optional, e.g. vv. 1-18)" aria-label="Note"></td><td class="ln"><a target="_blank" rel="noopener">open ↗</a></td>';
+      tr.querySelector(".d").textContent = DATES.label(date, { weekday: "short", month: "numeric", day: "numeric" });
+      const sel = tr.querySelector("select"), ch = tr.querySelector(".ch"), nt = tr.querySelector(".nt"), a = tr.querySelector("a");
+      bookSelect(sel, r.book || "", true); ch.value = r.chapter || ""; nt.value = r.note || "";
+      const link = () => { a.href = BIBLE.link(sel.value, ch.value); a.hidden = !sel.value; };
+      sel.onchange = ch.oninput = link; link();
+      tb.appendChild(tr);
+    }
+  }
+  $("prevWk").onclick = () => { wk = DATES.addDays(wk, -7); renderWeek(); };
+  $("nextWk").onclick = () => { wk = DATES.addDays(wk, 7); renderWeek(); };
+  $("thisWk").onclick = () => { wk = DATES.monday(DATES.today()); renderWeek(); };
+  $("fillBtn").onclick = () => {
+    let b = $("fillBook").value, c = Math.max(1, parseInt($("fillCh").value, 10) || 1);
+    const n = $("fillWknd").checked ? 7 : 5;
+    const max = BIBLE.books[BIBLE.index(b)][2]; if (c > max) c = max;
+    [...$("rdRows").children].forEach((tr, i) => {
+      const sel = tr.querySelector("select"), ch = tr.querySelector(".ch");
+      if (i < n) { sel.value = b; ch.value = c; [b, c] = BIBLE.next(b, c); } else { sel.value = ""; ch.value = ""; }
+      sel.onchange();
+    });
+    $("rdMsg").textContent = "Filled — don’t forget to save.";
+  };
+  $("saveWk").onclick = () => busy($("saveWk"), async () => {
+    const rows = [...$("rdRows").children], dates = rows.map(r => r.dataset.date), items = [];
+    for (const tr of rows) {
+      const book = tr.querySelector("select").value, ch = parseInt(tr.querySelector(".ch").value, 10), note = tr.querySelector(".nt").value.trim();
+      if (!book) continue;
+      const max = BIBLE.books[BIBLE.index(book)][2];
+      if (!ch || ch < 1 || ch > max) { toast(`${book} has chapters 1–${max}`); return; }
+      items.push({ date: tr.dataset.date, book, chapter: ch, note });
+    }
+    await post({ action: "setReadings", dates, items });
+    readings = readings.filter(r => !dates.includes(r.date)).concat(items.map(API.decorate));
+    $("rdMsg").innerHTML = '<span class="ok">Saved ✓ The YP site is updated.</span>';
+  });
+
+  // ---------- weekly enjoyment ----------
+  const FEELINGS = ["😊 Joyful", "🙏 Thankful", "🔥 Burning", "🌱 Growing", "💧 Refreshed", "🕊️ Peaceful", "💪 Strengthened", "🤔 Pondering", "😴 Tired but trusting"];
+  let feeling = "";
+  FEELINGS.forEach(f => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = f; b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { feeling = feeling === f ? "" : f; document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.textContent === feeling)); };
+    $("feelings").appendChild(b);
+  });
+  function compress(file) {
+    return new Promise((res, rej) => {
+      const img = new Image(), url = URL.createObjectURL(file);
+      img.onload = () => {
+        const s = Math.min(1, 1400 / img.naturalWidth, 1400 / img.naturalHeight);
+        const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+        const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url); res(c.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = () => rej(new Error("Couldn’t read " + file.name));
+      img.src = url;
+    });
+  }
+  $("enPost").onclick = () => busy($("enPost"), async () => {
+    const message = $("enMsg").value.trim(), file = $("enFile").files[0];
+    if (!message) { toast("Write your enjoyment first"); $("enMsg").focus(); return; }
+    $("enMsgOut").textContent = "Hanging…";
+    const image = file ? await compress(file) : "";
+    await post({ action: "addLeaf", name: $("enFrom").value.trim(), feeling, message, verse: $("enVerse").value.trim(), image });
+    $("enMsgOut").innerHTML = '<span class="ok">Hung ✓ It’s on the Tree of Life.</span>';
+    $("enMsg").value = ""; $("enVerse").value = ""; $("enFile").value = ""; feeling = "";
+    document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", "false"));
+    await loadPublic();
+  });
+  async function loadLeaves() { const d = await post({ action: "allLeaves" }); leaves = d.leaves || []; renderLeaves(); }
+  document.querySelectorAll("#leafChips button").forEach(b => b.onclick = () => {
+    leafFilter = b.dataset.f; document.querySelectorAll("#leafChips button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderLeaves();
+  });
+  function renderLeaves() {
+    const waiting = leaves.filter(l => l.status === "Waiting").length;
+    $("waitCount").textContent = waiting ? "(" + waiting + ")" : "";
+    const box = $("enList"); box.innerHTML = "";
+    const shown = leaves.filter(l => leafFilter === "All" || (leafFilter === "YP" && !l.so) || (leafFilter === "SO" && l.so) || l.status === leafFilter);
+    if (!shown.length) { box.innerHTML = '<p class="help">No leaves here.</p>'; return; }
+    shown.forEach(l => {
+      const d = document.createElement("div"); d.className = "post";
+      d.innerHTML = '<div><div class="wk"></div><div class="meta"></div><div class="msg"></div><div class="actions"></div></div><div class="ph"></div>';
+      d.querySelector(".wk").textContent = (l.so ? "🟡 " + (l.name || "Serving ones") : "🍁 " + (l.name || "A YP (no name)")) + (l.feeling ? " · " + l.feeling : "") + (l.status !== "Shown" ? " · " + l.status : "");
+      d.querySelector(".meta").textContent = [DATES.label(l.day, { weekday: "short", month: "short", day: "numeric" }), l.verse].filter(Boolean).join(" · ");
+      d.querySelector(".msg").textContent = l.message;
+      if (l.url) {
+        const img = document.createElement("img"); img.src = l.url; img.alt = "";
+        img.onerror = () => { const m = l.url.match(/id=([^&]+)/); if (m && !img.dataset.f) { img.dataset.f = 1; img.src = "https://lh3.googleusercontent.com/d/" + m[1]; } };
+        d.querySelector(".ph").appendChild(img);
+      }
+      const acts = d.querySelector(".actions");
+      const btn = (label, cls, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "b small " + cls; b.textContent = label; b.style.marginTop = "8px"; b.onclick = () => busy(b, fn); acts.appendChild(b); };
+      const setStatus = async st => { await post({ action: "setLeaf", id: l.id, status: st }); l.status = st; renderLeaves(); toast(st === "Shown" ? "On the tree ✓" : "Hidden from the tree"); };
+      if (l.status !== "Shown") btn("Show on tree", "primary", () => setStatus("Shown"));
+      if (l.status !== "Hidden") btn("Hide", "", () => setStatus("Hidden"));
+      btn("Delete", "danger", async () => {
+        if (!confirm("Delete this leaf for good?")) return;
+        await post({ action: "deleteLeaf", id: l.id }); leaves = leaves.filter(x => x.id !== l.id); renderLeaves(); toast("Deleted");
+      });
+      box.appendChild(d);
+    });
+  }
+
+  // ---------- scores ----------
+  async function loadScores() {
+    const d = await API.scores(), tb = $("scRows"); tb.innerHTML = "";
+    const list = (d.scores || []).slice().sort((a, b) => String(b.day).localeCompare(String(a.day))).slice(0, 150);
+    if (!list.length) { tb.innerHTML = '<tr><td colspan="5" class="help">No scores yet.</td></tr>'; return; }
+    list.forEach(s => {
+      const tr = document.createElement("tr");
+      [DATES.label(s.day), { transformed: "🦋 Transformed", overcomers: "🧗 Overcomers", bubbles: "🫧 Bubble Blitz" }[s.game] || s.game, s.name,
+       s.game === "transformed" ? s.score + " steps" : s.game === "bubbles" ? s.score + " bubbles" : Number(s.score).toLocaleString() + " m"]
+        .forEach(t => { const td = document.createElement("td"); td.textContent = t; tr.appendChild(td); });
+      const td = document.createElement("td"), b = document.createElement("button"); b.type = "button"; b.className = "b danger"; b.textContent = "Remove";
+      b.onclick = () => busy(b, async () => { await post({ action: "deleteScore", id: s.id }); tr.remove(); toast("Removed"); });
+      td.appendChild(b); tr.appendChild(td); tb.appendChild(tr);
+    });
+  }
+
+  // ---------- start ----------
+  let saved = ""; try { saved = sessionStorage.getItem("serve_code") || ""; } catch (e) {}
+  if (API.demo) open();
+  else if (saved) { $("code").value = saved; open(); }
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>
