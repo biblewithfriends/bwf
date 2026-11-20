@@ -133,6 +133,50 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
 .share-in{width:100%;font:inherit;font-size:13.5px;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);color:var(--navy);background:var(--parchment)}
 .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--navy);color:var(--white);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:20;max-width:calc(100vw - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.subrow{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:0 0 14px}
+.subrow .sub{margin:0}
+.edit-btn{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--line);background:var(--white);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;white-space:nowrap}
+.edit-btn:hover{border-color:var(--navy)}
+.danger{border-color:#E7C8C1;color:#A23B2A}
+.danger:hover{border-color:#A23B2A}
+.danger[data-arm]{background:#A23B2A;color:var(--white);border-color:#A23B2A}
+.dlg .row{margin-bottom:6px}
+.dlg label.lbl{display:block;font-size:13px;font-weight:600;color:var(--slate);margin:4px 0 6px}
+/* notes */
+.notes{margin-top:14px}
+.n-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:2px}
+.n-head h2{margin:0;font-size:18px;font-weight:600}
+.n-hint{margin:0 0 10px;color:var(--slate);font-size:13px}
+.notes textarea{width:100%;font:inherit;font-size:15px;line-height:1.45;padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--white);color:var(--navy);resize:vertical;min-height:76px}
+.notes textarea:focus,.n-row input:focus{outline:none;border-color:var(--navy)}
+.n-row{display:flex;gap:8px;margin-top:8px}
+.n-row input[type=date]{flex:none;width:auto;max-width:44%;padding:10px 10px}
+@media (max-width:420px){.n-row{flex-wrap:wrap}.n-row input:not([type=date]){flex-basis:100%;order:-1}.n-row input[type=date]{flex:1;max-width:none}}
+.n-row input{flex:1;min-width:0;font:inherit;font-size:14.5px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);color:var(--navy)}
+.n-list{list-style:none;margin:14px 0 0;padding:0}
+.n-list li{border-top:1px solid var(--line);padding:12px 2px}
+.n-meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gold-text);font-weight:600}
+.n-meta span{margin-right:auto}
+.n-list p{margin:4px 0 0;white-space:pre-wrap;word-wrap:break-word;font-size:15px;color:#2B3A55}
+.n-del{border:0;background:none;color:var(--slate);font-size:12.5px;cursor:pointer;padding:4px 6px;border-radius:8px}
+.n-del:hover{color:#A23B2A}
+.n-del[data-arm]{color:#fff;background:#A23B2A}
+.n-empty{color:var(--slate);font-size:14px;margin:12px 0 0}
+/* tour */
+#tour{position:fixed;inset:0;z-index:30}
+.t-catch{position:absolute;inset:0}
+.t-spot{position:absolute;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,40,80,.55);transition:all .35s ease;pointer-events:none}
+.t-spot::after{content:"";position:absolute;inset:-4px;border-radius:20px;border:3px solid var(--gold)}
+.t-tip{position:absolute;width:min(340px,calc(100vw - 24px));background:var(--white);border-radius:18px;padding:16px 16px 12px;box-shadow:0 18px 50px rgba(0,30,70,.3);transition:top .35s ease,left .35s ease}
+.t-badge{margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text)}
+.t-tip h3{margin:0 0 4px;font-size:18px;line-height:1.25}
+.t-tip p.t-d{margin:0 0 12px;font-size:14.5px;color:#3E4F6E}
+.t-acts{display:flex;gap:8px;align-items:center}
+.t-acts .t-n{margin-right:auto;font-size:12.5px;color:var(--slate)}
+.t-acts .go{padding:9px 16px}
+.t-acts .rs{padding:8px 13px}
+.t-end{position:absolute;top:10px;right:12px;border:0;background:none;color:var(--slate);font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){.t-spot,.t-tip{transition:none}}
 [hidden]{display:none!important}
 @media (max-width:420px){h1{font-size:26px}.brand .logo{height:32px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -159,7 +203,7 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
 </section>
 
 <div id="team" hidden>
-<p class="sub" id="sub"></p>
+<div class="subrow"><p class="sub" id="sub"></p><button class="edit-btn" id="ed2" hidden aria-label="Edit or delete this believer">✎ Edit</button></div>
 <div class="ppl" id="ppl"></div>
 <form class="form" id="form" hidden><input id="nm" maxlength="40" placeholder="Believer's name" autocomplete="off" aria-label="Name"><button class="go" id="fs">Add</button></form>
 
@@ -173,6 +217,17 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
  <div class="next" id="next"></div>
 </div>
 
+<section class="card notes" id="notes" aria-labelledby="nH">
+  <div class="n-head"><h2 id="nH">Shepherding notes</h2></div>
+  <p class="n-hint" id="nHint">Notes about this believer. Everyone with your group's link can read them.</p>
+  <form id="nForm">
+    <textarea id="nText" maxlength="2000" aria-label="New note" placeholder="What did you read or talk about? Anything to pray for or follow up on?"></textarea>
+    <div class="n-row"><input type="date" id="nDate" aria-label="Date of this note"><input id="nBy" maxlength="40" autocomplete="name" placeholder="Your name (optional)" aria-label="Your name"><button class="go" id="nAdd">Add note</button></div>
+  </form>
+  <ul class="n-list" id="nList"></ul>
+  <button class="link" id="nMore" hidden style="margin-top:4px;font-size:14px"></button>
+</section>
+
 <div id="levels"></div>
 
 <div class="leg">
@@ -180,7 +235,7 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
  <div>📖 Prepare by reading the matching Life Studies with someone who serves you</div>
  <div>🗣️ Gospel practice, including going out to speak with one person</div>
 </div>
-<div class="tools"><button class="rs" id="rn">Rename</button><button class="rs" id="rs">Reset progress</button><button class="rs" id="rm">Remove person</button></div>
+<div class="tools"><button class="rs" id="ed">✎ Edit name</button><button class="rs" id="rs">Reset progress</button><button class="rs danger" id="del2">Delete believer</button></div>
 </div>
 </div>
 
@@ -200,7 +255,7 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
     <li><b>Next up</b> always shows the next step for that person.</li>
   </ol>
   <p class="note"><b>Shared with your team.</b> Everyone who opens your group's link sees the same list and can update it, so you all know where each believer is. Keep the link within your serving team.</p>
-  <div class="acts"><button class="go gold" id="iGo">Get started</button></div>
+  <div class="acts"><button class="rs" id="iTour">Take a quick tour</button><button class="go gold" id="iGo">Get started</button></div>
 </div></dialog>
 
 <dialog id="setup" aria-labelledby="sT"><div class="dlg">
@@ -228,6 +283,25 @@ details summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:8px}
   <div class="acts" style="margin-top:14px"><button class="go gold" id="copyLink">Copy link</button></div>
 </div></dialog>
 
+<dialog id="edit" aria-labelledby="eT"><div class="dlg">
+  <button class="x" data-close aria-label="Close">×</button>
+  <h2 id="eT">Edit believer</h2>
+  <form id="eForm"><label class="lbl" for="eName">Name</label><div class="row"><input id="eName" maxlength="40" autocomplete="off"><button class="go" id="eSave">Save</button></div></form>
+  <hr class="hr">
+  <p id="eDelText">Deleting removes this believer and all of their progress for everyone in your group. This can't be undone.</p>
+  <button class="rs danger" id="eDel">Delete believer</button>
+</div></dialog>
+
+<div id="tour" hidden>
+  <div class="t-catch"></div><div class="t-spot" id="tSpot"></div>
+  <div class="t-tip" id="tTip" role="dialog" aria-modal="true" aria-labelledby="tH">
+    <button class="t-end" id="tEnd">End tour</button>
+    <p class="t-badge">Tour · sample data</p>
+    <h3 id="tH"></h3><p class="t-d" id="tD"></p>
+    <div class="t-acts"><span class="t-n" id="tN"></span><button class="rs" id="tBack">Back</button><button class="go" id="tNext">Next</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="text/plain" id="backendCode">// Progressive Shepherding: backend for your own group
@@ -245,7 +319,8 @@ function doGet(e) { return psGet(e); }
 
 // ===================== Progressive Shepherding =====================
 // Backend for biblewfriends.org/progressiveshepherding
-// Keeps the shared list of believers in a "Shepherding" tab of a Google Sheet.
+// Keeps the shared list of believers in a "Shepherding" tab of a Google Sheet,
+// and the shepherding notes about each believer in a "Shepherding notes" tab.
 // Everyone who opens your group's link reads and updates the same list.
 //
 // The first time someone connects the page to this web app, it creates a private
@@ -255,6 +330,8 @@ function doGet(e) { return psGet(e); }
 
 var PS_TAB = 'Shepherding';
 var PS_HEAD = ['ID', 'Name', 'Progress', 'Next step', 'Updated', 'Created', 'Checked (data)'];
+var PS_NOTES_TAB = 'Shepherding notes';
+var PS_NOTES_HEAD = ['Note ID', 'Believer ID', 'Believer', 'Date', 'By', 'Note'];
 
 function psGet(e) {
   var p = (e && e.parameter) || {};
@@ -293,7 +370,7 @@ function psJson(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
 
-function psSheet_() {
+function psBook_() {
   var ss = null;
   try { ss = SpreadsheetApp.getActiveSpreadsheet(); } catch (e) {}
   if (!ss) {                                       // a standalone script makes its own spreadsheet
@@ -301,25 +378,54 @@ function psSheet_() {
     if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
     if (!ss) { ss = SpreadsheetApp.create('Progressive Shepherding'); props.setProperty('PS_SHEET_ID', ss.getId()); }
   }
-  var sh = ss.getSheetByName(PS_TAB);
+  return ss;
+}
+
+function psTab_(name, head) {
+  var ss = psBook_(), sh = ss.getSheetByName(name);
   if (!sh) {
-    sh = ss.insertSheet(PS_TAB);
-    sh.getRange(1, 1, 1, PS_HEAD.length).setValues([PS_HEAD]).setFontWeight('bold');
+    sh = ss.insertSheet(name);
+    sh.getRange(1, 1, 1, head.length).setValues([head]).setFontWeight('bold');
     sh.setFrozenRows(1);
   }
   return sh;
 }
+function psSheet_() { return psTab_(PS_TAB, PS_HEAD); }
+function psNotesSheet_() { return psTab_(PS_NOTES_TAB, PS_NOTES_HEAD); }
 
-function psRows_(sh) {
+// text typed by people is stored as text, never as a spreadsheet formula
+function psSafe_(v, max) {
+  v = String(v == null ? '' : v).slice(0, max || 2000);
+  return /^[=+\-@]/.test(v) ? "'" + v : v;
+}
+
+function psRows_(sh, width) {
   var n = sh.getLastRow() - 1;
-  return n > 0 ? sh.getRange(2, 1, n, PS_HEAD.length).getValues() : [];
+  return n > 0 ? sh.getRange(2, 1, n, width || PS_HEAD.length).getValues() : [];
+}
+
+function psDate_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  return String(v || '').slice(0, 10);
 }
 
 function psRead_() {
+  var notes = {};
+  psRows_(psNotesSheet_(), PS_NOTES_HEAD.length).forEach(function (r) {
+    if (!r[0]) return;
+    (notes[String(r[1])] = notes[String(r[1])] || []).push({ nid: String(r[0]), date: psDate_(r[3]), by: String(r[4]), text: String(r[5]) });
+  });
   return psRows_(psSheet_()).filter(function (r) { return r[0]; }).map(function (r) {
     var d = {}; try { d = JSON.parse(r[6] || '{}'); } catch (e) {}
-    return { id: String(r[0]), name: String(r[1]), d: d };
+    var list = (notes[String(r[0])] || []).reverse();              // newest added first...
+    list.sort(function (x, y) { return x.date < y.date ? 1 : x.date > y.date ? -1 : 0; });   // ...then most recent date on top
+    return { id: String(r[0]), name: String(r[1]), d: d, notes: list };
   });
+}
+
+function psNoteRows_(fn) {                         // fn(sheet, rowNumber, row) for each note, last row first
+  var sh = psNotesSheet_(), rows = psRows_(sh, PS_NOTES_HEAD.length);
+  for (var j = rows.length - 1; j >= 0; j--) fn(sh, j + 2, rows[j]);
 }
 
 function psApply_(op) {
@@ -329,13 +435,30 @@ function psApply_(op) {
   var name = String(op.name || '').trim().slice(0, 40);
   if (op.type === 'add') {
     if (i >= 0 || !name) return;
-    sh.appendRow([String(op.id), name, op.prog || '', op.next || '', now, now, '{}']);
+    sh.appendRow([String(op.id), psSafe_(name, 40), op.prog || '', psSafe_(op.next || '', 200), now, now, '{}']);
     return;
   }
   if (i < 0) return;
   var row = i + 2;
-  if (op.type === 'remove') { sh.deleteRow(row); return; }
-  if (op.type === 'rename') { if (name) sh.getRange(row, 2).setValue(name); }
+  if (op.type === 'remove') {
+    sh.deleteRow(row);
+    psNoteRows_(function (ns, r, n) { if (String(n[1]) === String(op.id)) ns.deleteRow(r); });
+    return;
+  }
+  if (op.type === 'note') {
+    var text = String(op.text || '').trim();
+    if (!text || !op.nid) return;
+    psNotesSheet_().appendRow([String(op.nid), String(op.id), psSafe_(rows[i][1], 40), psDate_(op.date) || psDate_(now), psSafe_(op.by || '', 40), psSafe_(text, 2000)]);
+  }
+  else if (op.type === 'unnote') {
+    psNoteRows_(function (ns, r, n) { if (String(n[0]) === String(op.nid) && String(n[1]) === String(op.id)) ns.deleteRow(r); });
+  }
+  else if (op.type === 'rename') {
+    if (name) {
+      sh.getRange(row, 2).setValue(psSafe_(name, 40));
+      psNoteRows_(function (ns, r, n) { if (String(n[1]) === String(op.id)) ns.getRange(r, 3).setValue(psSafe_(name, 40)); });
+    }
+  }
   else if (op.type === 'set' || op.type === 'reset') {
     var d = {}; try { d = JSON.parse(rows[i][6] || '{}'); } catch (e) {}
     if (op.type === 'reset') d = {};
@@ -344,7 +467,7 @@ function psApply_(op) {
     sh.getRange(row, 7).setValue(JSON.stringify(d));
   }
   if (op.prog != null) sh.getRange(row, 3).setValue(String(op.prog));
-  if (op.next != null) sh.getRange(row, 4).setValue(String(op.next));
+  if (op.next != null) sh.getRange(row, 4).setValue(psSafe_(op.next, 200));
   sh.getRange(row, 5).setValue(now);
 }
 </script>
@@ -367,7 +490,7 @@ const BACKEND=$("#backendCode").textContent.replace(/^\n/,"");
 $("#codeView").textContent=BACKEND;
 
 // ---------- connection: the group's link carries the web app and its key ----------
-let conn=null;            // {url, key}
+let conn=null, tour=null; // conn: {url, key}
 let people=[], cur=store.get("ps-cur",null), pending=0, mode=null, lastSync=0, offline=false;
 function appUrl(s){s=String(s||"").trim();const m=s.match(/^https:\/\/script\.google\.com\/(?:a\/macros\/[^/]+|macros)\/s\/[\w-]+\/exec/);return m?m[0]:null}
 function fromParams(q){const k=q.get("k");if(!k)return null;const g=q.get("g"),u=q.get("u");
@@ -406,15 +529,23 @@ function update(){
   document.querySelectorAll("[data-k]").forEach(c=>{const v=done[c.dataset.k];c.checked=!!v;$("#w"+c.dataset.k.replace(/\./g,"-")).textContent=v&&fmt(v)?"✓ "+fmt(v):""});
   chips();return nx;
 }
+let showAllNotes=false;
+function renderNotes(){
+  const p=person();if(!p)return;const list=sortNotes(p.notes||[]),shown=showAllNotes?list:list.slice(0,3);
+  $("#nH").textContent="Shepherding notes"+(list.length?" ("+list.length+")":"");
+  $("#nText").placeholder="What did you read or talk about with "+p.name+"? Anything to pray for or follow up on?";
+  $("#nList").innerHTML=list.length?shown.map(n=>`<li><div class="n-meta"><span>${esc(fmt(n.date)||n.date)}${n.by?" · "+esc(n.by):""}</span><button class="n-del" data-nid="${esc(n.nid)}" aria-label="Delete this note">Delete</button></div><p>${esc(n.text)}</p></li>`).join(""):`<li class="n-empty" style="border:0;padding:0">No notes yet.</li>`;
+  const more=$("#nMore");more.hidden=list.length<=3;more.textContent=showAllNotes?"Show fewer":"Show all "+list.length+" notes";
+}
 function chips(){$("#ppl").innerHTML=people.map(p=>`<button class="pc${p.id==(person()||{}).id?" on":""}" data-p="${esc(p.id)}">${esc(p.name)}<small>${pct(p)}%</small></button>`).join("")+`<button class="pc add" data-add="1">+ Add believer</button>`}
-function disarm(){for(const id of["rm","rs"]){const b=$("#"+id);if(b.dataset.arm){delete b.dataset.arm;b.textContent=id=="rm"?"Remove person":"Reset progress"}}}
+function disarm(){for(const [id,t] of [["rs","Reset progress"],["del2","Delete believer"]]){const b=$("#"+id);if(b.dataset.arm){delete b.dataset.arm;b.textContent=t}}}
 function showForm(m){mode=m;$("#form").hidden=!m;if(m){$("#nm").value=m=="rename"?person().name:"";$("#fs").textContent=m=="rename"?"Save":"Add";$("#nm").focus()}}
 function render(openNext){
-  disarm();const p=person();$("#app").hidden=!p;
+  disarm();const p=person();$("#app").hidden=!p;$("#ed2").hidden=!p;
   if(!p){$("#sub").textContent="Add the first believer you're shepherding to get started.";chips();if(!mode)showForm("add");return}
-  if(cur!=p.id){cur=p.id;store.set("ps-cur",cur)}
+  if(cur!=p.id){cur=p.id;store.set("ps-cur",cur);showAllNotes=false}
   $("#sub").textContent="Shepherding "+p.name+". Check off each step as you go through it together.";
-  const nx=update();if(openNext)L.forEach((_,a)=>setOpen(a,nx?a==+nx[0]:false));
+  const nx=update();renderNotes();if(openNext)L.forEach((_,a)=>setOpen(a,nx?a==+nx[0]:false));
 }
 function status(){const s=$("#status");s.hidden=!conn;if(!conn)return;s.classList.toggle("off",offline);
   s.textContent=offline?"Can't reach your group's sheet. Changes may not save.":"Shared with your group"+(lastSync?" · updated "+new Date(lastSync).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}):"")}
@@ -423,10 +554,10 @@ function showConnect(title,text){showTeam(false);$("#cTitle").textContent=title|
   $("#cText").textContent=text||"Your serving team shares one link, and everyone who opens it sees the same list. If someone sent you a link, open it, or paste it here."}
 
 // ---------- syncing ----------
-function take(list,first){people=list.map(p=>({id:String(p.id),name:String(p.name),d:p.d||{}}));lastSync=Date.now();offline=false;
+function take(list,first){people=list.map(p=>({id:String(p.id),name:String(p.name),d:p.d||{},notes:Array.isArray(p.notes)?p.notes:[]}));lastSync=Date.now();offline=false;
   store.set("ps-cache",{url:conn.url,people});showTeam(true);render(first)}
 async function load(first){
-  if(!conn)return;
+  if(!conn||tour)return;
   try{const r=await call({ps:"list",k:conn.key});
     if(!r.ok){if(r.error=="link"){conn=null;store.set("ps-conn",null);showConnect("This link isn't working","It may have been replaced with a new one. Ask your team for the current link, or paste it here.");return}throw new Error(r.error)}
     if(pending==0)take(r.people,first)}
@@ -438,7 +569,7 @@ async function send(op){
     if(!r.ok)throw new Error(r.error||"Not saved");if(pending==0)take(r.people,false)}
   catch(e){pending=Math.max(0,pending-1);offline=true;status();toast("That change didn't save. Check your connection and try again.");load(false)}
 }
-function op(type,extra){const p=person();const o=Object.assign({type,id:p.id},extra||{});if(type!="remove"&&type!="rename")Object.assign(o,summary(p.d));send(o)}
+function op(type,extra){if(tour)return;const p=person();const o=Object.assign({type,id:p.id},extra||{});if(type!="remove"&&type!="rename")Object.assign(o,summary(p.d));send(o)}
 setInterval(()=>{if(conn&&!document.hidden&&pending==0)load(false)},20000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&conn&&Date.now()-lastSync>5000)load(false)});
 
@@ -456,7 +587,6 @@ document.addEventListener("click",e=>{
   const o=t.closest("[data-open]");if(o){openDlg(o.dataset.open);return}
   if(t.closest("[data-close]")){t.closest("dialog").close();return}
 });
-$("#rn").onclick=()=>showForm(mode=="rename"?null:"rename");
 $("#form").onsubmit=e=>{e.preventDefault();const n=$("#nm").value.trim().slice(0,40);if(!n)return;
   if(mode=="rename"){person().name=n;op("rename",{name:n})}
   else{const id="p"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);people.push({id,name:n,d:{}});cur=id;store.set("ps-cur",cur);op("add",{name:n})}
@@ -464,7 +594,25 @@ $("#form").onsubmit=e=>{e.preventDefault();const n=$("#nm").value.trim().slice(0
 function confirmBtn(b,label,ask,go){let t;b.onclick=function(){if(b.dataset.arm){clearTimeout(t);delete b.dataset.arm;b.textContent=label;go()}
   else{b.dataset.arm=1;b.textContent=ask;t=setTimeout(()=>{b.textContent=label;delete b.dataset.arm},3500)}}}
 confirmBtn($("#rs"),"Reset progress","Tap again to reset for everyone",()=>{person().d={};update();op("reset")});
-confirmBtn($("#rm"),"Remove person","Tap again to remove for everyone",()=>{const p=person();op("remove");people=people.filter(q=>q!==p);cur=people[0]?people[0].id:null;store.set("ps-cur",cur);showForm(null);render(true)});
+const sortNotes=l=>l.sort((x,y)=>x.date<y.date?1:x.date>y.date?-1:0);   // most recent date on top; same day keeps newest first
+$("#nBy").value=store.get("ps-by","");$("#nDate").value=today();$("#nDate").max=today();
+$("#nBy").addEventListener("change",()=>store.set("ps-by",$("#nBy").value.trim()));
+$("#nForm").onsubmit=e=>{e.preventDefault();const p=person(),text=$("#nText").value.trim();if(!p||!text)return;
+  const by=$("#nBy").value.trim().slice(0,40);store.set("ps-by",by);
+  const dv=$("#nDate").value,date=/^\d{4}-\d\d-\d\d$/.test(dv)?dv:today();
+  const n={nid:"n"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),date,by,text:text.slice(0,2000)};
+  (p.notes=p.notes||[]).unshift(n);sortNotes(p.notes);$("#nText").value="";$("#nDate").value=today();renderNotes();op("note",{nid:n.nid,text:n.text,by,date:n.date});toast(tour?"Sample note added (not saved)":"Note saved")};
+$("#nMore").onclick=()=>{showAllNotes=!showAllNotes;renderNotes()};
+$("#nList").addEventListener("click",e=>{const b=e.target.closest(".n-del");if(!b)return;
+  if(!b.dataset.arm){b.dataset.arm=1;b.textContent="Tap again to delete";clearTimeout(b._t);b._t=setTimeout(()=>{delete b.dataset.arm;b.textContent="Delete"},3500);return}
+  const p=person(),nid=b.dataset.nid;p.notes=(p.notes||[]).filter(n=>n.nid!=nid);renderNotes();op("unnote",{nid});toast("Note deleted")});
+function delPerson(){const p=person();if(!p)return;op("remove");people=people.filter(q=>q!==p);cur=people[0]?people[0].id:null;store.set("ps-cur",cur);showForm(null);render(true);toast(p.name+" was deleted")}
+function openEdit(){const p=person();if(!p)return;$("#eName").value=p.name;$("#eT").textContent="Edit "+p.name;$("#eDel").textContent="Delete "+p.name;delete $("#eDel").dataset.arm;openDlg("edit");setTimeout(()=>$("#eName").select(),50)}
+$("#ed").onclick=openEdit;$("#ed2").onclick=openEdit;
+$("#eForm").onsubmit=e=>{e.preventDefault();const n=$("#eName").value.trim().slice(0,40),p=person();if(!n||!p)return;$("#edit").close();if(n==p.name)return;p.name=n;op("rename",{name:n});render(false);toast("Name saved")};
+confirmBtn($("#eDel"),"Delete believer","Tap again to delete",()=>{$("#edit").close();delPerson()});
+$("#eDel").addEventListener("click",()=>{if(!$("#eDel").dataset.arm)$("#eDel").textContent="Delete "+((person()||{}).name||"believer")},true);
+confirmBtn($("#del2"),"Delete believer","Tap again to delete for everyone",delPerson);
 
 // ---------- dialogs, connecting, sharing ----------
 function openDlg(id){const d=$("#"+id);if(!d.open){if(d.showModal)d.showModal();else d.setAttribute("open","")}}
@@ -493,6 +641,58 @@ async function connect(text,errEl,btn){
 }
 $("#cForm").onsubmit=e=>{e.preventDefault();connect($("#cIn").value,$("#cErr"),$("#cGo"))};
 $("#sForm").onsubmit=e=>{e.preventDefault();connect($("#sIn").value,$("#sErr"),$("#sGo"))};
+
+// ---------- tour: a walk-through on sample data; nothing is saved ----------
+const TOUR=[
+ {el:"#ppl .pc:not(.add)",t:"Your believers",d:"Each believer you're shepherding has a tab here. Tap one to see where they are. The percent shows how far along they've grown."},
+ {el:"#ppl .pc.add",t:"Add a believer",d:"Tap here and type their name. Everyone in your group will see them right away."},
+ {el:"#ed2",t:"Edit or delete",d:"Fix a name, or delete a believer you're no longer tracking. You'll be asked to confirm before anything is deleted."},
+ {el:"#app .card",t:"Growth at a glance",d:"The ring shows their overall progress. The four bars are the four levels: Seed, Root, Grow and Fruit. Tap a bar to jump to that level."},
+ {el:"#next",t:"Next up",d:"This always shows the next step. When you've gone through it together, tap Mark done."},
+ {el:"#notes",t:"Shepherding notes",d:"Keep notes for each believer: what you read together, what to pray for, what to follow up on. Each note is dated, and your whole team can read them."},
+ {el:"#lv0",t:"Check off as you go",d:"Open a level and tap an item to check it off. The date is saved, so your team knows when it happened. Tap again to undo.",open:0},
+ {el:".leg",t:"What the icons mean",d:"📘 marks an LSM book or booklet, 📖 means prepare with the Life Studies, and 🗣️ is gospel practice."},
+ {el:"#shareBtn",t:"Share with your team",d:"Everyone who opens your group's link sees the same list and can update it. Send it only to the people serving with you."},
+ {el:"#helpBtn",t:"Come back anytime",d:"Tap ? to see the welcome again or retake this tour."}
+];
+function demoPeople(){const d={},m={},t=new Date(),ds=n=>{const x=new Date(t);x.setDate(x.getDate()-n);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
+  keys[0].slice(0,5).forEach((k,i)=>d[k]=ds(30-i*5));keys[1].slice(0,2).forEach((k,i)=>d[k]=ds(3-i));keys[0].forEach((k,i)=>m[k]=ds(60-i*3));keys[1].slice(0,9).forEach((k,i)=>m[k]=ds(20-i*2));
+  return [{id:"demo1",name:"Sample: Jordan",d,notes:[{nid:"dn2",date:ds(2),by:"Esteban",text:"Read John 3 together. He asked about baptism, so follow up next week."},{nid:"dn1",date:ds(9),by:"Mark",text:"Met at the CSM library after class. Pray for his family."}]},{id:"demo2",name:"Sample: Priya",d:m,notes:[]}]}
+function startTour(){
+  if(tour)return;document.querySelectorAll("dialog[open]").forEach(d=>d.close());
+  tour={i:0,s:{people,cur,team:$("#team").hidden,connect:$("#connect").hidden,share:$("#shareBtn").hidden,status:$("#status").hidden}};
+  people=demoPeople();cur="demo1";showForm(null);$("#team").hidden=false;$("#connect").hidden=true;$("#shareBtn").hidden=false;render(true);
+  $("#tour").hidden=false;document.addEventListener("keydown",tourKey);window.addEventListener("resize",place);window.addEventListener("scroll",place,{passive:true});
+  step(0);$("#tNext").focus();
+}
+function endTour(){
+  if(!tour)return;const s=tour.s;tour=null;$("#tour").hidden=true;
+  document.removeEventListener("keydown",tourKey);window.removeEventListener("resize",place);window.removeEventListener("scroll",place);
+  people=s.people;cur=s.cur;$("#team").hidden=s.team;$("#connect").hidden=s.connect;$("#shareBtn").hidden=s.share;$("#status").hidden=s.status;
+  render(true);window.scrollTo({top:0});if(conn)load(false);
+}
+function step(i){
+  tour.i=i;const S=TOUR[i];if(S.open!=null)L.forEach((_,a)=>setOpen(a,a==S.open));
+  $("#tH").textContent=S.t;$("#tD").textContent=S.d;$("#tN").textContent=(i+1)+" of "+TOUR.length;
+  $("#tBack").hidden=i==0;$("#tNext").textContent=i==TOUR.length-1?"Finish":"Next";
+  const el=$(S.el);if(el){const r=el.getBoundingClientRect(),vh=innerHeight;if(r.top<70||r.bottom>vh-190)el.scrollIntoView({block:r.height>vh*.5?"start":"center"})}
+  if(S.el.startsWith("#ppl")&&el)el.scrollIntoView({block:"nearest",inline:"nearest"});else $("#ppl").scrollLeft=0;
+  place();
+}
+function place(){
+  if(!tour)return;const el=$(TOUR[tour.i].el),sp=$("#tSpot"),tip=$("#tTip");if(!el)return;
+  const r=el.getBoundingClientRect(),pad=6,vw=innerWidth,vh=innerHeight;
+  const top=Math.max(4,r.top-pad),bot=Math.min(vh-4,r.bottom+pad);
+  Object.assign(sp.style,{left:Math.max(4,r.left-pad)+"px",top:top+"px",width:Math.min(vw-8,r.width+2*pad)+"px",height:Math.max(0,bot-top)+"px"});
+  const tw=tip.offsetWidth,th=tip.offsetHeight;let x=Math.min(Math.max(12,r.left+r.width/2-tw/2),vw-tw-12),y;
+  if(bot+12+th<=vh-8)y=bot+12;else if(top-12-th>=8)y=top-12-th;else y=vh-th-12;
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+function tourKey(e){if(e.key=="Escape")endTour();else if(e.key=="ArrowRight")$("#tNext").click();else if(e.key=="ArrowLeft"&&tour.i>0)$("#tBack").click()}
+$("#tNext").onclick=()=>{if(tour.i<TOUR.length-1)step(tour.i+1);else{endTour();toast(people.length?"You're ready.":"You're ready. Add your first believer to begin.")}};
+$("#tBack").onclick=()=>{if(tour.i>0)step(tour.i-1)};
+$("#tEnd").onclick=endTour;
+$("#iTour").onclick=()=>{store.set("ps-intro",1);startTour()};
 
 // ---------- start ----------
 const fromUrl=fromParams(new URLSearchParams(location.search));
