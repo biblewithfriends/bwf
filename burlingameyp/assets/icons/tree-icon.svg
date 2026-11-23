@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><clipPath id="r"><rect width="512" height="512" rx="112"/></clipPath><g clip-path="url(#r)">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe7c2"/><stop offset="1" stop-color="#fbd9a3"/></linearGradient>
+    <linearGradient id="bark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3620"/><stop offset=".5" stop-color="#7a4d2b"/><stop offset="1" stop-color="#5a3620"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#sky)"/>
+  <!-- the river of water of life -->
+  <path d="M0 432 C80 412 150 452 256 432 C362 412 432 452 512 432 V512 H0Z" fill="#6fb8de"/>
+  <path d="M0 458 C90 440 160 476 256 458 C352 440 422 476 512 458" stroke="#bfe4f5" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- trunk -->
+  <path d="M218 444 C232 390 238 340 240 280 L272 280 C274 340 280 390 294 444 Z" fill="url(#bark)"/>
+  <path d="M244 300 C220 276 196 262 168 254 M268 296 C292 272 318 258 346 250 M256 286 C256 256 254 228 250 200" stroke="#6a4226" stroke-width="16" stroke-linecap="round" fill="none"/>
+  <!-- canopy -->
+  <g>
+    <circle cx="256" cy="176" r="112" fill="#3f7a36"/>
+    <circle cx="160" cy="214" r="74" fill="#4f8a3c"/>
+    <circle cx="352" cy="214" r="74" fill="#4f8a3c"/>
+    <circle cx="200" cy="130" r="70" fill="#5f9e4a"/>
+    <circle cx="314" cy="130" r="70" fill="#5f9e4a"/>
+    <circle cx="256" cy="96" r="62" fill="#6aa84f"/>
+    <circle cx="210" cy="206" r="58" fill="#579944"/>
+    <circle cx="304" cy="206" r="58" fill="#579944"/>
+  </g>
+  <!-- fruit -->
+  <g fill="#f4bf2e" stroke="#c98a12" stroke-width="3">
+    <circle cx="256" cy="150" r="17"/><circle cx="186" cy="182" r="16"/><circle cx="326" cy="180" r="16"/>
+    <circle cx="222" cy="104" r="14"/><circle cx="296" cy="106" r="14"/><circle cx="140" cy="232" r="14"/>
+    <circle cx="372" cy="232" r="14"/><circle cx="256" cy="226" r="15"/>
+  </g>
+  <g fill="#fff6d6" opacity=".9">
+    <circle cx="251" cy="144" r="5"/><circle cx="181" cy="176" r="4.5"/><circle cx="321" cy="174" r="4.5"/><circle cx="251" cy="220" r="4.5"/>
+  </g>
+</g></svg>
