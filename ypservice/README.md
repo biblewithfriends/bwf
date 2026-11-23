@@ -1,4 +1,4 @@
-# Church in Burlingame YP (CiB YP) — home page, Q Box, daily games, Serving Ones site
+# Church in Burlingame YP (Burlingame YP) — home page, Q Box, daily games, Serving Ones site
 
 Everything lives in one GitHub repo and is powered by one Google Sheet.
 

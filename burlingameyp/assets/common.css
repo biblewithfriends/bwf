@@ -1,4 +1,4 @@
-/* CiB YP — version 2: the boba & matcha café */
+/* Burlingame YP — version 2: the boba & matcha café */
 :root {
   --ink: #24402f;          /* deep tea green */
   --soft: #5d7263;
@@ -109,3 +109,11 @@ footer.site p:first-child { cursor: pointer; user-select: none; }
 /* logo mark beside the name */
 .topnav .logo { display: inline-flex; align-items: center; gap: 0; white-space: pre; }
 .topnav .logo img { margin-right: 9px; }
+
+/* "Burlingame YP" is longer than the old name: keep the top bar on one line on small phones */
+@media (max-width: 420px) {
+  .topnav .logo { font-size: 1.02rem; }
+  .topnav .logo img { width: 26px; height: 26px; margin-right: 6px; }
+  .topnav .links { flex-wrap: nowrap; }
+  .topnav .links a { padding: 5px 6px; }
+}
