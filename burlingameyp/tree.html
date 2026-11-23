@@ -249,7 +249,6 @@
             <select id="soName" aria-label="Your name"></select>
             <input id="soOther" maxlength="60" placeholder="Your name" aria-label="Your name" hidden>
           </div>
-          <label class="lbl" for="soPhoto">Photo (optional)</label><input id="soPhoto" type="file" accept="image/*">
         </div>
       </div>
       <span class="lbl" id="feelLbl">How are you feeling? (optional)</span>
@@ -496,19 +495,6 @@
   $("soName").onchange = () => { $("soOther").hidden = $("soName").value !== "__other"; if (!$("soOther").hidden) $("soOther").focus(); };
   $("soOut").onclick = () => { soCode = ""; soNames = []; API.store.set("yp_so_code", ""); soRefresh(); };
   const soNameValue = () => $("soName").value === "__other" ? $("soOther").value.trim() : $("soName").value;
-  function compress(file) {
-    return new Promise((res, rej) => {
-      const img = new Image(), url = URL.createObjectURL(file);
-      img.onload = () => {
-        const k = Math.min(1, 1400 / img.naturalWidth, 1400 / img.naturalHeight);
-        const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
-        const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
-        URL.revokeObjectURL(url); res(c.toDataURL("image/jpeg", 0.85));
-      };
-      img.onerror = () => rej(new Error("Couldn’t read that photo"));
-      img.src = url;
-    });
-  }
   let sending = false;
   $("hangBtn").onclick = async () => {
     if (sending) return;
@@ -523,9 +509,7 @@
         const nm = soNameValue();
         if (!nm) { $("soName").focus(); throw new Error("Choose your name first"); }
         API.store.set("yp_so_name", $("soName").value === "__other" ? "" : nm);
-        const file = $("soPhoto").files[0], image = file ? await compress(file) : "";
-        res = await API.post({ action: "addLeaf", code: soCode, name: nm, feeling: currentFeeling(), message, verse: $("verse").value.trim(), image });
-        $("soPhoto").value = "";
+        res = await API.post({ action: "addLeaf", code: soCode, name: nm, feeling: currentFeeling(), message, verse: $("verse").value.trim() });
       } else {
         res = await API.post({ action: "leaf", message, feeling: currentFeeling(), verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
       }

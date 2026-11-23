@@ -88,7 +88,8 @@
       case "public":
         return { ok: true, readings: d.readings, leaves: d.leaves.filter(l => l.status === "Shown").sort((a, b) => b.id - a.id), quotes: d.quotes,
           answers: d.questions.filter(q => q.status === "Approved" && q.answer).sort((a, b) => String(b.answered).localeCompare(String(a.answered)))
-            .map(q => ({ id: q.id, question: q.question, answer: q.answer, answered: q.answered })) };
+            .map(q => ({ id: q.id, question: q.question, answer: q.answer, answered: q.answered })),
+          photos: (d.photos || []).filter(x => x.status === "Shown").slice().reverse().slice(0, 6) };
       case "scores": return { ok: true, scores: d.scores };
       case "ask": {
         if (!String(p.question || "").trim()) return { ok: false, error: "Type a question first" };
@@ -129,6 +130,10 @@
       case "addQuote": d.quotes.push(String(p.quote).slice(0, 140)); save(d); return { ok: true };
       case "setQuote": return { ok: true };
       case "deleteQuote": d.quotes = d.quotes.filter(q => q !== p.quote); save(d); return { ok: true };
+      case "allPhotos": return { ok: true, photos: (d.photos || []).slice().reverse() };
+      case "addPhoto": (d.photos = d.photos || []).push({ id: String(Date.now()), url: p.image, caption: p.caption || "", day: today(), status: "Shown" }); save(d); return { ok: true };
+      case "setPhoto": { const ph = (d.photos || []).find(x => x.id === p.id); if (ph) ph.status = p.status; save(d); return { ok: true }; }
+      case "deletePhoto": d.photos = (d.photos || []).filter(x => x.id !== p.id); save(d); return { ok: true };
       default: return { ok: false, error: "Unknown action" };
     }
   }

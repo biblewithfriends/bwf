@@ -127,6 +127,7 @@
       <button role="tab" data-tab="reading" aria-selected="false">📖 Reading plan</button>
       <button role="tab" data-tab="revival" aria-selected="false">🍂 Tree of Life <span id="waitCount"></span></button>
       <button role="tab" data-tab="quotes" aria-selected="false">💬 YP Quotes</button>
+      <button role="tab" data-tab="photos" aria-selected="false">📸 Featured photo</button>
       <button role="tab" data-tab="scores" aria-selected="false">🏆 Scores</button>
     </nav>
 
@@ -173,7 +174,6 @@
         <div><label class="lbl" for="enMsg">Your enjoyment</label><textarea id="enMsg" maxlength="3000" placeholder="What touched you this week? A verse, a hymn line, something the Lord did…"></textarea></div>
         <div class="row2">
           <div><label class="lbl" for="enVerse">Verse (optional)</label><input id="enVerse" maxlength="80" placeholder="e.g. Heb. 12:2"></div>
-          <div><label class="lbl" for="enFile">Photo (optional)</label><input id="enFile" type="file" accept="image/*"></div>
         </div>
         <div><button class="b primary" type="button" id="enPost">Hang leaf on the tree</button> <span id="enMsgOut"></span></div>
       </div>
@@ -193,6 +193,18 @@
         <div><button class="b primary" type="button" id="qtAdd">Add to the banner</button> <span id="qtOut"></span></div>
       </div>
       <div id="qtList"></div>
+    </section>
+
+    <!-- FEATURED PHOTO (Instagram section on the YP home page) -->
+    <section class="panel" id="tab-photos" hidden>
+      <h2>Featured photo</h2>
+      <p class="help">The newest photo here shows in the Instagram section on the YP home page (if a few are showing, they take turns). Archive one to take it down.</p>
+      <div class="up">
+        <div><label class="lbl" for="phFile">Photo</label><input id="phFile" type="file" accept="image/*"></div>
+        <div><label class="lbl" for="phCap">Caption (optional)</label><input id="phCap" maxlength="120" placeholder="e.g. Friday small group 🧋"></div>
+        <div><button class="b primary" type="button" id="phAdd">Feature this photo</button></div>
+      </div>
+      <div class="thumbs" id="phList"></div>
     </section>
 
     <!-- SCORES -->
@@ -237,8 +249,9 @@
   // ---------- tabs ----------
   document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
     document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
-    ["questions", "reading", "revival", "quotes", "scores"].forEach(t => $("tab-" + t).hidden = t !== b.dataset.tab);
+    ["questions", "reading", "revival", "quotes", "photos", "scores"].forEach(t => $("tab-" + t).hidden = t !== b.dataset.tab);
     if (b.dataset.tab === "quotes" && !quotesLoaded) loadQuotes();
+    if (b.dataset.tab === "photos" && !photosLoaded) loadPhotos();
   });
 
   // ---------- questions ----------
@@ -355,13 +368,12 @@
     });
   }
   $("enPost").onclick = () => busy($("enPost"), async () => {
-    const message = $("enMsg").value.trim(), file = $("enFile").files[0];
+    const message = $("enMsg").value.trim();
     if (!message) { toast("Write your enjoyment first"); $("enMsg").focus(); return; }
     $("enMsgOut").textContent = "Hanging…";
-    const image = file ? await compress(file) : "";
-    await post({ action: "addLeaf", name: $("enFrom").value.trim(), feeling: currentFeeling(), message, verse: $("enVerse").value.trim(), image });
+    await post({ action: "addLeaf", name: $("enFrom").value.trim(), feeling: currentFeeling(), message, verse: $("enVerse").value.trim() });
     $("enMsgOut").innerHTML = '<span class="ok">Hung ✓ It’s on the Tree of Life.</span>';
-    $("enMsg").value = ""; $("enVerse").value = ""; $("enFile").value = ""; feeling = ""; custom = false; $("feelCustom").value = ""; $("feelCustom").hidden = true; pressFeelings();
+    $("enMsg").value = ""; $("enVerse").value = ""; feeling = ""; custom = false; $("feelCustom").value = ""; $("feelCustom").hidden = true; pressFeelings();
     await loadPublic();
   });
   async function loadLeaves() { const d = await post({ action: "allLeaves" }); leaves = d.leaves || []; renderLeaves(); }
@@ -432,6 +444,41 @@
     await loadQuotes();
   });
   $("qtText").addEventListener("keydown", e => { if (e.key === "Enter") $("qtAdd").click(); });
+
+  // ---------- featured photo ----------
+  let photos = [], photosLoaded = false;
+  async function loadPhotos() {
+    try { const d = await post({ action: "allPhotos" }); photos = d.photos || []; photosLoaded = true; renderPhotos(); }
+    catch (e) { $("phList").innerHTML = '<p class="help">Couldn’t load photos: ' + e.message.replace(/</g, "&lt;") + "</p>"; }
+  }
+  function renderPhotos() {
+    const box = $("phList"); box.innerHTML = "";
+    if (!photos.length) { box.innerHTML = '<p class="help">No featured photos yet.</p>'; return; }
+    const firstShown = photos.find(p => p.status === "Shown");
+    photos.forEach(p => {
+      const d = document.createElement("div"); d.className = "thumb";
+      const img = document.createElement("img"); img.src = p.url; img.alt = p.caption || "Featured photo"; img.loading = "lazy";
+      img.onerror = () => { const m = p.url.match(/id=([^&]+)/); if (m && !img.dataset.f) { img.dataset.f = 1; img.src = "https://lh3.googleusercontent.com/d/" + m[1]; } };
+      const info = document.createElement("div");
+      const t = document.createElement("div"); t.className = "t";
+      t.textContent = (p === firstShown ? "⭐ Showing now · " : p.status === "Hidden" ? "Archived · " : "Showing · ") + DATES.label(p.day, { month: "short", day: "numeric" }) + (p.caption ? " · " + p.caption : "");
+      info.appendChild(t);
+      const btn = (label, cls, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "b small " + cls; b.textContent = label; b.style.marginTop = "6px"; b.style.marginRight = "6px"; b.onclick = () => busy(b, fn); info.appendChild(b); };
+      btn(p.status === "Shown" ? "Archive" : "Show", p.status === "Shown" ? "" : "primary", async () => {
+        const st = p.status === "Shown" ? "Hidden" : "Shown"; await post({ action: "setPhoto", id: p.id, status: st }); p.status = st; renderPhotos(); toast(st === "Shown" ? "Showing ✓" : "Archived");
+      });
+      btn("Delete", "danger", async () => { if (!confirm("Delete this photo for good?")) return; await post({ action: "deletePhoto", id: p.id }); photos = photos.filter(x => x !== p); renderPhotos(); toast("Deleted"); });
+      d.append(img, info); box.appendChild(d);
+    });
+  }
+  $("phAdd").onclick = () => busy($("phAdd"), async () => {
+    const file = $("phFile").files[0];
+    if (!file) { toast("Choose a photo first"); return; }
+    const image = await compress(file);
+    await post({ action: "addPhoto", image, caption: $("phCap").value.trim() });
+    $("phFile").value = ""; $("phCap").value = ""; toast("Featured ✓ It’s on the YP home page.");
+    await loadPhotos();
+  });
 
   // ---------- scores ----------
   async function loadScores() {
