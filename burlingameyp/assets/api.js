@@ -124,6 +124,11 @@
       case "setLeaf": { const l = d.leaves.find(x => x.id === p.id); if (l) l.status = p.status; save(d); return { ok: true }; }
       case "deleteLeaf": d.leaves = d.leaves.filter(l => l.id !== p.id); save(d); return { ok: true };
       case "deleteScore": d.scores = d.scores.filter(s => s.id !== p.id); save(d); return { ok: true };
+      case "servingOnes": return { ok: true, names: ["Sample Serving One", "Another Serving One"] };
+      case "allQuotes": return { ok: true, quotes: d.quotes.map((q, i) => ({ row: i + 2, quote: q, show: true })).reverse() };
+      case "addQuote": d.quotes.push(String(p.quote).slice(0, 140)); save(d); return { ok: true };
+      case "setQuote": return { ok: true };
+      case "deleteQuote": d.quotes = d.quotes.filter(q => q !== p.quote); save(d); return { ok: true };
       default: return { ok: false, error: "Unknown action" };
     }
   }

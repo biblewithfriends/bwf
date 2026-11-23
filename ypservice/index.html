@@ -126,16 +126,17 @@
       <button role="tab" data-tab="questions" aria-selected="true">💬 Questions <span id="newCount"></span></button>
       <button role="tab" data-tab="reading" aria-selected="false">📖 Reading plan</button>
       <button role="tab" data-tab="revival" aria-selected="false">🍂 Tree of Life <span id="waitCount"></span></button>
+      <button role="tab" data-tab="quotes" aria-selected="false">💬 YP Quotes</button>
       <button role="tab" data-tab="scores" aria-selected="false">🏆 Scores</button>
     </nav>
 
     <!-- QUESTIONS -->
     <section class="panel" id="tab-questions">
       <h2>Questions</h2>
-      <p class="help">Write an answer and post it to the YP site, or hide it. Names are never shown on the YP site.</p>
+      <p class="help">Write an answer and post it to the YP site, or archive it. Names are never shown on the YP site.</p>
       <div class="chips" id="qChips">
         <button data-f="New" aria-pressed="true">New</button><button data-f="Approved" aria-pressed="false">Posted</button>
-        <button data-f="Hidden" aria-pressed="false">Hidden</button><button data-f="All" aria-pressed="false">All</button>
+        <button data-f="Hidden" aria-pressed="false">Archived</button><button data-f="All" aria-pressed="false">All</button>
       </div>
       <div id="qList"></div>
     </section>
@@ -161,12 +162,13 @@
     <!-- TREE OF LIFE -->
     <section class="panel" id="tab-revival" hidden>
       <h2>Tree of Life</h2>
-      <p class="help">Hang a leaf with your enjoyment. Serving ones’ leaves are gold on the tree. YP leaves are listed below, where you can hide or delete any of them.</p>
+      <p class="help">Hang a leaf with your enjoyment. Serving ones’ leaves are gold on the tree. YP leaves are listed below, where you can archive or delete any of them. Serving ones can also hang gold leaves right from the Tree of Life page.</p>
       <div class="enj-form">
         <div><label class="lbl" for="enFrom">From (optional)</label><input id="enFrom" maxlength="60" placeholder="e.g. The serving ones"></div>
         <div>
           <span class="lbl" id="feelLbl">Feeling (optional)</span>
           <div class="feelings" id="feelings" role="group" aria-labelledby="feelLbl"></div>
+          <input id="feelCustom" maxlength="30" placeholder="Type a feeling (just for this leaf)" aria-label="Your own feeling" style="margin-top:8px" hidden>
         </div>
         <div><label class="lbl" for="enMsg">Your enjoyment</label><textarea id="enMsg" maxlength="3000" placeholder="What touched you this week? A verse, a hymn line, something the Lord did…"></textarea></div>
         <div class="row2">
@@ -177,9 +179,20 @@
       </div>
       <div class="chips" id="leafChips">
         <button data-f="All" aria-pressed="true">All</button><button data-f="YP" aria-pressed="false">YP</button>
-        <button data-f="SO" aria-pressed="false">Serving ones</button><button data-f="Waiting" aria-pressed="false">Waiting</button><button data-f="Hidden" aria-pressed="false">Hidden</button>
+        <button data-f="SO" aria-pressed="false">Serving ones</button><button data-f="Waiting" aria-pressed="false">Waiting</button><button data-f="Hidden" aria-pressed="false">Archived</button>
       </div>
       <div id="enList"></div>
+    </section>
+
+    <!-- YP QUOTES -->
+    <section class="panel" id="tab-quotes" hidden>
+      <h2>YP Quotes</h2>
+      <p class="help">Heard something funny or sweet from the YP? Add it here and it scrolls across the “YP be like” banner on the YP site. Leave out names.</p>
+      <div class="enj-form">
+        <div><label class="lbl" for="qtText">Quote</label><input id="qtText" maxlength="140" placeholder="e.g. can we get boba after?" style="width:100%"></div>
+        <div><button class="b primary" type="button" id="qtAdd">Add to the banner</button> <span id="qtOut"></span></div>
+      </div>
+      <div id="qtList"></div>
     </section>
 
     <!-- SCORES -->
@@ -224,7 +237,8 @@
   // ---------- tabs ----------
   document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
     document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
-    ["questions", "reading", "revival", "scores"].forEach(t => $("tab-" + t).hidden = t !== b.dataset.tab);
+    ["questions", "reading", "revival", "quotes", "scores"].forEach(t => $("tab-" + t).hidden = t !== b.dataset.tab);
+    if (b.dataset.tab === "quotes" && !quotesLoaded) loadQuotes();
   });
 
   // ---------- questions ----------
@@ -242,7 +256,7 @@
       const el = document.createElement("div"); el.className = "q";
       el.innerHTML = '<div class="meta"><span class="pill"></span><span class="who"></span><span class="when"></span></div><div class="text"></div>' +
         '<label class="lbl">Answer (shown on the YP site)</label><textarea></textarea><div class="actions"></div>';
-      const pill = el.querySelector(".pill"); pill.classList.add(q.status); pill.textContent = q.status === "Approved" ? "Posted" : q.status;
+      const pill = el.querySelector(".pill"); pill.classList.add(q.status); pill.textContent = q.status === "Approved" ? "Posted" : q.status === "Hidden" ? "Archived" : q.status;
       el.querySelector(".who").textContent = q.name ? "From: " + q.name : "Anonymous";
       el.querySelector(".when").textContent = q.time || "";
       el.querySelector(".text").textContent = q.question;
@@ -253,7 +267,7 @@
       btn(q.status === "Approved" ? "Update answer" : "Post to YP site", "primary", () => { if (!ta.value.trim()) { toast("Write an answer first"); return Promise.resolve(); } return upd("Approved", "Posted ✓"); });
       if (q.status !== "Approved") btn("Save draft", "", () => upd(q.status, "Draft saved"));
       if (q.status === "Approved") btn("Take down", "", () => upd("New", "Taken down"));
-      if (q.status === "Hidden") btn("Move back to New", "", () => upd("New", "Moved to New")); else btn("Hide", "danger", () => upd("Hidden", "Hidden"));
+      if (q.status === "Hidden") btn("Move back to New", "", () => upd("New", "Moved to New")); else btn("Archive", "danger", () => upd("Hidden", "Archived"));
       list.appendChild(el);
     });
   }
@@ -316,11 +330,17 @@
   // ---------- weekly enjoyment ----------
   const FEELINGS = ["😊 Joyful", "🙏 Thankful", "🔥 Burning", "🌱 Growing", "💧 Refreshed", "🕊️ Peaceful", "💪 Strengthened", "🤔 Pondering", "😴 Tired but trusting"];
   let feeling = "";
+  let custom = false;
+  const pressFeelings = () => document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.dataset.other ? custom : (!custom && x.textContent === feeling)));
   FEELINGS.forEach(f => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = f; b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { feeling = feeling === f ? "" : f; document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.textContent === feeling)); };
+    b.onclick = () => { custom = false; $("feelCustom").hidden = true; feeling = feeling === f ? "" : f; pressFeelings(); };
     $("feelings").appendChild(b);
   });
+  const other = document.createElement("button"); other.type = "button"; other.dataset.other = 1; other.textContent = "✏️ Write your own"; other.setAttribute("aria-pressed", "false");
+  other.onclick = () => { custom = !custom; feeling = ""; $("feelCustom").hidden = !custom; pressFeelings(); if (custom) $("feelCustom").focus(); };
+  $("feelings").appendChild(other);
+  const currentFeeling = () => custom ? ($("feelCustom").value.trim() ? "💭 " + $("feelCustom").value.trim().slice(0, 30) : "") : feeling;
   function compress(file) {
     return new Promise((res, rej) => {
       const img = new Image(), url = URL.createObjectURL(file);
@@ -339,10 +359,9 @@
     if (!message) { toast("Write your enjoyment first"); $("enMsg").focus(); return; }
     $("enMsgOut").textContent = "Hanging…";
     const image = file ? await compress(file) : "";
-    await post({ action: "addLeaf", name: $("enFrom").value.trim(), feeling, message, verse: $("enVerse").value.trim(), image });
+    await post({ action: "addLeaf", name: $("enFrom").value.trim(), feeling: currentFeeling(), message, verse: $("enVerse").value.trim(), image });
     $("enMsgOut").innerHTML = '<span class="ok">Hung ✓ It’s on the Tree of Life.</span>';
-    $("enMsg").value = ""; $("enVerse").value = ""; $("enFile").value = ""; feeling = "";
-    document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", "false"));
+    $("enMsg").value = ""; $("enVerse").value = ""; $("enFile").value = ""; feeling = ""; custom = false; $("feelCustom").value = ""; $("feelCustom").hidden = true; pressFeelings();
     await loadPublic();
   });
   async function loadLeaves() { const d = await post({ action: "allLeaves" }); leaves = d.leaves || []; renderLeaves(); }
@@ -358,7 +377,7 @@
     shown.forEach(l => {
       const d = document.createElement("div"); d.className = "post";
       d.innerHTML = '<div><div class="wk"></div><div class="meta"></div><div class="msg"></div><div class="actions"></div></div><div class="ph"></div>';
-      d.querySelector(".wk").textContent = (l.so ? "🟡 " + (l.name || "Serving ones") : "🍁 " + (l.name || "A YP (no name)")) + (l.feeling ? " · " + l.feeling : "") + (l.status !== "Shown" ? " · " + l.status : "");
+      d.querySelector(".wk").textContent = (l.so ? "🟡 " + (l.name || "Serving ones") : "🍁 " + (l.name || "A YP (no name)")) + (l.feeling ? " · " + l.feeling : "") + (l.status !== "Shown" ? " · " + (l.status === "Hidden" ? "Archived" : l.status) : "");
       d.querySelector(".meta").textContent = [DATES.label(l.day, { weekday: "short", month: "short", day: "numeric" }), l.verse].filter(Boolean).join(" · ");
       d.querySelector(".msg").textContent = l.message;
       if (l.url) {
@@ -368,9 +387,9 @@
       }
       const acts = d.querySelector(".actions");
       const btn = (label, cls, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "b small " + cls; b.textContent = label; b.style.marginTop = "8px"; b.onclick = () => busy(b, fn); acts.appendChild(b); };
-      const setStatus = async st => { await post({ action: "setLeaf", id: l.id, status: st }); l.status = st; renderLeaves(); toast(st === "Shown" ? "On the tree ✓" : "Hidden from the tree"); };
+      const setStatus = async st => { await post({ action: "setLeaf", id: l.id, status: st }); l.status = st; renderLeaves(); toast(st === "Shown" ? "On the tree ✓" : "Archived — off the tree"); };
       if (l.status !== "Shown") btn("Show on tree", "primary", () => setStatus("Shown"));
-      if (l.status !== "Hidden") btn("Hide", "", () => setStatus("Hidden"));
+      if (l.status !== "Hidden") btn("Archive", "", () => setStatus("Hidden"));
       btn("Delete", "danger", async () => {
         if (!confirm("Delete this leaf for good?")) return;
         await post({ action: "deleteLeaf", id: l.id }); leaves = leaves.filter(x => x.id !== l.id); renderLeaves(); toast("Deleted");
@@ -378,6 +397,41 @@
       box.appendChild(d);
     });
   }
+
+  // ---------- YP quotes ----------
+  let quotes = [], quotesLoaded = false;
+  async function loadQuotes() {
+    try { const d = await post({ action: "allQuotes" }); quotes = d.quotes || []; quotesLoaded = true; renderQuotes(); }
+    catch (e) { $("qtList").innerHTML = '<p class="help">Couldn’t load quotes: ' + e.message.replace(/</g, "&lt;") + "</p>"; }
+  }
+  function renderQuotes() {
+    const box = $("qtList"); box.innerHTML = "";
+    if (!quotes.length) { box.innerHTML = '<p class="help">No quotes yet.</p>'; return; }
+    quotes.forEach(q => {
+      const d = document.createElement("div"); d.className = "post";
+      d.innerHTML = '<div><div class="wk"></div><div class="meta"></div><div class="actions"></div></div><div></div>';
+      d.querySelector(".wk").textContent = "“" + q.quote + "”";
+      d.querySelector(".meta").textContent = q.show ? "On the banner" : "Archived — not on the banner";
+      const acts = d.querySelector(".actions");
+      const btn = (label, cls, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "b small " + cls; b.textContent = label; b.style.marginTop = "8px"; b.onclick = () => busy(b, fn); acts.appendChild(b); };
+      btn(q.show ? "Archive" : "Show on banner", q.show ? "" : "primary", async () => {
+        await post({ action: "setQuote", row: q.row, quote: q.quote, show: !q.show }); q.show = !q.show; renderQuotes(); toast(q.show ? "On the banner ✓" : "Archived");
+      });
+      btn("Delete", "danger", async () => {
+        if (!confirm("Delete this quote for good?")) return;
+        await post({ action: "deleteQuote", row: q.row, quote: q.quote }); await loadQuotes(); toast("Deleted");
+      });
+      box.appendChild(d);
+    });
+  }
+  $("qtAdd").onclick = () => busy($("qtAdd"), async () => {
+    const quote = $("qtText").value.trim();
+    if (!quote) { toast("Type the quote first"); $("qtText").focus(); return; }
+    await post({ action: "addQuote", quote });
+    $("qtText").value = ""; $("qtOut").innerHTML = '<span class="ok">Added ✓ It’s on the banner.</span>';
+    await loadQuotes();
+  });
+  $("qtText").addEventListener("keydown", e => { if (e.key === "Enter") $("qtAdd").click(); });
 
   // ---------- scores ----------
   async function loadScores() {

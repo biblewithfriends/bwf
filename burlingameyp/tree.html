@@ -80,6 +80,38 @@
   .err { color: var(--red); font-weight: 700; margin: 0; }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
+  /* ---------- who's hanging the leaf ---------- */
+  .whois { display: inline-flex; background: #fff; border-radius: 999px; padding: 4px; box-shadow: inset 0 0 0 1.5px var(--line); margin: 2px 0 6px; flex-wrap: wrap; }
+  .whois button { font: 700 .92rem var(--font-body); border: 0; border-radius: 999px; padding: 8px 16px; background: none; color: var(--ink); cursor: pointer; }
+  .whois button[aria-pressed="true"] { background: var(--bark); color: #fff; }
+  .so-box { background: #fff7e3; border-radius: 16px; padding: 12px 14px; margin-top: 10px; box-shadow: inset 0 0 0 1.5px #f1d79a; }
+  .so-box .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .so-box input, .so-box select { flex: 1; min-width: 170px; }
+  .so-box .who-line { font-weight: 700; color: #7a5a3f; margin: 0 0 8px; }
+  .so-box .linkish { background: none; border: 0; color: var(--rust); font: 700 .88rem var(--font-body); cursor: pointer; padding: 0; text-decoration: underline; }
+  .feelings button.other { box-shadow: inset 0 0 0 1.5px var(--line); border: 1.5px dashed transparent; }
+  #feelCustom { margin-top: 8px; max-width: 320px; }
+
+  /* ---------- Burlingame weather on the tree ---------- */
+  .wx-chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #7a5a3f; font-size: .9rem; }
+  .scene .wx { position: absolute; inset: 0; pointer-events: none; }
+  .scene .wx-fog { background: linear-gradient(180deg, rgba(240, 240, 238, .0) 0%, rgba(236, 236, 232, .55) 38%, rgba(236, 236, 232, .25) 70%, rgba(236, 236, 232, 0) 100%); opacity: 0; transition: opacity 1.5s; }
+  .scene .wx-fog::before, .scene .wx-fog::after { content: ""; position: absolute; left: -30%; width: 160%; height: 22%; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(245, 245, 242, .85), rgba(245, 245, 242, 0)); animation: fogDrift 38s linear infinite alternate; }
+  .scene .wx-fog::before { top: 24%; } .scene .wx-fog::after { top: 52%; animation-duration: 52s; animation-direction: alternate-reverse; }
+  @keyframes fogDrift { from { transform: translateX(-8%); } to { transform: translateX(10%); } }
+  .scene.wx-foggy .wx-fog { opacity: 1; }
+  .scene .wx-rain { opacity: 0; transition: opacity 1s; background-image: repeating-linear-gradient(105deg, rgba(120, 150, 185, 0) 0 14px, rgba(120, 150, 185, .55) 14px 15.5px, rgba(120, 150, 185, 0) 15.5px 40px);
+    background-size: 120px 120px; animation: rain .55s linear infinite; }
+  .scene.wx-rainy .wx-rain { opacity: .75; } .scene.wx-drizzle .wx-rain { opacity: .38; }
+  @keyframes rain { from { background-position: 0 0; } to { background-position: -30px 120px; } }
+  .scene .wx-flash { background: #fff; opacity: 0; }
+  .scene.wx-storm .wx-flash { animation: flash 9s infinite; }
+  @keyframes flash { 0%, 91%, 95%, 100% { opacity: 0; } 92% { opacity: .55; } 93% { opacity: .1; } 94% { opacity: .4; } }
+  .scene.windy .leaf { animation-duration: calc(var(--sw, 4s) * .45); }
+  #clouds, #nightSky { transition: opacity 1.5s; }
+  @media (prefers-reduced-motion: reduce) { .scene .wx-rain, .scene .wx-fog::before, .scene .wx-fog::after, .scene.wx-storm .wx-flash { animation: none; } }
+
   /* ---------- calm reading view ---------- */
   body.calm { overflow: hidden; }
   body.calm .leaf, body.calm .fall, body.calm .ticker-track { animation-play-state: paused !important; }
@@ -134,20 +166,36 @@
   <div class="scene" id="scene">
     <svg class="art" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9b0"/><stop offset=".55" stop-color="#ffecd2"/><stop offset="1" stop-color="#fff6e6"/></linearGradient>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="sky0" offset="0" stop-color="#ffd9b0"/><stop id="sky1" offset=".55" stop-color="#ffecd2"/><stop id="sky2" offset="1" stop-color="#fff6e6"/></linearGradient>
         <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe08a" stop-opacity=".9"/><stop offset="1" stop-color="#ffe08a" stop-opacity="0"/></radialGradient>
         <linearGradient id="bark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f301b"/><stop offset=".5" stop-color="#6e4628"/><stop offset="1" stop-color="#4f301b"/></linearGradient>
       </defs>
       <rect width="1000" height="800" fill="url(#sky)"/>
-      <circle cx="830" cy="150" r="150" fill="url(#glow)"/>
-      <circle cx="830" cy="150" r="56" fill="#ffd66b"/>
+      <g id="nightSky" opacity="0">
+        <g fill="#fffbe6">
+          <circle cx="90" cy="70" r="2.2"/><circle cx="180" cy="140" r="1.6"/><circle cx="260" cy="60" r="2"/><circle cx="350" cy="110" r="1.4"/><circle cx="430" cy="40" r="1.8"/>
+          <circle cx="560" cy="80" r="1.5"/><circle cx="640" cy="40" r="2.1"/><circle cx="700" cy="120" r="1.4"/><circle cx="940" cy="60" r="1.9"/><circle cx="960" cy="200" r="1.5"/>
+          <circle cx="120" cy="230" r="1.4"/><circle cx="40" cy="160" r="1.6"/><circle cx="600" cy="170" r="1.2"/><circle cx="300" cy="200" r="1.3"/>
+        </g>
+        <circle cx="830" cy="150" r="46" fill="#fff4cf"/><circle cx="850" cy="138" r="44" fill="#1f2a44"/>
+      </g>
+      <g id="sunGroup">
+        <circle cx="830" cy="150" r="150" fill="url(#glow)"/>
+        <circle cx="830" cy="150" r="56" fill="#ffd66b"/>
+      </g>
+      <g id="clouds" opacity="0" fill="#fbfbfa">
+        <g id="cloudA"><ellipse cx="190" cy="120" rx="110" ry="38"/><ellipse cx="150" cy="100" rx="60" ry="42"/><ellipse cx="230" cy="92" rx="70" ry="50"/></g>
+        <g id="cloudB"><ellipse cx="690" cy="88" rx="120" ry="36"/><ellipse cx="650" cy="70" rx="62" ry="40"/><ellipse cx="740" cy="62" rx="72" ry="46"/></g>
+        <g id="cloudC" opacity=".85"><ellipse cx="440" cy="190" rx="90" ry="28"/><ellipse cx="410" cy="174" rx="48" ry="30"/><ellipse cx="470" cy="170" rx="56" ry="34"/></g>
+      </g>
       <path d="M0 560 C140 500 260 520 380 548 C520 580 640 500 800 520 C900 532 960 548 1000 556 V800 H0Z" fill="#efc896"/>
       <path d="M0 610 C160 570 300 590 440 600 C600 612 760 572 1000 600 V800 H0Z" fill="#e3b072"/>
       <path d="M0 690 C200 668 380 676 520 684 C700 694 860 670 1000 680 V800 H0Z" fill="#c98a4b"/>
       <ellipse cx="500" cy="728" rx="300" ry="34" fill="#b0703a" opacity=".55"/>
-      <!-- soft autumn foliage -->
-      <g opacity=".16">
-        <ellipse cx="500" cy="270" rx="330" ry="190" fill="#f0a041"/><ellipse cx="500" cy="180" rx="210" ry="120" fill="#e9783a"/>
+      <rect id="groundShade" x="0" y="480" width="1000" height="320" fill="#1f2a44" opacity="0" style="transition:opacity 1.5s"/>
+      <!-- the tree of life stays green in every season and every kind of weather -->
+      <g opacity=".22">
+        <ellipse cx="500" cy="270" rx="330" ry="190" fill="#6aa84f"/><ellipse cx="500" cy="180" rx="210" ry="120" fill="#4f8f3e"/>
       </g>
       <!-- trunk and branches -->
       <g fill="none" stroke="#5e3a22" stroke-linecap="round" stroke-linejoin="round">
@@ -168,26 +216,50 @@
       <path d="M432 730 C400 736 380 744 372 752 L628 752 C620 744 600 736 568 730 Z" fill="#4f301b"/>
       <path d="M488 560 C494 600 492 640 486 680 M512 520 C520 560 518 600 514 640" stroke="#3f2614" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
     </svg>
+    <div class="wx wx-fog" aria-hidden="true"></div>
     <div class="leaves" id="leaves"></div>
     <div class="falling" id="falling" aria-hidden="true"></div>
+    <div class="wx wx-rain" aria-hidden="true"></div>
+    <div class="wx wx-flash" aria-hidden="true"></div>
   </div>
   <div class="legend">
     <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> a YP’s enjoyment</span>
     <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legSO"></svg> from the serving ones</span>
-    <span>🍂 older leaves fall to the ground</span>
+    <span>🍂 leaves stay up for the semester (Aug–Dec, Jan–Jul), then fall</span>
   </div>
+  <div class="legend" style="margin-top:6px"><span class="wx-chip" id="wxChip" hidden></span></div>
 
   <section id="hang">
     <div class="card form-card">
       <h2>Hang a leaf 🍁</h2>
       <p class="sub" id="prompt">What did you enjoy of the Lord this week?</p>
+      <div class="whois" role="group" aria-label="Who is hanging this leaf">
+        <button type="button" data-who="yp" aria-pressed="true">🍁 I’m a YP</button>
+        <button type="button" data-who="so" aria-pressed="false">✨ I’m a serving one</button>
+      </div>
+      <div class="so-box" id="soBox" hidden>
+        <div id="soGate">
+          <p class="who-line">Serving ones: enter the passcode once on this device. Your leaf will be gold.</p>
+          <div class="row"><input id="soCode" type="password" autocomplete="current-password" placeholder="Passcode" aria-label="Serving ones passcode"><button class="btn" type="button" id="soGo" style="background:var(--bark);color:#fff">Continue</button></div>
+          <p class="err" id="soErr" role="alert"></p>
+        </div>
+        <div id="soIn" hidden>
+          <p class="who-line">✨ Hanging a gold leaf as a serving one · <button class="linkish" type="button" id="soOut">sign out on this device</button></p>
+          <div class="row">
+            <select id="soName" aria-label="Your name"></select>
+            <input id="soOther" maxlength="60" placeholder="Your name" aria-label="Your name" hidden>
+          </div>
+          <label class="lbl" for="soPhoto">Photo (optional)</label><input id="soPhoto" type="file" accept="image/*">
+        </div>
+      </div>
       <span class="lbl" id="feelLbl">How are you feeling? (optional)</span>
       <div class="feelings" id="feelings" role="group" aria-labelledby="feelLbl"></div>
+      <input id="feelCustom" maxlength="30" placeholder="Type how you feel (just for this leaf)" aria-label="Your own feeling" hidden>
       <label class="lbl" for="msg">Your enjoyment</label>
       <textarea id="msg" maxlength="600" placeholder="A verse that stood out, a hymn line, something the Lord did…"></textarea>
       <div class="row2">
         <div><label class="lbl" for="verse">Verse (optional)</label><input id="verse" maxlength="80" placeholder="e.g. Heb. 12:2"></div>
-        <div><label class="lbl" for="name">Name (optional)</label><input id="name" maxlength="30" placeholder="Leave blank to stay anonymous" autocomplete="off"></div>
+        <div id="nameWrap"><label class="lbl" for="name">Name (optional)</label><input id="name" maxlength="30" placeholder="Leave blank to stay anonymous" autocomplete="off"></div>
       </div>
       <p class="hint">Your leaf shows on the tree for everyone to see. Use a first name or nickname, or leave it blank.</p>
       <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -263,13 +335,14 @@
   // faint background leaves so the tree looks full, in autumn colours (not tappable)
   (() => {
     const r = rng(3), cols = ["#f0a041", "#e9783a", "#d9572f", "#f4b54a", "#c9542a", "#e7a24a"];
+    const greens = ["#5f9e4a", "#4f8a3c", "#7bb35a", "#3f7a36", "#8cc063", "#6aa84f", "#579944"];   // the tree of life is evergreen
     let out = "";
     for (let i = 0; i < 260; i++) {
       const e = CANOPY[(r() * CANOPY.length) | 0], a = r() * Math.PI * 2, d = Math.sqrt(r());
       const x = e[0] + Math.cos(a) * e[2] * d * 1.05, y = e[1] + Math.sin(a) * e[3] * d * 1.05;
       if (y > 470) continue;
       const sc = 0.45 + r() * 0.45, rot = r() * 360;
-      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)}) scale(${sc.toFixed(2)}) translate(-20 -20)" opacity="${(0.28 + r() * 0.3).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${cols[(r() * cols.length) | 0]}"/></g>`;
+      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)}) scale(${sc.toFixed(2)}) translate(-20 -20)" opacity="${(0.42 + r() * 0.35).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${greens[(r() * greens.length) | 0]}"/></g>`;
     }
     const g2 = rng(5);
     for (let i = 0; i < 46; i++) {
@@ -281,7 +354,8 @@
 
   // ---------- render ----------
   let leaves = [], filter = "all", newId = null;
-  const OLD_DAYS = 21;
+  // leaves stay on the tree for the half of the year they were hung in: August–December, or January–July
+  const semesterStart = (() => { const d = DATES.parse(T); return d.getFullYear() + (d.getMonth() >= 7 ? "-08-01" : "-01-01"); })();
   function place(list, spots) {
     const used = new Set(), out = new Map();
     // oldest first, so a leaf keeps its spot as new ones arrive
@@ -295,7 +369,7 @@
   }
   function render() {
     const box = $("leaves"); box.innerHTML = "";
-    const cutoff = DATES.addDays(T, -OLD_DAYS);
+    const cutoff = semesterStart;
     const onTree = leaves.filter(l => l.day >= cutoff).slice(0, TREE_SPOTS.length);
     const onGround = leaves.filter(l => l.day < cutoff || !onTree.includes(l)).slice(0, GROUND_SPOTS.length);
     const pos = new Map([...place(onTree, TREE_SPOTS), ...place(onGround, GROUND_SPOTS)]);
@@ -320,8 +394,8 @@
       if (match(l)) shown++;
     });
     if (!leaves.length) box.innerHTML = '<div class="empty-tree">🍂 The tree is waiting for its first leaf.<br>Hang yours below!</div>';
-    const week = leaves.filter(l => l.day >= weekStart).length;
-    $("count").textContent = leaves.length ? `${leaves.length} leaves on the tree · ${week} this week` + (filter !== "all" ? ` · showing ${shown}` : "") : "";
+    const week = leaves.filter(l => l.day >= weekStart).length, fallen = onGround.length;
+    $("count").textContent = leaves.length ? `${onTree.length} leaves on the tree · ${week} this week` + (fallen ? ` · ${fallen} fallen` : "") + (filter !== "all" ? ` · showing ${shown}` : "") : "";
     newId = null;
   }
   let tipEl = null;
@@ -364,22 +438,77 @@
 
   // ---------- a few leaves drifting down (just for looks) ----------
   if (!FUN.reduced) setInterval(() => {
-    if (document.hidden || document.body.classList.contains("calm") || $("falling").childElementCount > 5) return;
+    if (document.hidden || document.body.classList.contains("calm") || $("falling").childElementCount > 4 * windFactor) return;
+    if (windFactor === 1 && Math.random() < .35) return;
     const s = document.createElement("div"); s.className = "fall";
     s.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(YP_COLORS[(Math.random() * YP_COLORS.length) | 0], "#6e1c0a")}</svg>`;
-    s.style.left = 10 + Math.random() * 80 + "%"; s.style.setProperty("--d", 7 + Math.random() * 5 + "s");
+    s.style.left = 10 + Math.random() * 80 + "%"; s.style.setProperty("--d", (7 + Math.random() * 5) / Math.sqrt(windFactor) + "s");
     s.addEventListener("animationend", () => s.remove());
     $("falling").appendChild(s);
-  }, 1800);
+  }, 1200);
 
   // ---------- hang a leaf ----------
   const FEELINGS = ["😊 Joyful", "🙏 Thankful", "🔥 Burning", "🌱 Growing", "💧 Refreshed", "🕊️ Peaceful", "💪 Strengthened", "🤔 Pondering", "😴 Tired but trusting"];
   let feeling = "";
+  let custom = false;
+  const pressFeelings = () => document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.classList.contains("other") ? custom : (!custom && x.textContent === feeling)));
   FEELINGS.forEach(f => {
     const b = document.createElement("button"); b.type = "button"; b.textContent = f; b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { feeling = feeling === f ? "" : f; document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", x.textContent === feeling)); };
+    b.onclick = () => { custom = false; $("feelCustom").hidden = true; feeling = feeling === f ? "" : f; pressFeelings(); };
     $("feelings").appendChild(b);
   });
+  // write your own: used for this leaf only, never added to the list
+  const other = document.createElement("button"); other.type = "button"; other.className = "other"; other.textContent = "✏️ Write your own"; other.setAttribute("aria-pressed", "false");
+  other.onclick = () => { custom = !custom; feeling = ""; $("feelCustom").hidden = !custom; pressFeelings(); if (custom) $("feelCustom").focus(); else $("feelCustom").value = ""; };
+  $("feelings").appendChild(other);
+  const currentFeeling = () => custom ? ($("feelCustom").value.trim() ? "💭 " + $("feelCustom").value.trim().slice(0, 30) : "") : feeling;
+  const resetFeeling = () => { feeling = ""; custom = false; $("feelCustom").value = ""; $("feelCustom").hidden = true; pressFeelings(); };
+
+  // ---------- YP or serving one ----------
+  let who = "yp", soCode = API.store.get("yp_so_code", ""), soNames = [];
+  function setWho(w) {
+    who = w; document.querySelectorAll(".whois button").forEach(b => b.setAttribute("aria-pressed", b.dataset.who === w));
+    $("soBox").hidden = w !== "so"; $("nameWrap").hidden = w === "so";
+    $("msg").maxLength = w === "so" ? 3000 : 600;
+    if (w === "so") soRefresh();
+  }
+  document.querySelectorAll(".whois button").forEach(b => b.onclick = () => setWho(b.dataset.who));
+  async function soRefresh() {
+    $("soGate").hidden = !!soNames.length; $("soIn").hidden = !soNames.length;
+    if (soNames.length || !soCode) return;
+    try { await soSignIn(soCode); } catch (e) { soCode = ""; API.store.set("yp_so_code", ""); $("soGate").hidden = false; $("soIn").hidden = true; }
+  }
+  async function soSignIn(code) {
+    const d = await API.post({ action: "servingOnes", code });
+    soCode = code; soNames = d.names || []; API.store.set("yp_so_code", code);
+    const last = API.store.get("yp_so_name", "");
+    $("soName").innerHTML = '<option value="">Choose your name…</option>' + soNames.map(n => `<option>${n.replace(/[&<>"]/g, "")}</option>`).join("") + '<option value="__other">Someone else…</option>';
+    $("soName").value = soNames.includes(last) ? last : ""; $("soOther").hidden = true;
+    $("soGate").hidden = true; $("soIn").hidden = false;
+  }
+  $("soGo").onclick = async () => {
+    $("soErr").textContent = ""; const c = $("soCode").value.trim(); if (!c) { $("soCode").focus(); return; }
+    $("soGo").disabled = true;
+    try { await soSignIn(c); $("soCode").value = ""; } catch (e) { $("soErr").textContent = /passcode/i.test(e.message) ? "That passcode didn’t work." : e.message; }
+    $("soGo").disabled = false;
+  };
+  $("soCode").addEventListener("keydown", e => { if (e.key === "Enter") $("soGo").click(); });
+  $("soName").onchange = () => { $("soOther").hidden = $("soName").value !== "__other"; if (!$("soOther").hidden) $("soOther").focus(); };
+  $("soOut").onclick = () => { soCode = ""; soNames = []; API.store.set("yp_so_code", ""); soRefresh(); };
+  const soNameValue = () => $("soName").value === "__other" ? $("soOther").value.trim() : $("soName").value;
+  function compress(file) {
+    return new Promise((res, rej) => {
+      const img = new Image(), url = URL.createObjectURL(file);
+      img.onload = () => {
+        const k = Math.min(1, 1400 / img.naturalWidth, 1400 / img.naturalHeight);
+        const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url); res(c.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = () => rej(new Error("Couldn’t read that photo"));
+      img.src = url;
+    });
+  }
   let sending = false;
   $("hangBtn").onclick = async () => {
     if (sending) return;
@@ -388,9 +517,19 @@
     sending = true; $("hangBtn").disabled = true; $("hangBtn").textContent = "Hanging…";
     try {
       const before = new Set(leaves.map(l => l.id));
-      const res = await API.post({ action: "leaf", message, feeling, verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
-      $("msg").value = ""; $("verse").value = ""; feeling = "";
-      document.querySelectorAll("#feelings button").forEach(x => x.setAttribute("aria-pressed", "false"));
+      let res;
+      if (who === "so") {
+        if (!soNames.length) throw new Error("Enter the serving ones passcode first");
+        const nm = soNameValue();
+        if (!nm) { $("soName").focus(); throw new Error("Choose your name first"); }
+        API.store.set("yp_so_name", $("soName").value === "__other" ? "" : nm);
+        const file = $("soPhoto").files[0], image = file ? await compress(file) : "";
+        res = await API.post({ action: "addLeaf", code: soCode, name: nm, feeling: currentFeeling(), message, verse: $("verse").value.trim(), image });
+        $("soPhoto").value = "";
+      } else {
+        res = await API.post({ action: "leaf", message, feeling: currentFeeling(), verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
+      }
+      $("msg").value = ""; $("verse").value = ""; resetFeeling();
       if (res.waiting) { FUN.toast("🍂 Thanks! Your leaf will appear once a serving one says it’s ready."); }
       else {
         // scroll up to the tree first, then hang the new leaf so they see it happen (no sound)
@@ -406,6 +545,44 @@
     } catch (e) { $("err").textContent = e.message; }
     sending = false; $("hangBtn").disabled = false; $("hangBtn").textContent = "🍂 Hang my leaf";
   };
+
+  // ---------- Burlingame weather (Open-Meteo, no key needed); the tree always keeps its green ----------
+  const SKIES = {
+    clear:  ["#ffd9b0", "#ffecd2", "#fff6e6"], partly: ["#f6dcc0", "#fbeedd", "#fff6e6"], cloudy: ["#d9dde2", "#e9ebec", "#f4f2ec"],
+    fog:    ["#e4e5e3", "#eeeeeb", "#f6f4ee"], rain:   ["#b9c3cf", "#d3d9df", "#ebe9e3"], storm:  ["#8f9aab", "#b9c0ca", "#dedbd3"],
+    night:  ["#1f2a44", "#34405e", "#5c5f73"], nightCloud: ["#2c3448", "#444b5e", "#64656f"]
+  };
+  function applyWeather(w) {
+    const code = w.weather_code, day = w.is_day !== 0, wind = w.wind_speed_10m || 0;
+    const kind = code === 0 || code === 1 ? "clear" : code === 2 ? "partly" : code === 3 ? "cloudy" : (code === 45 || code === 48) ? "fog"
+      : (code >= 51 && code <= 57) ? "drizzle" : ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) ? "rain" : (code >= 71 && code <= 77) || code === 85 || code === 86 ? "rain" : code >= 95 ? "storm" : "partly";
+    const sc = $("scene");
+    sc.classList.toggle("wx-foggy", kind === "fog");
+    sc.classList.toggle("wx-drizzle", kind === "drizzle");
+    sc.classList.toggle("wx-rainy", kind === "rain" || kind === "storm");
+    sc.classList.toggle("wx-storm", kind === "storm");
+    sc.classList.toggle("windy", wind >= 25);
+    const sky = !day ? (kind === "clear" ? SKIES.night : SKIES.nightCloud) : SKIES[kind === "drizzle" ? "rain" : kind] || SKIES.partly;
+    ["sky0", "sky1", "sky2"].forEach((id, i) => $(id).setAttribute("stop-color", sky[i]));
+    $("sunGroup").style.opacity = day && (kind === "clear" || kind === "partly") ? 1 : day && kind === "cloudy" ? .25 : 0;
+    $("nightSky").style.opacity = day ? 0 : kind === "clear" || kind === "partly" ? 1 : .35;
+    $("groundShade").style.opacity = !day ? .5 : (kind === "rain" || kind === "storm") ? .12 : 0;
+    $("clouds").style.opacity = kind === "clear" ? 0 : kind === "partly" ? .9 : 1;
+    $("clouds").setAttribute("fill", !day ? "#59607a" : (kind === "rain" || kind === "storm" || kind === "drizzle") ? "#c9ced6" : "#fbfbfa");
+    windFactor = wind >= 25 ? 2.5 : wind >= 15 ? 1.5 : 1;
+    const label = { clear: day ? "☀️ Sunny" : "🌙 Clear night", partly: day ? "⛅ Partly cloudy" : "☁️ Partly cloudy", cloudy: "☁️ Cloudy", fog: "🌫️ Foggy",
+      drizzle: "🌦️ Drizzly", rain: "🌧️ Rainy", storm: "⛈️ Stormy" }[kind];
+    $("wxChip").textContent = `${label}${wind >= 25 ? " and windy" : ""} · ${Math.round(w.temperature_2m)}° in Burlingame right now`;
+    $("wxChip").hidden = false;
+  }
+  let windFactor = 1;
+  async function loadWeather() {
+    try {
+      const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5841&longitude=-122.3661&current=weather_code,is_day,wind_speed_10m,temperature_2m&temperature_unit=fahrenheit&wind_speed_unit=kmh&timezone=America%2FLos_Angeles");
+      const d = await r.json(); if (d && d.current) applyWeather(d.current);
+    } catch (e) { /* no weather: the usual sunny tree */ }
+  }
+  loadWeather(); setInterval(() => { if (!document.hidden) loadWeather(); }, 15 * 60 * 1000);
 
   // ---------- data ----------
   async function load() {
