@@ -224,7 +224,7 @@
 (() => {
   const { API, DATES, BIBLE } = window;
   const $ = id => document.getElementById(id);
-  let code = "", questions = [], qFilter = "New", readings = [], leaves = [], leafFilter = "All", wk = DATES.monday(DATES.today());
+  let code = "", questions = [], qFilter = "New", readings = [], leaves = [], leafFilter = "All", wk = DATES.sunday(DATES.today());
   if (API.demo) $("demo").hidden = false;
 
   const toast = m => { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2500); };
@@ -279,7 +279,7 @@
       const upd = async (status, msg) => { await post({ action: "update", id: q.id, status, answer: ta.value.trim() }); q.status = status; q.answer = ta.value.trim(); renderQ(); toast(msg); };
       btn(q.status === "Approved" ? "Update answer" : "Post to YP site", "primary", () => { if (!ta.value.trim()) { toast("Write an answer first"); return Promise.resolve(); } return upd("Approved", "Posted ✓"); });
       if (q.status !== "Approved") btn("Save draft", "", () => upd(q.status, "Draft saved"));
-      if (q.status === "Approved") btn("Take down", "", () => upd("New", "Taken down"));
+      if (q.status === "Approved") btn("Unpost", "", () => upd("New", "Unposted"));
       if (q.status === "Hidden") btn("Move back to New", "", () => upd("New", "Moved to New")); else btn("Archive", "danger", () => upd("Hidden", "Archived"));
       list.appendChild(el);
     });
@@ -314,14 +314,14 @@
   }
   $("prevWk").onclick = () => { wk = DATES.addDays(wk, -7); renderWeek(); };
   $("nextWk").onclick = () => { wk = DATES.addDays(wk, 7); renderWeek(); };
-  $("thisWk").onclick = () => { wk = DATES.monday(DATES.today()); renderWeek(); };
+  $("thisWk").onclick = () => { wk = DATES.sunday(DATES.today()); renderWeek(); };
   $("fillBtn").onclick = () => {
     let b = $("fillBook").value, c = Math.max(1, parseInt($("fillCh").value, 10) || 1);
-    const n = $("fillWknd").checked ? 7 : 5;
+    const all = $("fillWknd").checked;   // rows run Sun → Sat; weekdays are rows 1–5
     const max = BIBLE.books[BIBLE.index(b)][2]; if (c > max) c = max;
     [...$("rdRows").children].forEach((tr, i) => {
       const sel = tr.querySelector("select"), ch = tr.querySelector(".ch");
-      if (i < n) { sel.value = b; ch.value = c; [b, c] = BIBLE.next(b, c); } else { sel.value = ""; ch.value = ""; }
+      if (all || (i >= 1 && i <= 5)) { sel.value = b; ch.value = c; [b, c] = BIBLE.next(b, c); } else { sel.value = ""; ch.value = ""; }
       sel.onchange();
     });
     $("rdMsg").textContent = "Filled — don’t forget to save.";

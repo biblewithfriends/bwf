@@ -92,6 +92,8 @@
   .leaf-peek a svg { width: 26px; height: 26px; flex: none; }
   .leaf-peek a span { font-size: .93rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .leaf-peek a small { display: block; color: var(--soft); font-weight: 700; }
+  .leaf-peek .peek-next { justify-self: start; font: 700 .85rem var(--font-body); border: 0; background: none; color: var(--soft); cursor: pointer; padding: 2px 4px; }
+  .leaf-peek a span { -webkit-line-clamp: 3; }
 
   /* ---------- the week: a planner row ---------- */
   .week { display: grid; grid-template-columns: repeat(7, 1fr); border-radius: var(--radius); background: var(--paper); overflow: hidden; box-shadow: var(--shadow); }
@@ -580,18 +582,34 @@
 
   // Tree of Life teaser: count + a few newest leaves
   function renderTreePeek(leaves) {
-    const mon = DATES.monday(T), week = leaves.filter(l => l.day >= mon).length;
+    const mon = DATES.sunday(T), week = leaves.filter(l => l.day >= mon).length;
     $("treeCount").textContent = leaves.length ? leaves.length + " leaves on the tree" : "Be the first leaf!";
     $("treeSub").textContent = leaves.length ? week + " new this week · tap to visit" : "Share what you enjoyed of the Lord";
     const box = $("leafPeek"); box.innerHTML = "";
-    const pick = [leaves.find(l => l.so), ...leaves.filter(l => !l.so).slice(0, 2)].filter(Boolean).slice(0, 3);
-    pick.forEach(l => {
+    // one random leaf from this semester (not just the newest); tap 🔀 for another
+    const d0 = DATES.parse(T), sem = d0.getFullYear() + (d0.getMonth() >= 7 ? "-08-01" : "-01-01");
+    const pool = leaves.filter(l => l.day >= sem && l.message);
+    const list = pool.length ? pool : leaves.filter(l => l.message);
+    if (!list.length) return;
+    const fall = (() => { const m = d0.getMonth() + 1, dd = d0.getDate(); return (m === 9 && dd >= 22) || m === 10 || m === 11 || (m === 12 && dd <= 20); })();
+    const COLS = fall ? ["#d9482b", "#d0611e", "#e39a2d", "#b8572a", "#c0392b"] : ["#5f9e4a", "#4f8a3c", "#7bb35a", "#6aa84f"];
+    let last = null;
+    const show = () => {
+      let l = list[Math.floor(Math.random() * list.length)];
+      if (list.length > 1) while (l === last) l = list[Math.floor(Math.random() * list.length)];
+      last = l; box.innerHTML = "";
       const a = document.createElement("a"); a.href = "tree.html";
-      a.innerHTML = `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${l.so ? "#f4bf2e" : "#d0611e"}"/></svg><div><small></small><span></span></div>`;
-      a.querySelector("small").textContent = (l.so ? (l.name || "The serving ones") : (l.name || "A YP")) + (l.feeling ? " · " + l.feeling : "");
+      a.innerHTML = `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${COLS[(l.id >>> 0) % COLS.length]}"/></svg><div><small></small><span></span></div>`;
+      a.querySelector("small").textContent = (l.name || "A YP") + (l.feeling ? " · " + l.feeling : "");
       a.querySelector("span").textContent = l.message;
       box.appendChild(a);
-    });
+      if (list.length > 1) {
+        const b = document.createElement("button"); b.type = "button"; b.className = "peek-next"; b.textContent = "🔀 Another leaf";
+        b.onclick = e => { e.preventDefault(); show(); };
+        box.appendChild(b);
+      }
+    };
+    show();
   }
 
   function renderLatest(answers) {

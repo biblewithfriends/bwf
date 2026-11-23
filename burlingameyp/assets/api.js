@@ -24,18 +24,19 @@
   const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate() + n); return iso(d); };
   const today = () => iso(new Date());
   const monday = s => { const d = parse(s); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return iso(d); };
+  const sunday = s => { const d = parse(s); d.setDate(d.getDate() - d.getDay()); return iso(d); };   // weeks start on Sunday
   const label = (s, o) => parse(s).toLocaleDateString(undefined, o || { weekday: "short", month: "numeric", day: "numeric" });
-  window.DATES = { iso, parse, addDays, today, monday, label };
+  window.DATES = { iso, parse, addDays, today, monday, sunday, label };
 
   // ---------- readings ----------
   function decorate(r) {
     const ch = r.chapter ? parseInt(r.chapter, 10) : "";
     return { ...r, chapter: ch, ref: (r.book + (ch ? " " + ch : "")).trim(), link: window.BIBLE ? window.BIBLE.link(r.book, ch) : "#" };
   }
-  function week(readings, mon) {
-    mon = mon || monday(today());
+  function week(readings, sun) {
+    sun = sun || sunday(today());
     return Array.from({ length: 7 }, (_, i) => {
-      const date = addDays(mon, i);
+      const date = addDays(sun, i);
       return { date, readings: readings.filter(r => r.date === date) };
     });
   }

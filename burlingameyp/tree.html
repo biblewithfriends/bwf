@@ -25,6 +25,7 @@
   .head { text-align: center; padding: 30px 0 8px; }
   .head h1 { font-size: clamp(2.6rem, 9vw, 4.4rem); margin: 0; color: var(--bark); }
   .head p { margin: 6px auto 0; font-weight: 700; color: #7a5a3f; max-width: 560px; }
+  .head p.caption { font: italic 600 1.05rem var(--font-body); color: #5e3a22; margin-top: 4px; }
 
   .bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; margin: 16px 0 14px; }
   .chip { font: 700 .9rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 14px; background: var(--paper); color: var(--ink); cursor: pointer; box-shadow: var(--shadow); }
@@ -43,7 +44,6 @@
   .leaf:hover, .leaf:focus-visible { filter: brightness(1.12) saturate(1.15); z-index: 3; }
   .leaf:hover svg, .leaf:focus-visible svg { transform: scale(1.35); transition: transform .18s cubic-bezier(.3, 1.8, .5, 1); }
   .leaf:focus-visible { outline: 3px solid #fff; outline-offset: 2px; border-radius: 50%; }
-  .leaf.so svg { filter: drop-shadow(0 0 5px rgba(255, 214, 107, .95)) drop-shadow(0 2px 2px rgba(60, 30, 10, .25)); }
   .leaf.ground { animation: none; }
   .leaf.dim { opacity: .14; pointer-events: none; }
   .leaf.new { animation: drop 1.6s cubic-bezier(.3, .7, .4, 1) both, sway var(--sw, 4s) ease-in-out 1.6s infinite alternate; z-index: 4; }
@@ -80,15 +80,6 @@
   .err { color: var(--red); font-weight: 700; margin: 0; }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
-  /* ---------- who's hanging the leaf ---------- */
-  .whois { display: inline-flex; background: #fff; border-radius: 999px; padding: 4px; box-shadow: inset 0 0 0 1.5px var(--line); margin: 2px 0 6px; flex-wrap: wrap; }
-  .whois button { font: 700 .92rem var(--font-body); border: 0; border-radius: 999px; padding: 8px 16px; background: none; color: var(--ink); cursor: pointer; }
-  .whois button[aria-pressed="true"] { background: var(--bark); color: #fff; }
-  .so-box { background: #fff7e3; border-radius: 16px; padding: 12px 14px; margin-top: 10px; box-shadow: inset 0 0 0 1.5px #f1d79a; }
-  .so-box .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .so-box input, .so-box select { flex: 1; min-width: 170px; }
-  .so-box .who-line { font-weight: 700; color: #7a5a3f; margin: 0 0 8px; }
-  .so-box .linkish { background: none; border: 0; color: var(--rust); font: 700 .88rem var(--font-body); cursor: pointer; padding: 0; text-decoration: underline; }
   .feelings button.other { box-shadow: inset 0 0 0 1.5px var(--line); border: 1.5px dashed transparent; }
   #feelCustom { margin-top: 8px; max-width: 320px; }
 
@@ -110,6 +101,8 @@
   @keyframes flash { 0%, 91%, 95%, 100% { opacity: 0; } 92% { opacity: .55; } 93% { opacity: .1; } 94% { opacity: .4; } }
   .scene.windy .leaf { animation-duration: calc(var(--sw, 4s) * .45); }
   #clouds, #nightSky { transition: opacity 1.5s; }
+  .scene .wx-night { background: #16203a; opacity: 0; transition: opacity 2s; mix-blend-mode: multiply; }
+  .trunk-word { text-align: center; font-weight: 700; color: #7a5a3f; margin: 10px 0 0; }
   @media (prefers-reduced-motion: reduce) { .scene .wx-rain, .scene .wx-fog::before, .scene .wx-fog::after, .scene.wx-storm .wx-flash { animation: none; } }
 
   /* ---------- calm reading view ---------- */
@@ -152,14 +145,13 @@
 <main class="wrap">
   <header class="head">
     <h1>The Tree of Life 🍂</h1>
+    <p class="caption">“…on this side and on that side of the river was the tree of life…” — Rev. 22:2</p>
     <p>Every leaf is someone’s enjoyment of the Lord. Tap a leaf to read it, then hang your own.</p>
   </header>
 
   <div class="bar" role="group" aria-label="Show leaves">
     <button class="chip" type="button" data-f="all" aria-pressed="true">🍂 All leaves</button>
     <button class="chip" type="button" data-f="week" aria-pressed="false">📅 This week</button>
-    <button class="chip" type="button" data-f="yp" aria-pressed="false">🍁 YP</button>
-    <button class="chip" type="button" data-f="so" aria-pressed="false">✨ Serving ones</button>
     <div class="count" id="count" aria-live="polite"></div>
   </div>
 
@@ -177,11 +169,12 @@
           <circle cx="560" cy="80" r="1.5"/><circle cx="640" cy="40" r="2.1"/><circle cx="700" cy="120" r="1.4"/><circle cx="940" cy="60" r="1.9"/><circle cx="960" cy="200" r="1.5"/>
           <circle cx="120" cy="230" r="1.4"/><circle cx="40" cy="160" r="1.6"/><circle cx="600" cy="170" r="1.2"/><circle cx="300" cy="200" r="1.3"/>
         </g>
-        <circle cx="830" cy="150" r="46" fill="#fff4cf"/><circle cx="850" cy="138" r="44" fill="#1f2a44"/>
+        <mask id="moonCut"><rect width="1000" height="800" fill="#fff"/><circle cx="852" cy="137" r="42" fill="#000"/></mask>
+        <circle cx="830" cy="150" r="46" fill="#fff4cf" mask="url(#moonCut)"/>
       </g>
-      <g id="sunGroup">
+      <g id="sunGroup" style="transition:transform 2s ease, opacity 1.5s">
         <circle cx="830" cy="150" r="150" fill="url(#glow)"/>
-        <circle cx="830" cy="150" r="56" fill="#ffd66b"/>
+        <circle id="sunDisc" cx="830" cy="150" r="56" fill="#ffd66b" style="transition:fill 2s"/>
       </g>
       <g id="clouds" opacity="0" fill="#fbfbfa">
         <g id="cloudA"><ellipse cx="190" cy="120" rx="110" ry="38"/><ellipse cx="150" cy="100" rx="60" ry="42"/><ellipse cx="230" cy="92" rx="70" ry="50"/></g>
@@ -192,13 +185,10 @@
       <path d="M0 610 C160 570 300 590 440 600 C600 612 760 572 1000 600 V800 H0Z" fill="#e3b072"/>
       <path d="M0 690 C200 668 380 676 520 684 C700 694 860 670 1000 680 V800 H0Z" fill="#c98a4b"/>
       <ellipse cx="500" cy="728" rx="300" ry="34" fill="#b0703a" opacity=".55"/>
-      <rect id="groundShade" x="0" y="480" width="1000" height="320" fill="#1f2a44" opacity="0" style="transition:opacity 1.5s"/>
-      <!-- the tree of life stays green in every season and every kind of weather -->
-      <g opacity=".22">
-        <ellipse cx="500" cy="270" rx="330" ry="190" fill="#6aa84f"/><ellipse cx="500" cy="180" rx="210" ry="120" fill="#4f8f3e"/>
-      </g>
+      <path id="groundShade" d="M0 560 C140 500 260 520 380 548 C520 580 640 500 800 520 C900 532 960 548 1000 556 V800 H0Z" fill="#1f2a44" opacity="0" style="transition:opacity 1.5s"/>
+
       <!-- trunk and branches -->
-      <g fill="none" stroke="#5e3a22" stroke-linecap="round" stroke-linejoin="round">
+      <g id="branches" fill="none" stroke="#5e3a22" stroke-linecap="round" stroke-linejoin="round">
         <path d="M480 470 C430 420 360 382 270 362" stroke-width="22"/>
         <path d="M352 384 C320 340 290 300 236 276" stroke-width="12"/>
         <path d="M292 368 C244 378 206 400 160 392" stroke-width="10"/>
@@ -209,13 +199,31 @@
         <path d="M495 322 C452 282 422 242 398 196" stroke-width="11"/>
         <path d="M497 298 C540 258 572 220 604 186" stroke-width="11"/>
         <path d="M490 250 C482 208 486 170 498 128" stroke-width="8"/>
-        <path d="M236 276 C220 252 214 232 216 210 M762 278 C780 254 788 232 786 210 M398 196 C384 176 380 156 386 136 M604 186 C622 168 630 148 628 128" stroke-width="6"/>
+        <path d="M236 276 C220 252 214 232 216 210" stroke-width="6"/><path d="M762 278 C780 254 788 232 786 210" stroke-width="6"/>
+        <path d="M398 196 C384 176 380 156 386 136" stroke-width="6"/><path d="M604 186 C622 168 630 148 628 128" stroke-width="6"/>
+        <path d="M420 425 C410 398 402 378 406 350" stroke-width="6"/><path d="M330 375 C318 398 300 414 274 420" stroke-width="5"/>
+        <path d="M580 420 C590 393 598 373 594 345" stroke-width="6"/><path d="M670 380 C682 402 700 416 726 422" stroke-width="5"/>
+        <path d="M502 382 C530 360 552 350 580 348" stroke-width="6"/><path d="M498 360 C470 342 448 334 424 334" stroke-width="6"/>
+        <path d="M492 206 C470 184 458 164 454 140" stroke-width="5"/><path d="M494 186 C516 164 530 144 534 118" stroke-width="5"/>
+        <path d="M160 392 C140 384 126 372 118 354" stroke-width="5"/><path d="M842 402 C862 394 876 382 884 364" stroke-width="5"/>
+        <path d="M236 276 C214 282 198 296 188 316" stroke-width="5"/><path d="M762 278 C784 284 800 298 810 318" stroke-width="5"/>
+        <path d="M398 196 C372 196 354 206 340 222" stroke-width="5"/><path d="M604 186 C630 188 648 198 662 214" stroke-width="5"/>
+        <path d="M290 300 C270 280 262 260 264 236" stroke-width="5"/><path d="M710 300 C730 280 738 260 736 236" stroke-width="5"/>
+        <path d="M216 210 C200 196 192 180 192 162" stroke-width="4"/><path d="M786 210 C802 196 810 180 810 162" stroke-width="4"/>
+        <path d="M386 136 C380 118 382 102 390 86" stroke-width="4"/><path d="M628 128 C634 110 632 94 624 78" stroke-width="4"/>
+        <path d="M498 128 C492 108 494 90 502 72" stroke-width="4"/>
       </g>
       <g id="deco"></g>
       <path d="M432 730 C452 640 470 556 476 470 C478 452 490 440 500 440 C510 440 522 452 524 470 C530 556 548 640 568 730 Z" fill="url(#bark)"/>
       <path d="M432 730 C400 736 380 744 372 752 L628 752 C620 744 600 736 568 730 Z" fill="#4f301b"/>
-      <path d="M488 560 C494 600 492 640 486 680 M512 520 C520 560 518 600 514 640" stroke="#3f2614" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+      <path d="M478 600 C482 630 480 660 474 690 M524 560 C530 590 530 620 526 650" stroke="#3f2614" stroke-width="3" fill="none" opacity=".4" stroke-linecap="round"/>
+      <!-- the word on the trunk changes each day of the week -->
+      <path id="trunkLine" d="M500 724 L500 470" fill="none"/>
+      <text id="trunkWord" font-family="Fredoka, Figtree, sans-serif" font-weight="600" fill="#f8e4c6" fill-opacity=".92" letter-spacing="1"
+        style="paint-order:stroke" stroke="#3f2614" stroke-opacity=".35" stroke-width="2" text-anchor="middle" dominant-baseline="central">
+        <textPath href="#trunkLine" startOffset="50%" id="trunkPath"></textPath></text>
     </svg>
+    <div class="wx wx-night" aria-hidden="true"></div>
     <div class="wx wx-fog" aria-hidden="true"></div>
     <div class="leaves" id="leaves"></div>
     <div class="falling" id="falling" aria-hidden="true"></div>
@@ -223,8 +231,7 @@
     <div class="wx wx-flash" aria-hidden="true"></div>
   </div>
   <div class="legend">
-    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> a YP’s enjoyment</span>
-    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legSO"></svg> from the serving ones</span>
+    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> someone’s enjoyment of the Lord</span>
     <span>🍂 leaves stay up for the semester (Aug–Dec, Jan–Jul), then fall</span>
   </div>
   <div class="legend" style="margin-top:6px"><span class="wx-chip" id="wxChip" hidden></span></div>
@@ -233,24 +240,6 @@
     <div class="card form-card">
       <h2>Hang a leaf 🍁</h2>
       <p class="sub" id="prompt">What did you enjoy of the Lord this week?</p>
-      <div class="whois" role="group" aria-label="Who is hanging this leaf">
-        <button type="button" data-who="yp" aria-pressed="true">🍁 I’m a YP</button>
-        <button type="button" data-who="so" aria-pressed="false">✨ I’m a serving one</button>
-      </div>
-      <div class="so-box" id="soBox" hidden>
-        <div id="soGate">
-          <p class="who-line">Serving ones: enter the passcode once on this device. Your leaf will be gold.</p>
-          <div class="row"><input id="soCode" type="password" autocomplete="current-password" placeholder="Passcode" aria-label="Serving ones passcode"><button class="btn" type="button" id="soGo" style="background:var(--bark);color:#fff">Continue</button></div>
-          <p class="err" id="soErr" role="alert"></p>
-        </div>
-        <div id="soIn" hidden>
-          <p class="who-line">✨ Hanging a gold leaf as a serving one · <button class="linkish" type="button" id="soOut">sign out on this device</button></p>
-          <div class="row">
-            <select id="soName" aria-label="Your name"></select>
-            <input id="soOther" maxlength="60" placeholder="Your name" aria-label="Your name" hidden>
-          </div>
-        </div>
-      </div>
       <span class="lbl" id="feelLbl">How are you feeling? (optional)</span>
       <div class="feelings" id="feelings" role="group" aria-labelledby="feelLbl"></div>
       <input id="feelCustom" maxlength="30" placeholder="Type how you feel (just for this leaf)" aria-label="Your own feeling" hidden>
@@ -260,7 +249,7 @@
         <div><label class="lbl" for="verse">Verse (optional)</label><input id="verse" maxlength="80" placeholder="e.g. Heb. 12:2"></div>
         <div id="nameWrap"><label class="lbl" for="name">Name (optional)</label><input id="name" maxlength="30" placeholder="Leave blank to stay anonymous" autocomplete="off"></div>
       </div>
-      <p class="hint">Your leaf shows on the tree for everyone to see. Use a first name or nickname, or leave it blank.</p>
+      <p class="hint">Your leaf shows on the tree for everyone to see — YP and serving ones alike. Use a first name or nickname, or leave it blank.</p>
       <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="send"><button class="btn" type="button" id="hangBtn">🍂 Hang my leaf</button><p class="err" id="err" role="alert"></p></div>
     </div>
@@ -268,7 +257,6 @@
 </main>
 
 <footer class="site"><div class="wrap">
-  <p>“…on this side and on that side of the river was the tree of life…” — Rev. 22:2</p>
   <p><a href="./">🏠 Back to home</a></p>
   <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p>
 </div></footer>
@@ -295,58 +283,87 @@
   if (API.demo) $("demoBanner").hidden = false;
 
   // ---------- leaf drawing ----------
-  const YP_COLORS = ["#d9482b", "#c0392b", "#d0611e", "#a8401b", "#cf5a2a", "#b8572a", "#9c3b1b", "#e06a2c"];
-  const SO_COLOR = "#f4bf2e";
+  // autumn (Sept 22 – Dec 20): every leaf is an autumn leaf; the rest of the year they are green
+  const FALL = (() => { const d = DATES.parse(T), m = d.getMonth() + 1, dd = d.getDate(); return (m === 9 && dd >= 22) || m === 10 || m === 11 || (m === 12 && dd <= 20); })();
+  const AUTUMN = ["#d9482b", "#c0392b", "#d0611e", "#a8401b", "#e39a2d", "#b8572a", "#f0a041", "#e06a2c", "#c9542a", "#f4b54a"];
+  const GREENS = ["#5f9e4a", "#4f8a3c", "#7bb35a", "#3f7a36", "#6aa84f", "#579944", "#8cc063"];
+  const YP_COLORS = FALL ? AUTUMN : GREENS, VEIN = FALL ? "#6e1c0a" : "#24461c";
   const hash = s => { let h = 2166136261; for (const c of String(s)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
   function leafSVG(color, vein) {
     return `<path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${color}"/>` +
       `<path d="M20 6 V37 M20 15 L27 11 M20 22 L29 18 M20 29 L27 26 M20 15 L13 11 M20 22 L11 18 M20 29 L13 26" stroke="${vein}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".55"/>` +
       `<path d="M20 37 V40" stroke="#5e3a22" stroke-width="2" stroke-linecap="round"/>`;
   }
-  const colorOf = l => l.so ? SO_COLOR : YP_COLORS[hash(l.id) % YP_COLORS.length];
-  $("legYP").innerHTML = leafSVG(YP_COLORS[0], "#7a1f0c");
-  $("legSO").innerHTML = leafSVG(SO_COLOR, "#8a5a00");
+  // everyone's leaf looks the same (YP and serving ones)
+  const colorOf = l => YP_COLORS[hash(l.id) % YP_COLORS.length];
+  $("legYP").innerHTML = leafSVG(YP_COLORS[0], VEIN);
+
+  // ---------- the word on the trunk: one for each day of the week ----------
+  const TRUNK = ["Word of God", "Triune God", "Economy of God", "All-inclusive Christ", "Life-giving Spirit", "Body of Christ", "New Jerusalem"];
+  (() => {
+    const w = TRUNK[DATES.parse(T).getDay()];
+    $("trunkPath").textContent = w;
+    $("trunkWord").setAttribute("font-size", Math.min(30, Math.round(250 / (w.length * 0.56))));
+  })();
 
   // ---------- spots on the branches (fixed, so a leaf never moves) ----------
+  // every leaf hangs from a branch: spots are spaced along each branch, alternating sides,
+  // and the leaf is turned so its stem touches the branch
   function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
-  const CANOPY = [[500, 270, 300, 175], [300, 335, 165, 95], [705, 330, 165, 95], [500, 150, 190, 90], [215, 370, 70, 45], [800, 370, 70, 45]];
   const TREE_SPOTS = [], GROUND_SPOTS = [];
   (() => {
     const r = rng(7);
-    let guard = 0;
-    while (TREE_SPOTS.length < 160 && guard++ < 20000) {
-      const e = CANOPY[(r() * CANOPY.length) | 0];
-      const a = r() * Math.PI * 2, d = Math.sqrt(r());
-      const x = e[0] + Math.cos(a) * e[2] * d, y = e[1] + Math.sin(a) * e[3] * d;
-      if (y > 445 || x < 70 || x > 930 || y < 60) continue;
-      if (TREE_SPOTS.some(p => (p[0] - x) ** 2 + ((p[1] - y) * 1.2) ** 2 < 34 * 34)) continue;
-      TREE_SPOTS.push([x, y]);
-    }
+    const paths = [...document.querySelectorAll("#branches path")];
+    paths.forEach((pth, pi) => {
+      const L = pth.getTotalLength(), w = parseFloat(pth.getAttribute("stroke-width")) || 6;
+      const step = w > 15 ? 26 : 24;
+      let side = pi % 2 ? 1 : -1;
+      for (let t = 18; t < L - 4; t += step) {
+        const p = pth.getPointAtLength(t), q1 = pth.getPointAtLength(Math.max(0, t - 2)), q2 = pth.getPointAtLength(Math.min(L, t + 2));
+        let tx = q2.x - q1.x, ty = q2.y - q1.y; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
+        const sides = w >= 8 ? [side, -side] : (t / step) % 2 < 1 ? [side, -side] : [side];
+        sides.forEach(sd => {
+          let nx = -ty * sd, ny = tx * sd;
+          const off = w / 2 + 15;
+          const x = p.x + nx * off, y = p.y + ny * off;
+          if (x < 40 || x > 960 || y < 50 || y > 470) return;
+          if (x > 440 && x < 560 && y > 430) return;                       // keep the trunk clear
+          if (TREE_SPOTS.some(s => (s[0] - x) ** 2 + (s[1] - y) ** 2 < 27 * 27)) return;
+          const rot = Math.atan2(nx, -ny) * 180 / Math.PI + (r() - 0.5) * 24;
+          TREE_SPOTS.push([x, y, rot]);
+        });
+        side = -side;
+      }
+    });
     const g = rng(11);
-    guard = 0;
+    let guard = 0;
     while (GROUND_SPOTS.length < 70 && guard++ < 20000) {
       const x = 220 + g() * 560, y = 704 + g() * 50 - Math.abs(x - 500) * 0.04;
       if (GROUND_SPOTS.some(p => (p[0] - x) ** 2 + ((p[1] - y) * 2) ** 2 < 26 * 26)) continue;
-      GROUND_SPOTS.push([x, y]);
+      GROUND_SPOTS.push([x, y, (g() * 180) - 90]);
     }
   })();
 
-  // faint background leaves so the tree looks full, in autumn colours (not tappable)
+  // faint background leaves along the branches so the tree looks full (not tappable)
   (() => {
-    const r = rng(3), cols = ["#f0a041", "#e9783a", "#d9572f", "#f4b54a", "#c9542a", "#e7a24a"];
-    const greens = ["#5f9e4a", "#4f8a3c", "#7bb35a", "#3f7a36", "#8cc063", "#6aa84f", "#579944"];   // the tree of life is evergreen
+    const r = rng(3), cols = FALL ? AUTUMN : GREENS;
     let out = "";
-    for (let i = 0; i < 260; i++) {
-      const e = CANOPY[(r() * CANOPY.length) | 0], a = r() * Math.PI * 2, d = Math.sqrt(r());
-      const x = e[0] + Math.cos(a) * e[2] * d * 1.05, y = e[1] + Math.sin(a) * e[3] * d * 1.05;
-      if (y > 470) continue;
-      const sc = 0.45 + r() * 0.45, rot = r() * 360;
-      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)}) scale(${sc.toFixed(2)}) translate(-20 -20)" opacity="${(0.42 + r() * 0.35).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${greens[(r() * greens.length) | 0]}"/></g>`;
-    }
-    const g2 = rng(5);
+    document.querySelectorAll("#branches path").forEach(pth => {
+      const L = pth.getTotalLength();
+      for (let t = 6; t < L; t += 11) {
+        const p = pth.getPointAtLength(t), sd = r() < .5 ? -1 : 1;
+        const q = pth.getPointAtLength(Math.min(L, t + 2)); let tx = q.x - p.x, ty = q.y - p.y; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
+        const nx = -ty * sd, ny = tx * sd, sc = 0.4 + r() * 0.35, off = 6 + r() * 8;
+        const x = p.x + nx * off, y = p.y + ny * off;
+        if (x > 440 && x < 560 && y > 430) continue;
+        const rot = Math.atan2(nx, -ny) * 180 / Math.PI + (r() - 0.5) * 50;
+        out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)}) scale(${sc.toFixed(2)}) translate(-20 -38)" opacity="${(0.4 + r() * 0.35).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${cols[(r() * cols.length) | 0]}"/></g>`;
+      }
+    });
+    const g2 = rng(5), groundCols = AUTUMN;
     for (let i = 0; i < 46; i++) {
       const x = 230 + g2() * 540, y = 712 + g2() * 40;
-      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(g2() * 360).toFixed(0)}) scale(${(0.4 + g2() * 0.3).toFixed(2)}) translate(-20 -20)" opacity=".5"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${cols[(g2() * cols.length) | 0]}"/></g>`;
+      out += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(g2() * 360).toFixed(0)}) scale(${(0.4 + g2() * 0.3).toFixed(2)}) translate(-20 -20)" opacity=".5"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${groundCols[(g2() * groundCols.length) | 0]}"/></g>`;
     }
     $("deco").innerHTML = out;
   })();
@@ -372,21 +389,20 @@
     const onTree = leaves.filter(l => l.day >= cutoff).slice(0, TREE_SPOTS.length);
     const onGround = leaves.filter(l => l.day < cutoff || !onTree.includes(l)).slice(0, GROUND_SPOTS.length);
     const pos = new Map([...place(onTree, TREE_SPOTS), ...place(onGround, GROUND_SPOTS)]);
-    const weekStart = DATES.monday(T);
-    const match = l => filter === "all" || (filter === "week" && l.day >= weekStart) || (filter === "yp" && !l.so) || (filter === "so" && l.so);
+    const weekStart = DATES.sunday(T);
+    const match = l => filter === "all" || (filter === "week" && l.day >= weekStart);
     let shown = 0;
     [...onGround, ...onTree].forEach(l => {
       const p = pos.get(l.id); if (!p) return;
       const ground = onGround.includes(l);
       const b = document.createElement("button"); b.type = "button";
-      b.className = "leaf" + (l.so ? " so" : "") + (ground ? " ground" : "") + (match(l) ? "" : " dim") + (l.id === newId ? " new" : "");
+      b.className = "leaf" + (ground ? " ground" : "") + (match(l) ? "" : " dim") + (l.id === newId ? " new" : "");
       const h = hash(l.id);
       b.style.left = p[0] / 10 + "%"; b.style.top = p[1] / 8 + "%";
-      b.style.setProperty("--r", (ground ? (h % 180) - 90 : (h % 70) - 35) + "deg");
+      b.style.setProperty("--r", p[2].toFixed(0) + "deg");
       b.style.setProperty("--sw", 3 + (h % 30) / 10 + "s"); b.style.setProperty("--dl", -(h % 40) / 10 + "s");
-      if (l.so) b.style.width = "clamp(30px, 5.2%, 52px)";
-      b.setAttribute("aria-label", (l.so ? "Leaf from the serving ones" : "Leaf from " + (l.name || "a YP")) + (l.feeling ? ", feeling " + l.feeling.replace(/^\S+\s/, "") : "") + ". Tap to read.");
-      b.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(colorOf(l), l.so ? "#8a5a00" : "#6e1c0a")}</svg>`;
+      b.setAttribute("aria-label", "Leaf from " + (l.name || "someone") + (l.feeling ? ", feeling " + l.feeling.replace(/^\S+\s/, "") : "") + ". Tap to read.");
+      b.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(colorOf(l), VEIN)}</svg>`;
       b.onclick = () => openLeaf(l);
       b.onmouseenter = () => showTip(b, l); b.onmouseleave = hideTip; b.onfocus = () => showTip(b, l); b.onblur = hideTip;
       box.appendChild(b);
@@ -414,9 +430,9 @@
   let lastFocus = null;
   function openLeaf(l) {
     hideTip();
-    $("calmLeaf").innerHTML = leafSVG(colorOf(l), l.so ? "#8a5a00" : "#6e1c0a");
-    $("calmTitle").textContent = l.so ? (l.name || "The serving ones") : (l.name || "A YP");
-    $("calmDate").textContent = (l.so ? "Serving ones · " : "") + DATES.label(l.day, { weekday: "long", month: "long", day: "numeric" });
+    $("calmLeaf").innerHTML = leafSVG(colorOf(l), VEIN);
+    $("calmTitle").textContent = l.name || "A YP";
+    $("calmDate").textContent = DATES.label(l.day, { weekday: "long", month: "long", day: "numeric" });
     const body = $("calmBody"); body.innerHTML = "";
     if (l.feeling) { const f = document.createElement("span"); f.className = "feel"; const e = document.createElement("b"); const parts = l.feeling.split(" "); e.textContent = parts[0]; f.append(e, parts.slice(1).join(" ")); body.appendChild(f); }
     const m = document.createElement("p"); m.className = "calm-msg"; m.textContent = l.message; body.appendChild(m);
@@ -428,7 +444,7 @@
     }
     lastFocus = document.activeElement;
     document.body.classList.add("calm"); $("calm").hidden = false; $("calmClose").focus();
-    FUN.note && FUN.note(l.so ? 7 : (hash(l.id) % 5) + 2, 0.12);
+    FUN.note && FUN.note((hash(l.id) % 5) + 2, 0.12);
   }
   function closeLeaf() { document.body.classList.remove("calm"); $("calm").hidden = true; if (lastFocus) lastFocus.focus(); }
   $("calmClose").onclick = closeLeaf;
@@ -440,7 +456,7 @@
     if (document.hidden || document.body.classList.contains("calm") || $("falling").childElementCount > 4 * windFactor) return;
     if (windFactor === 1 && Math.random() < .35) return;
     const s = document.createElement("div"); s.className = "fall";
-    s.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(YP_COLORS[(Math.random() * YP_COLORS.length) | 0], "#6e1c0a")}</svg>`;
+    s.innerHTML = `<svg viewBox="0 0 40 40">${leafSVG(YP_COLORS[(Math.random() * YP_COLORS.length) | 0], VEIN)}</svg>`;
     s.style.left = 10 + Math.random() * 80 + "%"; s.style.setProperty("--d", (7 + Math.random() * 5) / Math.sqrt(windFactor) + "s");
     s.addEventListener("animationend", () => s.remove());
     $("falling").appendChild(s);
@@ -463,38 +479,6 @@
   const currentFeeling = () => custom ? ($("feelCustom").value.trim() ? "💭 " + $("feelCustom").value.trim().slice(0, 30) : "") : feeling;
   const resetFeeling = () => { feeling = ""; custom = false; $("feelCustom").value = ""; $("feelCustom").hidden = true; pressFeelings(); };
 
-  // ---------- YP or serving one ----------
-  let who = "yp", soCode = API.store.get("yp_so_code", ""), soNames = [];
-  function setWho(w) {
-    who = w; document.querySelectorAll(".whois button").forEach(b => b.setAttribute("aria-pressed", b.dataset.who === w));
-    $("soBox").hidden = w !== "so"; $("nameWrap").hidden = w === "so";
-    $("msg").maxLength = w === "so" ? 3000 : 600;
-    if (w === "so") soRefresh();
-  }
-  document.querySelectorAll(".whois button").forEach(b => b.onclick = () => setWho(b.dataset.who));
-  async function soRefresh() {
-    $("soGate").hidden = !!soNames.length; $("soIn").hidden = !soNames.length;
-    if (soNames.length || !soCode) return;
-    try { await soSignIn(soCode); } catch (e) { soCode = ""; API.store.set("yp_so_code", ""); $("soGate").hidden = false; $("soIn").hidden = true; }
-  }
-  async function soSignIn(code) {
-    const d = await API.post({ action: "servingOnes", code });
-    soCode = code; soNames = d.names || []; API.store.set("yp_so_code", code);
-    const last = API.store.get("yp_so_name", "");
-    $("soName").innerHTML = '<option value="">Choose your name…</option>' + soNames.map(n => `<option>${n.replace(/[&<>"]/g, "")}</option>`).join("") + '<option value="__other">Someone else…</option>';
-    $("soName").value = soNames.includes(last) ? last : ""; $("soOther").hidden = true;
-    $("soGate").hidden = true; $("soIn").hidden = false;
-  }
-  $("soGo").onclick = async () => {
-    $("soErr").textContent = ""; const c = $("soCode").value.trim(); if (!c) { $("soCode").focus(); return; }
-    $("soGo").disabled = true;
-    try { await soSignIn(c); $("soCode").value = ""; } catch (e) { $("soErr").textContent = /passcode/i.test(e.message) ? "That passcode didn’t work." : e.message; }
-    $("soGo").disabled = false;
-  };
-  $("soCode").addEventListener("keydown", e => { if (e.key === "Enter") $("soGo").click(); });
-  $("soName").onchange = () => { $("soOther").hidden = $("soName").value !== "__other"; if (!$("soOther").hidden) $("soOther").focus(); };
-  $("soOut").onclick = () => { soCode = ""; soNames = []; API.store.set("yp_so_code", ""); soRefresh(); };
-  const soNameValue = () => $("soName").value === "__other" ? $("soOther").value.trim() : $("soName").value;
   let sending = false;
   $("hangBtn").onclick = async () => {
     if (sending) return;
@@ -503,16 +487,8 @@
     sending = true; $("hangBtn").disabled = true; $("hangBtn").textContent = "Hanging…";
     try {
       const before = new Set(leaves.map(l => l.id));
-      let res;
-      if (who === "so") {
-        if (!soNames.length) throw new Error("Enter the serving ones passcode first");
-        const nm = soNameValue();
-        if (!nm) { $("soName").focus(); throw new Error("Choose your name first"); }
-        API.store.set("yp_so_name", $("soName").value === "__other" ? "" : nm);
-        res = await API.post({ action: "addLeaf", code: soCode, name: nm, feeling: currentFeeling(), message, verse: $("verse").value.trim() });
-      } else {
-        res = await API.post({ action: "leaf", message, feeling: currentFeeling(), verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
-      }
+      // everyone (YP and serving ones) hangs a leaf the same way
+      const res = await API.post({ action: "leaf", message, feeling: currentFeeling(), verse: $("verse").value.trim(), name: $("name").value.trim(), website: $("website").value });
       $("msg").value = ""; $("verse").value = ""; resetFeeling();
       if (res.waiting) { FUN.toast("🍂 Thanks! Your leaf will appear once a serving one says it’s ready."); }
       else {
@@ -530,43 +506,76 @@
     sending = false; $("hangBtn").disabled = false; $("hangBtn").textContent = "🍂 Hang my leaf";
   };
 
-  // ---------- Burlingame weather (Open-Meteo, no key needed); the tree always keeps its green ----------
-  const SKIES = {
-    clear:  ["#ffd9b0", "#ffecd2", "#fff6e6"], partly: ["#f6dcc0", "#fbeedd", "#fff6e6"], cloudy: ["#d9dde2", "#e9ebec", "#f4f2ec"],
-    fog:    ["#e4e5e3", "#eeeeeb", "#f6f4ee"], rain:   ["#b9c3cf", "#d3d9df", "#ebe9e3"], storm:  ["#8f9aab", "#b9c0ca", "#dedbd3"],
-    night:  ["#1f2a44", "#34405e", "#5c5f73"], nightCloud: ["#2c3448", "#444b5e", "#64656f"]
+  // ---------- Burlingame time of day + weather (Open-Meteo, no key needed) ----------
+  // sunrise → afternoon → sunset → night with the moon, then the weather on top
+  const PHASE_SKY = {
+    morning:   ["#ffb59c", "#ffd8b6", "#fff1dc"],
+    afternoon: ["#8fc6ec", "#cfe7f4", "#fff4e2"],
+    evening:   ["#5d4a8c", "#e8806a", "#ffc47c"],
+    night:     ["#141d36", "#27345a", "#4b5172"]
   };
-  function applyWeather(w) {
-    const code = w.weather_code, day = w.is_day !== 0, wind = w.wind_speed_10m || 0;
+  const WX_SKY = { cloudy: ["#d9dde2", "#e9ebec", "#f4f2ec"], fog: ["#e4e5e3", "#eeeeeb", "#f6f4ee"], rain: ["#b9c3cf", "#d3d9df", "#ebe9e3"], storm: ["#8f9aab", "#b9c0ca", "#dedbd3"] };
+  const SUN_AT = { morning: [165, 512], afternoon: [830, 150], evening: [845, 512], night: [830, 150] };
+  // rough Burlingame sunrise/sunset by month, used until the forecast loads
+  const SUN_TABLE = [[440, 1035], [420, 1070], [435, 1155], [400, 1180], [365, 1205], [350, 1230], [365, 1230], [390, 1200], [415, 1155], [440, 1110], [410, 1020], [435, 1015]];
+  const mix = (a, b, t) => { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const x = p(a), y = p(b); return "#" + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, "0")).join(""); };
+  const nowMin = () => { const f = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(new Date());
+    return +f.find(x => x.type === "hour").value * 60 + +f.find(x => x.type === "minute").value; };
+  const toMin = iso => { const m = String(iso || "").match(/T(\d\d):(\d\d)/); return m ? +m[1] * 60 + +m[2] : null; };
+  let wx = null, sunMin = null, windFactor = 1;
+  function phaseNow() {
+    const [rise, set] = sunMin || SUN_TABLE[DATES.parse(T).getMonth()], n = nowMin();
+    if (n < rise - 30 || n > set + 40) return "night";
+    if (n < rise + 150) return "morning";
+    if (n > set - 90) return "evening";
+    return "afternoon";
+  }
+  function applySky() {
+    const phase = phaseNow(), w = wx || { weather_code: 0, wind_speed_10m: 0 };
+    const code = w.weather_code, wind = w.wind_speed_10m || 0;
     const kind = code === 0 || code === 1 ? "clear" : code === 2 ? "partly" : code === 3 ? "cloudy" : (code === 45 || code === 48) ? "fog"
       : (code >= 51 && code <= 57) ? "drizzle" : ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) ? "rain" : (code >= 71 && code <= 77) || code === 85 || code === 86 ? "rain" : code >= 95 ? "storm" : "partly";
-    const sc = $("scene");
+    const sc = $("scene"), night = phase === "night", wet = kind === "rain" || kind === "storm" || kind === "drizzle";
     sc.classList.toggle("wx-foggy", kind === "fog");
     sc.classList.toggle("wx-drizzle", kind === "drizzle");
     sc.classList.toggle("wx-rainy", kind === "rain" || kind === "storm");
     sc.classList.toggle("wx-storm", kind === "storm");
     sc.classList.toggle("windy", wind >= 25);
-    const sky = !day ? (kind === "clear" ? SKIES.night : SKIES.nightCloud) : SKIES[kind === "drizzle" ? "rain" : kind] || SKIES.partly;
-    ["sky0", "sky1", "sky2"].forEach((id, i) => $(id).setAttribute("stop-color", sky[i]));
-    $("sunGroup").style.opacity = day && (kind === "clear" || kind === "partly") ? 1 : day && kind === "cloudy" ? .25 : 0;
-    $("nightSky").style.opacity = day ? 0 : kind === "clear" || kind === "partly" ? 1 : .35;
-    $("groundShade").style.opacity = !day ? .5 : (kind === "rain" || kind === "storm") ? .12 : 0;
+    sc.dataset.phase = phase;
+    // sky: the time of day, greyed by clouds, fog or rain
+    const base = PHASE_SKY[phase], over = WX_SKY[kind === "drizzle" ? "rain" : kind];
+    const amt = !over ? (kind === "partly" ? 0.18 : 0) : night ? 0.25 : phase === "afternoon" ? 0.85 : 0.55;
+    const grey = over || WX_SKY.cloudy;
+    ["sky0", "sky1", "sky2"].forEach((id, i) => $(id).setAttribute("stop-color", night && over ? mix(base[i], "#3a4256", 0.3) : mix(base[i], grey[i], amt)));
+    // sun low on the left at sunrise, high in the afternoon, low on the right at sunset; the moon at night
+    const at = SUN_AT[phase];
+    $("sunGroup").style.transform = `translate(${at[0] - 830}px, ${at[1] - 150}px)`;
+    $("sunDisc").setAttribute("fill", phase === "afternoon" ? "#ffd66b" : "#ff9d4d");
+    $("sunGroup").style.opacity = night ? 0 : (kind === "clear" || kind === "partly") ? 1 : kind === "cloudy" ? .3 : .12;
+    $("nightSky").style.opacity = !night ? 0 : (kind === "clear" || kind === "partly") ? 1 : .4;
+    sc.querySelector(".wx-night").style.opacity = night ? .34 : phase === "evening" ? .08 : 0;
+    $("groundShade").style.opacity = night ? .45 : phase === "evening" ? .14 : wet ? .12 : phase === "morning" ? .05 : 0;
     $("clouds").style.opacity = kind === "clear" ? 0 : kind === "partly" ? .9 : 1;
-    $("clouds").setAttribute("fill", !day ? "#59607a" : (kind === "rain" || kind === "storm" || kind === "drizzle") ? "#c9ced6" : "#fbfbfa");
+    $("clouds").setAttribute("fill", night ? "#59607a" : wet ? "#c9ced6" : phase === "evening" ? "#f6c3b0" : phase === "morning" ? "#fde0d2" : "#fbfbfa");
     windFactor = wind >= 25 ? 2.5 : wind >= 15 ? 1.5 : 1;
-    const label = { clear: day ? "☀️ Sunny" : "🌙 Clear night", partly: day ? "⛅ Partly cloudy" : "☁️ Partly cloudy", cloudy: "☁️ Cloudy", fog: "🌫️ Foggy",
-      drizzle: "🌦️ Drizzly", rain: "🌧️ Rainy", storm: "⛈️ Stormy" }[kind];
-    $("wxChip").textContent = `${label}${wind >= 25 ? " and windy" : ""} · ${Math.round(w.temperature_2m)}° in Burlingame right now`;
+    const PH = { morning: "🌅 Sunrise", afternoon: "☀️ Afternoon", evening: "🌇 Sunset", night: "🌙 Night" }[phase];
+    if (!wx) { $("wxChip").textContent = PH + " in Burlingame"; $("wxChip").hidden = false; return; }
+    const label = { clear: night ? "clear sky" : "clear", partly: "partly cloudy", cloudy: "cloudy", fog: "foggy", drizzle: "drizzly", rain: "rainy", storm: "stormy" }[kind];
+    $("wxChip").textContent = `${PH} · ${label}${wind >= 25 ? " and windy" : ""} · ${Math.round(w.temperature_2m)}° in Burlingame right now`;
     $("wxChip").hidden = false;
   }
-  let windFactor = 1;
   async function loadWeather() {
     try {
-      const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5841&longitude=-122.3661&current=weather_code,is_day,wind_speed_10m,temperature_2m&temperature_unit=fahrenheit&wind_speed_unit=kmh&timezone=America%2FLos_Angeles");
-      const d = await r.json(); if (d && d.current) applyWeather(d.current);
-    } catch (e) { /* no weather: the usual sunny tree */ }
+      const r = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5841&longitude=-122.3661&current=weather_code,is_day,wind_speed_10m,temperature_2m&daily=sunrise,sunset&forecast_days=1&temperature_unit=fahrenheit&wind_speed_unit=kmh&timezone=America%2FLos_Angeles");
+      const d = await r.json();
+      if (d && d.current) wx = d.current;
+      if (d && d.daily) { const a = toMin(d.daily.sunrise && d.daily.sunrise[0]), b = toMin(d.daily.sunset && d.daily.sunset[0]); if (a !== null && b !== null) sunMin = [a, b]; }
+    } catch (e) { /* no weather: just the time of day */ }
+    applySky();
   }
-  loadWeather(); setInterval(() => { if (!document.hidden) loadWeather(); }, 15 * 60 * 1000);
+  applySky(); loadWeather();
+  setInterval(() => { if (!document.hidden) loadWeather(); }, 15 * 60 * 1000);
+  setInterval(() => { if (!document.hidden) applySky(); }, 60 * 1000);
 
   // ---------- data ----------
   async function load() {

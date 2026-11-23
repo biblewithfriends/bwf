@@ -106,7 +106,7 @@
   const me = SCORES.myName().toLowerCase();
 
   function filter() {
-    const T = DATES.today(), mon = DATES.monday(T);
+    const T = DATES.today(), mon = DATES.sunday(T);
     return all.filter(s => range === "all" || (range === "today" ? s.day === T : s.day >= mon && s.day <= T));
   }
   function render() {
