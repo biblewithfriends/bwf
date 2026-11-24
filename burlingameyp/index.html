@@ -19,9 +19,8 @@
 <meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png?v=12">
 <style>
   /* ---------- the notebook page top ---------- */
-  .hero { position: relative; overflow: hidden; padding: 60px 0 90px; min-height: 440px; text-align: center; border-radius: 0 0 44px 44px;
-    background: radial-gradient(circle at 12% 18%, rgba(255,253,248,.9) 0 90px, transparent 91px), radial-gradient(circle at 90% 78%, var(--pink) 0 130px, transparent 131px),
-      radial-gradient(circle at 78% 8%, var(--yellow) 0 46px, transparent 47px), linear-gradient(180deg, #cfe3b4, #b9d79a); }
+  .hero { position: relative; overflow: hidden; padding: 56px 0 96px; min-height: 360px; text-align: center; border-radius: 0 0 44px 44px;
+    background: #c4dda7; }
   .chalk { position: absolute; inset: 0; pointer-events: none; font: 600 1.25rem var(--font-display); color: rgba(36,64,47,.28); }
   .chalk span { position: absolute; white-space: nowrap; }
   .hero .content { position: relative; z-index: 3; pointer-events: none; }
@@ -172,17 +171,17 @@
   .hero h1 .w { display: inline-block; white-space: nowrap; }
   .hero h1 i:hover { transform: translateY(-14px) rotate(-8deg); color: var(--red); }
   @keyframes letterIn { from { transform: translateY(40px) scale(.4) rotate(12deg); opacity: 0; } }
-  .hero p.full { animation: wiggle 3s ease-in-out infinite; }
+  .hero p.full { transform: rotate(-2deg); }
   @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
   .cup { position: absolute; left: 14px; bottom: 6px; z-index: 5; width: 108px; padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
-    animation: bob 2.6s ease-in-out infinite; transform-origin: 50% 100%; }
+    transform-origin: 50% 100%; }
   .cup svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 8px 8px rgba(36,64,47,.2)); }
   .cup.shake { animation: shake .55s ease; }
   .cup .say { position: absolute; left: 70%; bottom: 96%; background: #fff; color: var(--ink); font-weight: 700; font-size: .85rem; white-space: nowrap; padding: 5px 12px; border-radius: 16px 16px 16px 4px; box-shadow: var(--shadow); animation: sayIn .25s cubic-bezier(.3, 1.8, .5, 1); }
   @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
   @keyframes shake { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(-14deg) scale(1.08); } 35% { transform: rotate(12deg) scale(1.08); } 55% { transform: rotate(-9deg); } 75% { transform: rotate(6deg); } }
   @keyframes sayIn { from { transform: scale(.3); opacity: 0; } }
-  @media (max-width: 640px) { .hero { padding-bottom: 178px; } .cup { width: 74px; bottom: 60px; } .cup .say { font-size: .75rem; } }
+  @media (max-width: 640px) { .hero { padding-bottom: 150px; min-height: 0; } .cup { width: 74px; bottom: 60px; } .cup .say { font-size: .75rem; } }
   .combo { position: absolute; z-index: 8; pointer-events: none; transform: translate(-50%, -50%); font: 600 1.7rem var(--font-display); color: var(--red); text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 -2px 0 #fff; animation: comboUp .8s cubic-bezier(.3, 1.8, .5, 1) forwards; }
   @keyframes comboUp { 0% { transform: translate(-50%, -50%) scale(.3); } 40% { transform: translate(-50%, -90%) scale(1.25) rotate(-8deg); } 100% { transform: translate(-50%, -160%) scale(1); opacity: 0; } }
   .reading-big { position: relative; overflow: hidden; }
@@ -191,6 +190,8 @@
   .stamp.new { animation: stampIn .45s cubic-bezier(.3, 1.6, .5, 1); }
   @keyframes stampIn { from { transform: rotate(-30deg) scale(3.2); opacity: 0; } }
   .panel.mr { background: linear-gradient(160deg, var(--purple), var(--paper) 70%); }
+  .qcta.qbox-only { display: block; max-width: 760px; margin: 0 auto; }
+  .qcta.qbox-only h3 { margin-top: 0; font-size: clamp(1.5rem, 5vw, 2rem); }
   .qcta { background: linear-gradient(160deg, var(--pink), var(--paper) 65%); }
   .game.ladder { background: linear-gradient(160deg, var(--note-yellow), var(--paper) 70%); }
   .game:hover { transform: translateY(-6px) rotate(-1.5deg) scale(1.02); }
@@ -224,12 +225,6 @@
   <div class="wrap content">
     <h1><span>Church in Burlingame</span><br><span>Young People</span></h1>
     <p class="full">Burlingame YP</p>
-    <p class="tag">read it, ask it, play it!</p>
-    <div class="ctas">
-      <a class="btn" href="#today">📖 Today’s reading</a>
-      <a class="btn white" href="qbox.html">📮 Ask a question</a>
-      <a class="btn green" href="#games">🎮 Play</a>
-    </div>
   </div>
   <button class="cup" id="cup" type="button" aria-label="Shake the boba cup">
     <span class="say" id="cupSay" hidden></span>
@@ -253,19 +248,24 @@
 
 <div class="ticker"><div class="lbl">YP be like</div><div class="viewport"><div class="ticker-track" id="ticker"></div></div></div>
 
-<!-- ============ TODAY ============ -->
-<section id="today">
+<!-- ============ WEEK ============ -->
+<section id="week">
   <div class="wrap">
     <div class="sec-title">
-      <span class="kicker" id="todayKicker">Today</span>
-      <h2><span class="doodle">Today’s portion</span> ☀️</h2>
+      <span class="kicker" id="weekKicker">this week</span>
+      <h2><span class="doodle">This week’s reading</span></h2>
+      <p>Tap a chapter to read it. Check it off when you’re done ✅</p>
     </div>
-    <div class="today-grid">
-      <div class="card panel reading-big">
-        <h3>📖 Bible reading</h3>
-        <p class="sub">Recovery Version</p>
-        <div id="todayReading"><div class="empty">Loading…</div></div>
-      </div>
+    <div class="week" id="weekGrid"></div>
+    <div class="progress" id="progress"></div>
+  </div>
+</section>
+
+<div class="lanes" aria-hidden="true"></div>
+
+<!-- ============ TREE OF LIFE ============ -->
+<section id="tree" style="padding-top:10px">
+  <div class="wrap" style="max-width:640px">
       <div class="card panel mr">
         <h3>🍂 Tree of Life</h3>
         <p class="sub">Everyone’s enjoyment of the Lord</p>
@@ -280,39 +280,17 @@
         <div class="leaf-peek" id="leafPeek"></div>
         <a class="btn" href="tree.html#hang" style="background:#b5481f;color:#fff">🍁 Hang a leaf</a>
       </div>
-    </div>
   </div>
 </section>
 
-<!-- ============ WEEK ============ -->
-<section id="week" style="padding-top:20px">
-  <div class="wrap">
-    <div class="sec-title">
-      <span class="kicker" id="weekKicker">this week</span>
-      <h2><span class="doodle">This week’s reading</span> 🏃</h2>
-      <p>Tap a chapter to read it. Check it off when you’re done ✅</p>
-    </div>
-    <div class="week" id="weekGrid"></div>
-    <div class="progress" id="progress"></div>
-  </div>
-</section>
-
-<div class="lanes" aria-hidden="true"></div>
 
 <!-- ============ Q BOX ============ -->
 <section id="qbox">
   <div class="wrap">
-    <div class="card qcta">
-      <div>
-        <h3>📮 The Q Box</h3>
-        <p>Big, small, funny, deep, faith stuff, life stuff, feelings — ask anything. Stay anonymous if you want. The serving ones answer.</p>
-        <a class="btn" href="qbox.html">🏐 Serve a question</a>
-      </div>
-      <div>
-        <div style="font-weight:900;margin-bottom:8px">💬 Latest answers</div>
-        <div id="latest"><div class="mini-qa"><span>Loading…</span></div></div>
-        <a href="qbox.html#answers" style="font-weight:900">See all answers →</a>
-      </div>
+    <div class="card qcta qbox-only">
+      <h3>📮 Question Box</h3>
+      <div id="latest"><div class="mini-qa"><span>Loading…</span></div></div>
+      <a href="qbox.html#answers" style="font-weight:900">See all questions and answers →</a>
     </div>
   </div>
 </section>
@@ -366,7 +344,7 @@
 
 <footer class="site"><div class="wrap">
   <p>Made with 🧋 boba, 🍵 matcha, 🍬 candy & a lot of 🎵 hymn-singing. <small>(tap me!)</small></p>
-  <p><a href="https://www.recoveryversion.bible/" target="_blank" rel="noopener">📖 Holy Bible Recovery Version</a> · <a id="footIg" target="_blank" rel="noopener">📸 Instagram</a></p>
+  <p><a id="footRV" href="https://text.recoveryversion.bible/" target="_blank" rel="noopener">📖 Holy Bible Recovery Version</a> · <a id="footIg" target="_blank" rel="noopener">📸 Instagram</a></p>
   <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p>
 </div></footer>
 
@@ -394,7 +372,6 @@
   const CFG = window.QBOX_CONFIG || {};
   const $ = id => document.getElementById(id);
   const T = DATES.today();
-  FUN.wallpaper();
   if (API.demo) $("demoBanner").hidden = false;
 
   // ---------- bubbles ----------
@@ -428,12 +405,13 @@
     FUN.pop(r.width);
     popped++; if (blitz) blitz.n++;
     const now = Date.now(); combo = now - lastPop < 1000 ? combo + 1 : 1; lastPop = now;
-    if (combo >= 2) FUN.note(Math.min(combo - 2, 14), 0.12);
     if (combo >= 3) { const c = document.createElement("div"); c.className = "combo"; c.textContent = "x" + combo + (combo >= 8 ? " 🔥" : "!"); c.style.left = cx + "px"; c.style.top = cy - 34 + "px"; hero.appendChild(c); setTimeout(() => c.remove(), 800); }
     $("popCount").textContent = counterText();
-    const lab = document.createElement("div"); lab.className = "pop-label";
-    lab.textContent = emoji + " " + name + " — " + line; lab.style.left = cx + "px"; lab.style.top = cy + "px";
-    hero.appendChild(lab); setTimeout(() => lab.remove(), 1500);
+    if (!blitz) {   // no captions during Bubble Blitz
+      const lab = document.createElement("div"); lab.className = "pop-label";
+      lab.textContent = emoji + " " + name + " — " + line; lab.style.left = cx + "px"; lab.style.top = cy + "px";
+      hero.appendChild(lab); setTimeout(() => lab.remove(), 1500);
+    }
     if (!FUN.reduced) for (let i = 0; i < 6; i++) {
       const s = document.createElement("span"); s.className = "spark"; s.textContent = i % 2 ? "✨" : emoji;
       const a = Math.PI * 2 * i / 6; s.style.left = cx - 11 + "px"; s.style.top = cy - 11 + "px";
@@ -503,7 +481,6 @@
     c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
     say.textContent = CUP_LINES[(Math.random() * CUP_LINES.length) | 0]; say.hidden = false;
     clearTimeout(c._t); c._t = setTimeout(() => say.hidden = true, 1800);
-    FUN.note((Math.random() * 6) | 0, 0.16);
     if (!FUN.reduced) for (let i = 0; i < 6; i++) setTimeout(() => spawn(2 + Math.random() * 22), i * 90);
   };
   // bouncy title letters
@@ -526,28 +503,10 @@
 
   // ---------- data ----------
   const readKey = d => "yp_read_" + d;
-  function renderToday(readings) {
-    const box = $("todayReading"); box.innerHTML = "";
-    $("todayKicker").textContent = DATES.label(T, { weekday: "long", month: "long", day: "numeric" });
-    const list = API.readingsFor(readings, T);
-    if (!list.length) {
-      const next = readings.find(r => r.date > T);
-      box.innerHTML = '<div class="empty"><span class="big">🛌</span>No reading assigned for today.</div>';
-      if (next) { const p = document.createElement("p"); p.className = "ref-note"; p.style.marginTop = "12px"; p.textContent = "Next up: " + next.ref + " (" + DATES.label(next.date, { weekday: "long" }) + ")"; box.appendChild(p); }
-      return;
-    }
-    list.forEach(r => {
-      const big = document.createElement("div"); big.className = "ref-big"; big.textContent = r.ref; box.appendChild(big);
-      if (r.note) { const n = document.createElement("p"); n.className = "ref-note"; n.textContent = r.note; box.appendChild(n); }
-    });
-    const row = document.createElement("div"); row.className = "read-row";
-    const a = document.createElement("a"); a.className = "btn green"; a.href = list[0].link; a.target = "_blank"; a.rel = "noopener"; a.textContent = "📖 Read it ↗";
-    const lab = document.createElement("label"); lab.className = "tick";
-    const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!API.store.get(readKey(T), false);
-    const stamp = isNew => { const old = box.querySelector(".stamp"); if (old) old.remove(); if (!cb.checked) return; const s = document.createElement("div"); s.className = "stamp" + (isNew ? " new" : ""); s.textContent = "READ ✓"; box.appendChild(s); };
-    cb.onchange = () => { API.store.set(readKey(T), cb.checked); if (cb.checked) { FUN.confetti(["📖", "✨", "🙌", "🎉"], 24); FUN.fanfare(); } stamp(true); renderWeek(readings); };
-    lab.append(cb, "I read it!");
-    row.append(a, lab); box.appendChild(row); stamp(false);
+  // the Recovery Version link at the bottom opens today's chapter (or the next one)
+  function linkTodayRV(readings) {
+    const r = API.readingsFor(readings, T)[0] || readings.find(x => x.date > T);
+    if (r && r.link) { $("footRV").href = r.link; $("footRV").textContent = "📖 " + r.ref + " · Recovery Version"; }
   }
 
   function renderWeek(readings) {
@@ -573,7 +532,7 @@
         const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!API.store.get(readKey(d.date), false);
         cb.setAttribute("aria-label", "Mark " + d.readings[0].ref + " as read");
         if (cb.checked) done++;
-        cb.onchange = () => { API.store.set(readKey(d.date), cb.checked); if (cb.checked) { FUN.toast("✅ Nice! Keep running the race 🏃"); FUN.note(4); } renderWeek(readings); if (d.date === T) renderToday(readings); };
+        cb.onchange = () => { API.store.set(readKey(d.date), cb.checked); if (cb.checked) { FUN.toast("✅ Nice! Keep running the race 🏃"); FUN.note(4); } renderWeek(readings); };
         lab.appendChild(cb); el.appendChild(lab);
       }
       g.appendChild(el);
@@ -662,12 +621,12 @@
 
   API.public().then(d => {
     try { featured(d.photos); } catch (e) {}
-    renderToday(d.readings); renderWeek(d.readings); renderTreePeek(d.leaves || []); renderLatest(d.answers || []);
+    linkTodayRV(d.readings); renderWeek(d.readings); renderTreePeek(d.leaves || []); renderLatest(d.answers || []);
     FUN.ticker($("ticker"), d.quotes);
     const tr = API.readingsFor(d.readings, T)[0];
     $("tagClimb").textContent = tr ? "Today: " + tr.ref : "Today: Bible mix";
   }).catch(() => {
-    $("todayReading").innerHTML = '<div class="empty"><span class="big">🏐</span>Couldn’t load right now. Refresh in a bit!</div>';
+    $("weekGrid").innerHTML = '<div class="empty"><span class="big">🏐</span>Couldn’t load right now. Refresh in a bit!</div>';
     renderLatest([]);
   });
 })();
