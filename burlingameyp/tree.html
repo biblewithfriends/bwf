@@ -149,11 +149,6 @@
     <p>Every leaf is someone’s enjoyment of the Lord. Tap a leaf to read it, then hang your own.</p>
   </header>
 
-  <div class="bar" role="group" aria-label="Show leaves">
-    <button class="chip" type="button" data-f="all" aria-pressed="true">🍂 All leaves</button>
-    <button class="chip" type="button" data-f="week" aria-pressed="false">📅 This week</button>
-    <div class="count" id="count" aria-live="polite"></div>
-  </div>
 
   <div class="scene" id="scene">
     <svg class="art" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -232,9 +227,8 @@
   </div>
   <div class="legend">
     <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> someone’s enjoyment of the Lord</span>
-    <span>🍂 leaves stay up for the semester (Aug–Dec, Jan–Jul), then fall</span>
   </div>
-  <div class="legend" style="margin-top:6px"><span class="wx-chip" id="wxChip" hidden></span></div>
+  <span id="wxChip" hidden></span>
 
   <section id="hang">
     <div class="card form-card">
@@ -369,7 +363,7 @@
   })();
 
   // ---------- render ----------
-  let leaves = [], filter = "all", newId = null;
+  let leaves = [], newId = null;
   // leaves stay on the tree for the half of the year they were hung in: August–December, or January–July
   const semesterStart = (() => { const d = DATES.parse(T); return d.getFullYear() + (d.getMonth() >= 7 ? "-08-01" : "-01-01"); })();
   function place(list, spots) {
@@ -385,18 +379,17 @@
   }
   function render() {
     const box = $("leaves"); box.innerHTML = "";
-    const cutoff = semesterStart;
-    const onTree = leaves.filter(l => l.day >= cutoff).slice(0, TREE_SPOTS.length);
-    const onGround = leaves.filter(l => l.day < cutoff || !onTree.includes(l)).slice(0, GROUND_SPOTS.length);
-    const pos = new Map([...place(onTree, TREE_SPOTS), ...place(onGround, GROUND_SPOTS)]);
-    const weekStart = DATES.sunday(T);
-    const match = l => filter === "all" || (filter === "week" && l.day >= weekStart);
-    let shown = 0;
-    [...onGround, ...onTree].forEach(l => {
+    // every leaf stays on the tree (no falling, no filters)
+    const n = TREE_SPOTS.length, first = leaves.slice(0, n), extra = leaves.slice(n);
+    const pos = place(first, TREE_SPOTS);
+    extra.slice().sort((a, b) => a.id - b.id).forEach((l, k) => {
+      const sp = TREE_SPOTS[(hash(l.id) + k) % n], ring = 1 + Math.floor(k / n);
+      pos.set(l.id, [sp[0] + 13 * ring * (k % 2 ? 1 : -1), sp[1] - 9 * ring, sp[2] + 25 * (k % 2 ? 1 : -1)]);
+    });
+    leaves.slice().sort((a, b) => a.id - b.id).forEach(l => {
       const p = pos.get(l.id); if (!p) return;
-      const ground = onGround.includes(l);
       const b = document.createElement("button"); b.type = "button";
-      b.className = "leaf" + (ground ? " ground" : "") + (match(l) ? "" : " dim") + (l.id === newId ? " new" : "");
+      b.className = "leaf" + (l.id === newId ? " new" : "");
       const h = hash(l.id);
       b.style.left = p[0] / 10 + "%"; b.style.top = p[1] / 8 + "%";
       b.style.setProperty("--r", p[2].toFixed(0) + "deg");
@@ -406,11 +399,8 @@
       b.onclick = () => openLeaf(l);
       b.onmouseenter = () => showTip(b, l); b.onmouseleave = hideTip; b.onfocus = () => showTip(b, l); b.onblur = hideTip;
       box.appendChild(b);
-      if (match(l)) shown++;
     });
     if (!leaves.length) box.innerHTML = '<div class="empty-tree">🍂 The tree is waiting for its first leaf.<br>Hang yours below!</div>';
-    const week = leaves.filter(l => l.day >= weekStart).length, fallen = onGround.length;
-    $("count").textContent = leaves.length ? `${onTree.length} leaves on the tree · ${week} this week` + (fallen ? ` · ${fallen} fallen` : "") + (filter !== "all" ? ` · showing ${shown}` : "") : "";
     newId = null;
   }
   let tipEl = null;
@@ -422,9 +412,6 @@
     $("scene").appendChild(tipEl);
   }
   function hideTip() { if (tipEl) { tipEl.remove(); tipEl = null; } }
-  document.querySelectorAll(".chip").forEach(c => c.onclick = () => {
-    filter = c.dataset.f; document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c)); render(); FUN.tick && FUN.tick();
-  });
 
   // ---------- read a leaf ----------
   let lastFocus = null;
@@ -498,7 +485,7 @@
         await new Promise(r => setTimeout(r, FUN.reduced ? 0 : 650));
         leaves = (d.leaves || []).slice().sort((a, b) => b.id - a.id);
         const mine = leaves.find(l => !before.has(l.id));
-        if (mine) { newId = mine.id; filter = "all"; document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x.dataset.f === "all")); }
+        if (mine) newId = mine.id;
         render();
         FUN.toast("🍁 Your leaf is on the tree!");
       }
@@ -559,7 +546,7 @@
     $("clouds").setAttribute("fill", night ? "#59607a" : wet ? "#c9ced6" : phase === "evening" ? "#f6c3b0" : phase === "morning" ? "#fde0d2" : "#fbfbfa");
     windFactor = wind >= 25 ? 2.5 : wind >= 15 ? 1.5 : 1;
     const PH = { morning: "🌅 Sunrise", afternoon: "☀️ Afternoon", evening: "🌇 Sunset", night: "🌙 Night" }[phase];
-    if (!wx) { $("wxChip").textContent = PH + " in Burlingame"; $("wxChip").hidden = false; return; }
+    return;   // the sky shows the time and weather; no label needed
     const label = { clear: night ? "clear sky" : "clear", partly: "partly cloudy", cloudy: "cloudy", fog: "foggy", drizzle: "drizzly", rain: "rainy", storm: "stormy" }[kind];
     $("wxChip").textContent = `${PH} · ${label}${wind >= 25 ? " and windy" : ""} · ${Math.round(w.temperature_2m)}° in Burlingame right now`;
     $("wxChip").hidden = false;
