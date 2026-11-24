@@ -65,7 +65,7 @@ input:focus-visible, textarea:focus-visible, .btn:focus-visible, button:focus-vi
 @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 
 .ticker { background: var(--ink); color: #f3f7ea; overflow: hidden; display: flex; align-items: stretch; }
-.ticker .lbl { flex: none; font-family: var(--font-display); font-weight: 600; background: var(--pink); color: var(--ink); padding: 10px 18px; border-radius: 0 999px 999px 0; }
+.ticker .lbl { flex: none; display: flex; align-items: center; margin: 0; font-size: 1rem; font-family: var(--font-display); font-weight: 600; background: var(--pink); color: var(--ink); padding: 10px 18px; border-radius: 0 999px 999px 0; }
 .ticker .viewport { overflow: hidden; flex: 1; }
 .ticker-track { display: flex; width: max-content; animation: scroll var(--speed, 60s) linear infinite; }
 .ticker:hover .ticker-track { animation-play-state: paused; }
