@@ -66,7 +66,7 @@
   </div>
 </div></nav>
 
-<header class="hero"><h1>High Scores 🏆</h1><p>Who’s on top today?</p></header>
+<header class="hero"><h1>High Scores 🏆</h1><p>Who’s on top this week?</p></header>
 
 <main class="wrap">
   <div class="seg" id="gameSeg" role="group" aria-label="Game">
@@ -75,7 +75,6 @@
     <button type="button" data-g="bubbles">🫧 Bubble Blitz</button>
   </div>
   <div class="seg small" id="rangeSeg" role="group" aria-label="Time range">
-    <button type="button" data-r="today">Today</button>
     <button type="button" data-r="week">This week</button>
     <button type="button" data-r="all">All time</button>
   </div>
@@ -99,10 +98,9 @@
 (() => {
   const { API, DATES, SCORES, FUN } = window;
   const $ = id => document.getElementById(id);
-  FUN.wallpaper();
   if (API.demo) $("demoBanner").hidden = false;
   const qs = new URLSearchParams(location.search);
-  let game = ["overcomers", "bubbles"].includes(qs.get("game")) ? qs.get("game") : "transformed", range = "today", all = [];
+  let game = ["overcomers", "bubbles"].includes(qs.get("game")) ? qs.get("game") : "transformed", range = "week", all = [];
   const me = SCORES.myName().toLowerCase();
 
   function filter() {
