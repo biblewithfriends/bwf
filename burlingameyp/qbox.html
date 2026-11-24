@@ -23,7 +23,8 @@
   .hero h1 .q { display: inline; }
   .hero p { margin: 8px 0 0; font-weight: 700; font-size: 1.15rem; }
   section { padding: 46px 0 20px; }
-  .ask-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  .ask-grid { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 760px; margin: 0 auto; }
+  .ask-verse { text-align: center; } .ask-verse .verse { margin: 0; font-size: 1.1rem; }
   @media (max-width: 860px) { .ask-grid { grid-template-columns: 1fr; } }
   /* the question sheet: ruled paper */
   .stitched { padding: 28px; position: relative; }
@@ -114,7 +115,7 @@
     <div class="ask-grid">
       <div class="card stitched ask">
         <div id="askForm">
-          <label class="big" for="question">What’s on your mind? 🤔</label>
+          <label class="big" for="question">What’s on your mind?</label>
           <textarea id="question" maxlength="2000" placeholder="Big, small, funny, deep, faith stuff, life stuff, feelings — all welcome."></textarea>
           <div style="display:flex;justify-content:space-between;align-items:center"><button class="idea" type="button" id="idea"><span>🎲</span> Stuck? Roll for an idea</button><div class="count" id="count">0 / 2000</div></div>
 
@@ -142,12 +143,8 @@
         </div>
       </div>
 
-      <div class="side">
-        <div class="card note yellow"><h3>🙈 Your choice</h3><p>Flip the switch to stay anonymous, or add your name if you want someone to follow up with you.</p></div>
-        <div class="card note green"><h3>⏱️ How it works</h3>
-          <ul><li>You ask (like a jump serve 🏐)</li><li>The serving ones read it & answer (the set 🙌)</li><li>It shows up below (the spike 💥)</li></ul></div>
-        <div class="card note pink"><h3>📖 Ask away</h3>
-          <p class="verse">“Ask, and it shall be given to you; seek, and you shall find; knock, and it shall be opened to you.”<b>— Matthew 7:7</b></p></div>
+      <div class="card note pink ask-verse">
+        <p class="verse">“Ask and it shall be given to you; seek and you shall find; knock and it shall be opened to you.”<b>— Matthew 7:7</b></p>
       </div>
     </div>
   </div>
