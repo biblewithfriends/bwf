@@ -25,6 +25,7 @@
   .head { text-align: center; padding: 30px 0 8px; }
   .head h1 { font-size: clamp(2.6rem, 9vw, 4.4rem); margin: 0; color: var(--bark); }
   .head p { margin: 6px auto 0; font-weight: 700; color: #7a5a3f; max-width: 560px; }
+  .tree-verse { text-align: center; font: italic 600 1.08rem var(--font-body); color: #5e3a22; margin: 14px auto 0; max-width: 780px; padding: 0 16px; }
   .head p.caption { font: italic 600 1.05rem var(--font-body); color: #5e3a22; margin-top: 4px; }
 
   .bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; margin: 16px 0 14px; }
@@ -145,7 +146,6 @@
 <main class="wrap">
   <header class="head">
     <h1>The Tree of Life 🍂</h1>
-    <p class="caption">“…on this side and on that side of the river was the tree of life…” — Rev. 22:2</p>
     <p>Every leaf is someone’s enjoyment of the Lord. Tap a leaf to read it, then hang your own.</p>
   </header>
 
@@ -225,9 +225,7 @@
     <div class="wx wx-rain" aria-hidden="true"></div>
     <div class="wx wx-flash" aria-hidden="true"></div>
   </div>
-  <div class="legend">
-    <span><svg viewBox="0 0 40 40" aria-hidden="true" id="legYP"></svg> someone’s enjoyment of the Lord</span>
-  </div>
+  <p class="tree-verse">“…on this side and on that side of the river was the tree of life…” <span style="white-space:nowrap">— Rev. 22:2</span></p>
   <span id="wxChip" hidden></span>
 
   <section id="hang">
@@ -289,7 +287,6 @@
   }
   // everyone's leaf looks the same (YP and serving ones)
   const colorOf = l => YP_COLORS[hash(l.id) % YP_COLORS.length];
-  $("legYP").innerHTML = leafSVG(YP_COLORS[0], VEIN);
 
   // ---------- the word on the trunk: one for each day of the week ----------
   const TRUNK = ["Word of God", "Triune God", "Economy of God", "All-inclusive Christ", "Life-giving Spirit", "Body of Christ", "New Jerusalem"];
