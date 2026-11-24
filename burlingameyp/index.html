@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Burlingame YP 🏐</title>
-<meta name="description" content="Home for the young people: this week's Bible reading, the Tree of Life, the Q Box and daily games.">
+<meta name="description" content="Home for the young people: this week's Bible reading, the Tree of Life and the Question Box.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
@@ -214,8 +214,8 @@
   <div class="links">
     <a href="./" aria-current="page">🏠<span class="t"> Home</span></a>
     <a href="tree.html">🍂<span class="t"> Tree</span></a>
-    <a href="qbox.html">📮<span class="t"> Q Box</span></a>
-    <a href="#games">🎮<span class="t"> Games</span></a>
+    <a href="qbox.html">❓<span class="t"> Questions</span></a>
+    <a href="games/">🎮<span class="t"> Games</span></a>
     <a href="games/scores.html">🏆<span class="t"> Scores</span></a>
   </div>
 </div></nav>
@@ -313,34 +313,6 @@
         <a class="btn ig-btn" id="igBtn" target="_blank" rel="noopener">📸 Open Instagram ↗</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============ GAMES ============ -->
-<section id="games">
-  <div class="wrap">
-    <div class="sec-title">
-      <span class="kicker">new every day</span>
-      <h2><span class="doodle">Play today’s reading</span> 🎮</h2>
-      <p>New puzzle every day, based on the chapter of the day.</p>
-    </div>
-    <div class="games">
-      <a class="card game ladder" href="games/transformed.html">
-        <div class="icon">🦋</div>
-        <h3>Transformed</h3>
-        <span class="today-tag" id="tagLadder">Today’s word</span>
-        <p>Change one letter at a time until the word is transformed. Green letters = you’re getting closer.</p>
-        <span class="btn">Play ▸</span>
-      </a>
-      <a class="card game climb" href="games/overcomers.html">
-        <div class="icon">🧗⛰️</div>
-        <h3>Overcomers</h3>
-        <span class="today-tag" id="tagClimb">Today’s chapter</span>
-        <p>5 prompts, 25 seconds each. Name one thing from the chapter — rarer answers climb you higher toward Mount Zion.</p>
-        <span class="btn blue">Start climbing ▸</span>
-      </a>
-    </div>
-    <div class="scores-link"><a class="btn white" href="games/scores.html">🏆 See high scores</a> <a class="btn white" href="#blitzTop" id="blitzLink">🫧 Bubble Blitz record</a></div>
   </div>
 </section>
 
@@ -495,7 +467,6 @@
     });
   });
   $("blitzBtn").onclick = startBlitz;
-  $("blitzLink").onclick = e => { e.preventDefault(); startBlitz(); };
   $("blitzAgain").onclick = () => { $("blitzEnd").close(); startBlitz(); };
   $("blitzClose").onclick = () => $("blitzEnd").close();
   if (location.hash === "#blitz") setTimeout(startBlitz, 600);
@@ -625,8 +596,6 @@
     try { featured(d.photos); } catch (e) {}
     linkTodayRV(d.readings); renderWeek(d.readings); renderTreePeek(d.leaves || []); renderLatest(d.answers || []);
     FUN.ticker($("ticker"), d.quotes);
-    const tr = API.readingsFor(d.readings, T)[0];
-    $("tagClimb").textContent = tr ? "Today: " + tr.ref : "Today: Bible mix";
   }).catch(() => {
     $("weekGrid").innerHTML = '<div class="empty"><span class="big">🏐</span>Couldn’t load right now. Refresh in a bit!</div>';
     renderLatest([]);

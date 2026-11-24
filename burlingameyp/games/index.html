@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Games 🎮 · Burlingame YP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/common.css">
+<link rel="icon" type="image/svg+xml" href="../assets/icons/logo-rounded.svg?v=12">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=12">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=12">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#24402f">
+<meta name="apple-mobile-web-app-title" content="Burlingame YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png?v=12">
+<style>
+  .hero { padding: 40px 0 36px; text-align: center; border-radius: 0 0 44px 44px; background: linear-gradient(180deg, #e3f0d2, #c4dda7); }
+  .hero h1 { font-size: clamp(2.8rem, 10vw, 5rem); margin: 0; padding: 0 12px; }
+  .hero p { font-weight: 700; margin: 6px 0 0; }
+  main { padding: 34px 0 20px; }
+  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  @media (max-width: 760px) { .games { grid-template-columns: 1fr; } }
+  .game { display: block; text-decoration: none; color: var(--ink); padding: 22px 24px; }
+  .game.climb { background: linear-gradient(160deg, #e6f0fa, var(--paper)); }
+  .game .icon { font-size: 2.6rem; line-height: 1; }
+  .game h3 { font-size: 2.2rem; margin: 8px 0 4px; }
+  .game p { margin: 0 0 14px; color: var(--soft); }
+  .game .today-tag { display: inline-block; font-weight: 700; font-size: .82rem; background: var(--matcha-light); border: 1.5px solid var(--line); border-radius: 999px; padding: 1px 10px; margin-bottom: 10px; }
+  .more { margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+</style>
+</head>
+<body>
+<div id="demoBanner" class="demo-banner" hidden>👀 Preview mode — sample data until the Apps Script link is added</div>
+<nav class="topnav"><div class="wrap" style="width:min(1040px,100% - 32px)">
+  <a class="logo" href="../"><img src="../assets/icons/logo-rounded.svg" alt="" width="30" height="30">Burlingame <b>YP</b></a>
+  <div class="links">
+    <a href="../">🏠<span class="t"> Home</span></a>
+    <a href="../tree.html">🍂<span class="t"> Tree</span></a>
+    <a href="../qbox.html">❓<span class="t"> Questions</span></a>
+    <a href="./" aria-current="page">🎮<span class="t"> Games</span></a>
+    <a href="scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<header class="hero"><h1>Games 🎮</h1><p>New puzzles every day, from the chapter of the day.</p></header>
+
+<main class="wrap">
+  <div class="games">
+    <a class="card game ladder" href="transformed.html">
+      <div class="icon">🦋</div>
+      <h3>Transformed</h3>
+      <span class="today-tag" id="tagLadder">Today’s word</span>
+      <p>Change one letter at a time until the word is transformed. Green letters = you’re getting closer.</p>
+      <span class="btn">Play ▸</span>
+    </a>
+    <a class="card game climb" href="overcomers.html">
+      <div class="icon">🧗⛰️</div>
+      <h3>Overcomers</h3>
+      <span class="today-tag" id="tagClimb">Today’s chapter</span>
+      <p>5 prompts, 25 seconds each. Name one thing from the chapter — rarer answers climb you higher toward Mount Zion.</p>
+      <span class="btn blue">Start climbing ▸</span>
+    </a>
+  </div>
+  <div class="more"><a class="btn white" href="scores.html">🏆 High scores</a> <a class="btn white" href="../#blitzTop">🫧 Bubble Blitz (on the home page)</a></div>
+</main>
+
+<footer class="site"><div class="wrap"><p>One new word and one new climb every day.</p>  <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p></div></footer>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/bible.js"></script>
+<script src="../assets/api.js"></script>
+<script src="../assets/fun.js"></script>
+<script>
+(() => {
+  const T = DATES.today();
+  API.public().then(d => {
+    const tr = API.readingsFor(d.readings || [], T)[0];
+    document.getElementById("tagClimb").textContent = tr ? "Today: " + tr.ref : "Today: Bible mix";
+  }).catch(() => {});
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>
