@@ -26,10 +26,10 @@
   @media (min-width: 1700px), (min-resolution: 2dppx) and (min-width: 900px) { .backdrop, .cover { background-image: url(art-2400.jpg); } }
   .cover { position: fixed; inset: 0; z-index: 12; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; display: flex; align-items: flex-end; justify-content: center; text-align: center; transition: opacity .5s; }
   .cover::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,10,30,0) 50%, rgba(6,10,30,.45) 100%); }
-  .cover .in { position: relative; margin: 0 16px max(28px, calc(env(safe-area-inset-bottom) + 18px)); padding: 26px 26px 22px; max-width: 620px;
+  .cover .in { position: relative; margin: 0 14px max(28px, calc(env(safe-area-inset-bottom) + 18px)); padding: 26px 18px 22px; max-width: 620px;
     background: rgba(8, 12, 30, .78); border: 1px solid rgba(232,199,150,.35); border-radius: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .cover .eyebrow { margin: 0 0 6px; color: var(--gold); font-size: .95rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
-  .cover h1 { margin: 0 0 20px; font: 700 clamp(2.3rem, 8.5vw, 4rem)/1.05 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
+  .cover h1 { margin: 0; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
+  .cover .sub { margin: 6px 0 22px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
   .cover .go + .soon:empty { display: none; }
   .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.05rem; padding: 14px 26px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
   .cover .go[hidden] { display: none; }
@@ -141,8 +141,8 @@
 <div class="spin" id="spin" hidden></div>
 <div class="cover" id="cover">
   <div class="in">
-    <p class="eyebrow">Church in Burlingame</p>
-    <h1>2026 Thanksgiving Dinner</h1>
+    <h1>Church in Burlingame</h1>
+    <p class="sub">2026 Thanksgiving Dinner</p>
     <button class="go" id="go" type="button" hidden>See the photos</button>
     <div class="soon" id="msgText">Loading the photos…</div>
     <a class="connect" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
