@@ -39,7 +39,14 @@
   .cover .turkey svg { width: 100%; height: 100%; display: block; }
   @keyframes nudge { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(5px); } 90% { transform: translateY(-2px); } }
   @media (prefers-reduced-motion: reduce) { .cover .turkey { animation: none; } }
-  .cover .info { padding: 48px 22px max(56px, calc(env(safe-area-inset-bottom) + 40px)); max-width: 640px; margin: 0 auto; }
+  /* a fine white line between the photo and the navy, with a small diamond in the middle */
+  .cover .divider { position: relative; display: flex; align-items: center; gap: 14px; height: 0; padding: 0 0; }
+  .cover .divider::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.35); }
+  .cover .divider i { position: absolute; left: 50%; top: 0; width: 16px; height: 16px; background: #0b1230; border: 2px solid #fff; transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 10px rgba(255,255,255,.35); }
+  .cover .divider i::after { content: ""; position: absolute; inset: 3px; background: var(--gold); }
+  .cover .info .go { margin-bottom: 30px; }
+  .cover .info .soon { display: inline-block; margin-bottom: 30px; }
+  .cover .info { padding: 46px 22px max(56px, calc(env(safe-area-inset-bottom) + 40px)); max-width: 640px; margin: 0 auto; }
   .cover h1 { margin: 0 0 22px; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
   .cover .sub { margin: 6px 0 22px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
   .cover .verse { margin: 0 auto 26px; max-width: 520px; font: italic 400 clamp(1rem, 3.9vw, 1.12rem)/1.6 Georgia, "Times New Roman", serif; color: #ece3d3; }
@@ -121,6 +128,9 @@
   .albums { position: fixed; inset: 0; z-index: 10; overflow-y: auto; display: none; padding: max(70px, calc(env(safe-area-inset-top) + 62px)) 14px 30px; }
   body.albumson .albums { display: block; }
   .albums .gtop { position: fixed; top: 0; left: 0; right: 0; z-index: 2; display: flex; align-items: center; padding: max(12px, env(safe-area-inset-top)) 16px 12px; background: linear-gradient(rgba(6,10,30,.85), rgba(6,10,30,.55)); backdrop-filter: blur(6px); }
+  button.home { padding: 0; text-align: left; cursor: pointer; }
+  button.home:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .top .home.small { display: block; font-weight: 500; color: var(--soft); font-size: .8rem; white-space: nowrap; }
   .albums .gtop .title { font: 700 1.35rem Georgia, "Times New Roman", serif; margin-right: auto; min-width: 0; }
   .albums .gtop .title small { font: 500 .8rem system-ui, sans-serif; }
   .topconnect { flex: none; margin-left: 12px; padding: 9px 16px; border: 1.5px solid var(--gold); border-radius: 999px; color: var(--gold); font-weight: 700; font-size: .9rem; text-decoration: none; background: rgba(8,12,30,.5); white-space: nowrap; }
@@ -162,13 +172,14 @@
   <section class="hero">
     <h2 class="skytitle">2026 Thanksgiving<br>Dinner</h2>
     <div class="actions">
-      <button class="go" id="go" type="button" hidden>See all photos</button>
-      <div class="soon" id="msgText">Loading the photos…</div>
       <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><svg viewBox="-16 -2 232 204" aria-hidden="true"> <g transform="translate(100 112)"> <g> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(-72)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(-48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(-24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#7fae6a"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(72)"/> </g> <g fill="#fbf3e2" opacity=".55"> <ellipse rx="7" ry="30" cy="-62" transform="rotate(-48)"/><ellipse rx="7" ry="30" cy="-62"/><ellipse rx="7" ry="30" cy="-62" transform="rotate(48)"/> </g> <ellipse cy="10" rx="42" ry="44" fill="#7a4a30"/> <ellipse cy="22" rx="26" ry="26" fill="#9a6440"/> <circle cy="-34" r="23" fill="#8a5636"/> <circle cx="-8" cy="-39" r="5.5" fill="#fff"/><circle cx="8" cy="-39" r="5.5" fill="#fff"/> <circle cx="-7" cy="-38.5" r="3" fill="#2b1d16"/><circle cx="9" cy="-38.5" r="3" fill="#2b1d16"/> <path d="M-7 -29 L7 -29 L0 -18 Z" fill="#f2b33d"/> <path d="M3 -24 q9 4 4 16 q-6 3 -7 -6 z" fill="#d7463c"/> <g stroke="#e0913a" stroke-width="5" stroke-linecap="round" fill="none"> <path d="M-14 52 v14 M-14 66 l-7 5 M-14 66 l7 5"/><path d="M14 52 v14 M14 66 l-7 5 M14 66 l7 5"/> </g> </g> </svg></button>
     </div>
   </section>
   <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
+  <div class="divider" aria-hidden="true"><span></span><i></i><span></span></div>
   <section class="info" id="info">
+    <button class="go" id="go" type="button" hidden>See all photos</button>
+    <div class="soon" id="msgText">Loading the photos…</div>
     <h1>Church in Burlingame</h1>
     <p class="welcome">New here? We’d love to read the Bible with you.</p>
     <a class="connect btn2" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
@@ -178,7 +189,7 @@
 
 <div class="top">
   <button class="ico" id="backBtn" type="button" aria-label="Back to the gallery" title="Gallery"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <div class="title"><span id="albumName">2026 Thanksgiving Dinner</span><small>Church in Burlingame</small></div>
+  <div class="title"><span id="albumName">2026 Thanksgiving Dinner</span><button class="home small" type="button" data-home aria-label="Back to the Thanksgiving home page">Church in Burlingame</button></div>
   <button class="ico" id="gridBtn" type="button" aria-label="All photos in this album" title="All photos in this album"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
   <button class="ico" id="shareBtn" type="button" aria-label="Share this photo" title="Share this photo"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M5 11v9h14v-9"/></svg></button>
   <a class="ico" id="dl" target="_blank" rel="noopener" aria-label="Download the original photo" title="Download the original"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg></a>
@@ -211,7 +222,7 @@
 </aside>
 
 <div class="albums" id="albums" role="dialog" aria-label="Albums">
-  <div class="gtop"><div class="title">Church in Burlingame<small>2026 Thanksgiving Dinner</small></div><a class="topconnect" href="https://biblewfriends.org/connect.html">Connect with us</a></div>
+  <div class="gtop"><button class="title home" type="button" data-home aria-label="Back to the Thanksgiving home page">Church in Burlingame<small>2026 Thanksgiving Dinner</small></button><a class="topconnect" href="https://biblewfriends.org/connect.html">Connect with us</a></div>
   <div class="alist" id="alist"></div>
 </div>
 
@@ -272,6 +283,14 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     } catch (e) { $("msgText").textContent = "Couldn’t load the photos. Please refresh in a minute."; }
   }
 
+  // tapping "Church in Burlingame" goes back to the Thanksgiving home page (the cover)
+  function goHome() {
+    stopPlay();
+    document.body.classList.remove("started", "albumson", "gridon", "talk", "clean");
+    $("cover").scrollTo(0, 0);
+    history.replaceState(null, "", location.pathname);
+  }
+  document.querySelectorAll("[data-home]").forEach(b => b.onclick = goHome);
   $("moreBtn").onclick = () => $("info").scrollIntoView({ behavior: "smooth", block: "start" });
 
   // ---------- albums ----------
