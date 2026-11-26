@@ -108,6 +108,11 @@
   .note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
   .note .felt { margin-top: 6px; color: #6b5233; font-style: italic; }
   .note b { display: block; margin-top: 8px; font-size: .88rem; color: #8a5a1c; }
+  .cover .btnrow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; margin: 20px 0 6px; }
+  .cover .btnrow .go, .cover .btnrow .soon { margin: 0 !important; }
+  .cover .btnrow .go { padding: 14px 24px; font-size: 1.05rem; white-space: nowrap; }
+  @media (max-width: 430px) { .cover .btnrow { gap: 10px; } .cover .btnrow .go { padding: 13px 17px; font-size: .97rem; } }
+  @media (max-width: 380px) { .cover .info { padding-left: 14px; padding-right: 14px; } .cover .btnrow { gap: 8px; } .cover .btnrow .go { padding: 12px 13px; font-size: .9rem; } }
   .cover .welcome { margin: 0 0 12px; color: #ece3d3; font-size: 1rem; }
   .cover .connect.btn2 { display: inline-block; margin: 0; padding: 12px 22px; border: 1.5px solid var(--gold); border-radius: 999px; color: var(--gold); text-decoration: none; font-weight: 700; }
   .cover .connect.btn2:hover { background: rgba(232,199,150,.12); }
@@ -238,10 +243,12 @@
   <div class="divider" aria-hidden="true"><span></span><i></i><span></span></div>
   <section class="info" id="info">
     <p class="thanks-come" data-i18n="thanks">The Church in Burlingame<br>thanks you for coming!</p>
-    <button class="go" id="go" type="button" data-dyn hidden>See all photos</button>
-    <div class="soon" id="msgText" data-dyn>Loading the photos…</div>
     <p class="invite">We’d love to read God’s word with you — over a meal, in a home, or wherever is easy for you.</p>
-    <a class="go link" href="https://biblewfriends.org/connect.html">Connect with us</a>
+    <div class="btnrow">
+      <button class="go" id="go" type="button" data-dyn hidden>See all photos</button>
+      <div class="soon" id="msgText" data-dyn>Loading the photos…</div>
+      <a class="go link" href="https://biblewfriends.org/connect.html">Connect with us</a>
+    </div>
 
     <!-- gratitude notes (in place of the gratitude tree) -->
     <div class="grat">
