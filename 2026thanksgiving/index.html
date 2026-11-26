@@ -80,6 +80,26 @@
   .grat textarea { height: 88px; }
   .grat .go.small { justify-self: center; margin-top: 14px; font-size: 1rem; padding: 12px 26px; }
   .grat .err { text-align: center; }
+  .gtwrap { margin: 46px auto 0; max-width: 760px; }
+  .gt-title { margin: 0; font: 700 clamp(1.3rem, 5.4vw, 1.7rem)/1.2 Georgia, "Times New Roman", serif; color: #f6e7c8; }
+  .gt-sub { margin: 6px 0 10px; color: var(--soft); font-size: .92rem; }
+  .gtree { position: relative; width: 100%; aspect-ratio: 880 / 730; }
+  .gtree svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .gleaves { position: absolute; inset: 0; }
+  .gleaf { position: absolute; width: clamp(24px, 5.2%, 40px); aspect-ratio: 1; padding: 0; transform: translate(-50%, -50%) rotate(var(--r)); transform-origin: 50% 50%;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); animation: gsway var(--sw) ease-in-out var(--dl) infinite alternate; }
+  .gleaf svg { width: 100%; height: 100%; display: block; }
+  .gleaf:hover, .gleaf:focus-visible { filter: drop-shadow(0 0 6px #ffe7a8); outline: none; z-index: 2; }
+  .gleaf.new { animation: gdrop 1.2s cubic-bezier(.3,1.4,.5,1) both; }
+  @keyframes gsway { from { transform: translate(-50%, -50%) rotate(calc(var(--r) - 5deg)); } to { transform: translate(-50%, -50%) rotate(calc(var(--r) + 5deg)); } }
+  @keyframes gdrop { from { transform: translate(-50%, -260%) rotate(calc(var(--r) - 90deg)) scale(1.6); opacity: 0; } to { transform: translate(-50%, -50%) rotate(var(--r)); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .gleaf { animation: none; } }
+  .gt-empty { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); width: 80%; color: #ece3d3; font-weight: 600; }
+  .gt-all { margin-top: 12px; color: var(--gold); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .gnote-pop { position: fixed; inset: 0; z-index: 25; display: grid; place-items: center; padding: 20px; background: rgba(4,7,20,.6); }
+  .gnote-pop .note { max-width: 420px; width: 100%; transform: none !important; text-align: left; position: relative; padding: 20px 20px 16px; }
+  .gnote-pop .x { position: absolute; top: 6px; right: 8px; width: 34px; height: 34px; color: #6b5233; font-size: 1.4rem; }
+  .notes[hidden] { display: none; }
   .notes { margin-top: 26px; display: grid; gap: 12px; }
   .note { background: #fbf3e2; color: #3b2a12; border-radius: 14px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
   .note:nth-child(3n+1) { transform: rotate(-.6deg); } .note:nth-child(3n+2) { transform: rotate(.5deg); }
@@ -233,7 +253,51 @@
         <button class="go small" id="gSend" type="submit">Share my thanks 🍂</button>
         <p class="err" id="gErr" role="alert"></p>
       </form>
-      <div class="notes" id="gNotes" aria-live="polite"></div>
+    </div>
+    <!-- the gratitude tree: every thank-you is a leaf -->
+    <div class="gtwrap">
+      <h2 class="gt-title">Our gratitude tree</h2>
+      <p class="gt-sub" id="gtSub">Tap a leaf to read it</p>
+      <div class="gtree" id="gtree">
+        <svg viewBox="60 40 880 730" aria-hidden="true">
+          <defs><linearGradient id="gbark" x1="0" x2="1"><stop offset="0" stop-color="#4f301b"/><stop offset=".5" stop-color="#6e4628"/><stop offset="1" stop-color="#4f301b"/></linearGradient></defs>
+          <defs><radialGradient id="gmound" cx=".5" cy=".35" r=".6"><stop offset="0" stop-color="#2c3d24"/><stop offset=".7" stop-color="#1c2a1a"/><stop offset="1" stop-color="#1c2a1a" stop-opacity="0"/></radialGradient></defs>
+          <ellipse cx="500" cy="752" rx="420" ry="58" fill="url(#gmound)"/>
+          <g id="branches" fill="none" stroke="#5e3a22" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M480 470 C430 420 360 382 270 362" stroke-width="22"/>
+        <path d="M352 384 C320 340 290 300 236 276" stroke-width="12"/>
+        <path d="M292 368 C244 378 206 400 160 392" stroke-width="10"/>
+        <path d="M520 462 C582 410 652 382 736 370" stroke-width="22"/>
+        <path d="M640 392 C670 344 700 302 762 278" stroke-width="12"/>
+        <path d="M706 376 C754 390 792 410 842 402" stroke-width="10"/>
+        <path d="M500 450 C506 384 502 320 490 246" stroke-width="20"/>
+        <path d="M495 322 C452 282 422 242 398 196" stroke-width="11"/>
+        <path d="M497 298 C540 258 572 220 604 186" stroke-width="11"/>
+        <path d="M490 250 C482 208 486 170 498 128" stroke-width="8"/>
+        <path d="M236 276 C220 252 214 232 216 210" stroke-width="6"/><path d="M762 278 C780 254 788 232 786 210" stroke-width="6"/>
+        <path d="M398 196 C384 176 380 156 386 136" stroke-width="6"/><path d="M604 186 C622 168 630 148 628 128" stroke-width="6"/>
+        <path d="M420 425 C410 398 402 378 406 350" stroke-width="6"/><path d="M330 375 C318 398 300 414 274 420" stroke-width="5"/>
+        <path d="M580 420 C590 393 598 373 594 345" stroke-width="6"/><path d="M670 380 C682 402 700 416 726 422" stroke-width="5"/>
+        <path d="M502 382 C530 360 552 350 580 348" stroke-width="6"/><path d="M498 360 C470 342 448 334 424 334" stroke-width="6"/>
+        <path d="M492 206 C470 184 458 164 454 140" stroke-width="5"/><path d="M494 186 C516 164 530 144 534 118" stroke-width="5"/>
+        <path d="M160 392 C140 384 126 372 118 354" stroke-width="5"/><path d="M842 402 C862 394 876 382 884 364" stroke-width="5"/>
+        <path d="M236 276 C214 282 198 296 188 316" stroke-width="5"/><path d="M762 278 C784 284 800 298 810 318" stroke-width="5"/>
+        <path d="M398 196 C372 196 354 206 340 222" stroke-width="5"/><path d="M604 186 C630 188 648 198 662 214" stroke-width="5"/>
+        <path d="M290 300 C270 280 262 260 264 236" stroke-width="5"/><path d="M710 300 C730 280 738 260 736 236" stroke-width="5"/>
+        <path d="M216 210 C200 196 192 180 192 162" stroke-width="4"/><path d="M786 210 C802 196 810 180 810 162" stroke-width="4"/>
+        <path d="M386 136 C380 118 382 102 390 86" stroke-width="4"/><path d="M628 128 C634 110 632 94 624 78" stroke-width="4"/>
+        <path d="M498 128 C492 108 494 90 502 72" stroke-width="4"/>
+      </g>
+          <g id="gdeco"></g>
+          <path d="M432 730 C452 640 470 556 476 470 C478 452 490 440 500 440 C510 440 522 452 524 470 C530 556 548 640 568 730 Z" fill="url(#gbark)"/>
+          <path d="M432 730 C400 736 380 744 372 752 L628 752 C620 744 600 736 568 730 Z" fill="#4f301b"/>
+          <path id="gtLine" d="M500 722 L500 476" fill="none"/>
+          <text font-family="Georgia, serif" font-style="italic" font-size="27" fill="#f8e4c6" fill-opacity=".92" text-anchor="middle" dominant-baseline="central"><textPath href="#gtLine" startOffset="50%">Thankful</textPath></text>
+        </svg>
+        <div class="gleaves" id="gLeaves"></div>
+      </div>
+      <button class="gt-all" id="gtAll" type="button" hidden>Read all thank-yous</button>
+      <div class="notes" id="gNotes" aria-live="polite" hidden></div>
     </div>
   </section>
 </div>
@@ -343,7 +407,78 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   }
   document.querySelectorAll("[data-home]").forEach(b => b.onclick = goHome);
   // ---------- what guests are thankful for ----------
+  // the gratitude tree: spots along each branch (fixed, so a leaf never moves), alternating sides
+  const GCOL = ["#d9482b", "#c0392b", "#d0611e", "#e39a2d", "#b8572a", "#f0a041", "#e06a2c", "#c9542a", "#f4b54a", "#8a9a3b"];
+  const LEAF = c => `<path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${c}"/><path d="M20 6 V37 M20 15 L27 11 M20 22 L29 18 M20 29 L27 26 M20 15 L13 11 M20 22 L11 18 M20 29 L13 26" stroke="#6e1c0a" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".5"/><path d="M20 37 V40" stroke="#5e3a22" stroke-width="2" stroke-linecap="round"/>`;
+  const ghash = str => { let h = 2166136261; for (const c of String(str)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const GSPOTS = [];
+  (() => {
+    let seed = 7; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+    let deco = "";
+    document.querySelectorAll("#gtree #branches path").forEach((pth, pi) => {
+      const L = pth.getTotalLength(), w = parseFloat(pth.getAttribute("stroke-width")) || 6;
+      let side = pi % 2 ? 1 : -1;
+      for (let t = 16; t < L - 4; t += (w > 15 ? 26 : 24)) {
+        const p = pth.getPointAtLength(t), a = pth.getPointAtLength(Math.max(0, t - 2)), b = pth.getPointAtLength(Math.min(L, t + 2));
+        let tx = b.x - a.x, ty = b.y - a.y; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
+        (w >= 8 ? [side, -side] : [side]).forEach(sd => {
+          const nx = -ty * sd, ny = tx * sd, off = w / 2 + 15, x = p.x + nx * off, y = p.y + ny * off;
+          if (x < 70 || x > 930 || y < 50 || y > 470 || (x > 440 && x < 560 && y > 430)) return;
+          if (GSPOTS.some(q => (q[0] - x) ** 2 + (q[1] - y) ** 2 < 27 * 27)) return;
+          GSPOTS.push([x, y, Math.atan2(nx, -ny) * 180 / Math.PI + (rnd() - .5) * 24]);
+        });
+        side = -side;
+      }
+      // faint background leaves so the tree looks full even with few notes
+      for (let t = 6; t < L; t += 12) {
+        const p = pth.getPointAtLength(t), q = pth.getPointAtLength(Math.min(L, t + 2)), sd = rnd() < .5 ? -1 : 1;
+        let tx = q.x - p.x, ty = q.y - p.y; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
+        const nx = -ty * sd, ny = tx * sd, x = p.x + nx * (6 + rnd() * 8), y = p.y + ny * (6 + rnd() * 8);
+        if (x > 440 && x < 560 && y > 430) continue;
+        deco += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(Math.atan2(nx, -ny) * 180 / Math.PI + (rnd() - .5) * 50).toFixed(0)}) scale(${(.4 + rnd() * .3).toFixed(2)}) translate(-20 -38)" opacity="${(.18 + rnd() * .2).toFixed(2)}"><path d="M20 3 C29 9 35 18 33 27 C31 34 25 37 20 37 C15 37 9 34 7 27 C5 18 11 9 20 3Z" fill="${GCOL[(rnd() * GCOL.length) | 0]}"/></g>`;
+      }
+    });
+    $("gdeco").innerHTML = deco;
+    // hand the spots out spread around the whole tree, not branch by branch
+    for (let k = GSPOTS.length - 1; k > 0; k--) { const j = (rnd() * (k + 1)) | 0; [GSPOTS[k], GSPOTS[j]] = [GSPOTS[j], GSPOTS[k]]; }
+  })();
+  let gNewKey = null;
+  function openNote(t) {
+    const pop = document.createElement("div"); pop.className = "gnote-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Thank-you note");
+    const d = document.createElement("div"); d.className = "note";
+    const x = document.createElement("button"); x.className = "x"; x.type = "button"; x.setAttribute("aria-label", "Close"); x.textContent = "×"; d.appendChild(x);
+    const p = document.createElement("p"); p.textContent = "🍂 " + t.thankful; d.appendChild(p);
+    if (t.felt) { const f = document.createElement("p"); f.className = "felt"; f.textContent = t.felt; d.appendChild(f); }
+    const b = document.createElement("b"); b.textContent = "— " + (t.name || "A guest"); d.appendChild(b);
+    pop.appendChild(d); document.body.appendChild(pop);
+    const close = () => { pop.remove(); document.removeEventListener("keydown", esc); };
+    const esc = e => { if (e.key === "Escape") close(); };
+    pop.onclick = e => { if (e.target === pop || e.target === x) close(); };
+    document.addEventListener("keydown", esc); x.focus();
+  }
+  function renderTree(list) {
+    const box = $("gLeaves"); box.innerHTML = "";
+    const all = (list || []).slice().reverse();               // oldest first, so each note keeps its leaf
+    const n = GSPOTS.length;
+    all.forEach((t, k) => {
+      const ring = Math.floor(k / n), sp = GSPOTS[k % n];
+      const x = sp[0] + ring * 12 * (k % 2 ? 1 : -1), y = sp[1] - ring * 9, r = sp[2] + ring * 25 * (k % 2 ? 1 : -1);
+      const key = t.at + "|" + t.thankful, h = ghash(key);
+      const b = document.createElement("button"); b.type = "button"; b.className = "gleaf" + (key === gNewKey ? " new" : "");
+      b.style.left = ((x - 60) / 880 * 100) + "%"; b.style.top = ((y - 40) / 730 * 100) + "%";
+      b.style.setProperty("--r", r.toFixed(0) + "deg"); b.style.setProperty("--sw", 3 + (h % 30) / 10 + "s"); b.style.setProperty("--dl", -(h % 40) / 10 + "s");
+      b.setAttribute("aria-label", "Thank-you from " + (t.name || "a guest") + ". Tap to read.");
+      b.innerHTML = `<svg viewBox="0 0 40 40">${LEAF(GCOL[h % GCOL.length])}</svg>`;
+      b.onclick = () => openNote(t);
+      box.appendChild(b);
+    });
+    if (!all.length) box.innerHTML = '<div class="gt-empty">Be the first to hang a leaf of thanks 🍂</div>';
+    $("gtSub").textContent = all.length ? all.length + (all.length === 1 ? " thank-you" : " thank-yous") + " · tap a leaf to read it" : "Share above and your thanks will hang here";
+    $("gtAll").hidden = !all.length; gNewKey = null;
+  }
+  $("gtAll").onclick = () => { const n = $("gNotes"); n.hidden = !n.hidden; $("gtAll").textContent = n.hidden ? "Read all thank-yous" : "Hide the list"; };
   function renderThanks(list) {
+    renderTree(list);
     const box = $("gNotes"); box.innerHTML = "";
     (list || []).forEach(t => {
       const d = document.createElement("div"); d.className = "note";
@@ -367,7 +502,9 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       if (!d.ok) throw new Error(d.error || "Couldn’t share right now");
       try { localStorage.setItem("tg_name", name); } catch (x) {}
       $("gThank").value = ""; $("gFelt").value = "";
-      renderThanks(d.thanks); toast("Thank you for sharing 🙏");
+      if (d.thanks && d.thanks[0]) gNewKey = d.thanks[0].at + "|" + d.thanks[0].thankful;
+      renderThanks(d.thanks); toast("Your leaf is on the tree 🍂");
+      $("gtree").scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (err) { $("gErr").textContent = err.message; }
     $("gSend").disabled = false; $("gSend").textContent = "Share my thanks 🍂";
   };
