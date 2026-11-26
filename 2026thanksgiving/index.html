@@ -89,18 +89,20 @@
   .gleaf { position: absolute; width: clamp(24px, 5.2%, 40px); aspect-ratio: 1; padding: 0; transform: translate(-50%, -50%) rotate(var(--r)); transform-origin: 50% 50%;
     filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); animation: gsway var(--sw) ease-in-out var(--dl) infinite alternate; }
   .gleaf svg { width: 100%; height: 100%; display: block; }
-  .gleaf:hover, .gleaf:focus-visible { filter: drop-shadow(0 0 6px #ffe7a8); outline: none; z-index: 2; }
   .gleaf.new { animation: gdrop 1.2s cubic-bezier(.3,1.4,.5,1) both; }
   @keyframes gsway { from { transform: translate(-50%, -50%) rotate(calc(var(--r) - 5deg)); } to { transform: translate(-50%, -50%) rotate(calc(var(--r) + 5deg)); } }
   @keyframes gdrop { from { transform: translate(-50%, -260%) rotate(calc(var(--r) - 90deg)) scale(1.6); opacity: 0; } to { transform: translate(-50%, -50%) rotate(var(--r)); opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .gleaf { animation: none; } }
   .gt-empty { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); width: 80%; color: #ece3d3; font-weight: 600; }
-  .gt-all { margin-top: 12px; color: var(--gold); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-  .gnote-pop { position: fixed; inset: 0; z-index: 25; display: grid; place-items: center; padding: 20px; background: rgba(4,7,20,.6); }
-  .gnote-pop .note { max-width: 420px; width: 100%; transform: none !important; text-align: left; position: relative; padding: 20px 20px 16px; }
-  .gnote-pop .x { position: absolute; top: 6px; right: 8px; width: 34px; height: 34px; color: #6b5233; font-size: 1.4rem; }
-  .notes[hidden] { display: none; }
-  .notes { margin-top: 26px; display: grid; gap: 12px; }
+  .gtwrap .verse { margin: 14px auto 8px; }
+  .notes { margin: 22px auto 0; max-width: 520px; display: grid; gap: 12px; text-align: left; }
+  .notes:empty { display: none; }
+  /* language picker (same languages as Bible with Friends) */
+  .langpick { position: absolute; z-index: 3; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: rgba(8,12,30,.55); border: 1px solid rgba(255,255,255,.28); backdrop-filter: blur(4px); }
+  .langpick svg { width: 17px; height: 17px; flex: none; }
+  .langpick select { -webkit-appearance: none; appearance: none; background: none; border: 0; color: #fff; font: 600 .9rem system-ui, sans-serif; padding: 0 2px; cursor: pointer; }
+  .langpick select:focus { outline: none; } .langpick:focus-within { outline: 2px solid var(--gold); }
+  .langpick option { color: #000; }
   .note { background: #fbf3e2; color: #3b2a12; border-radius: 14px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
   .note:nth-child(3n+1) { transform: rotate(-.6deg); } .note:nth-child(3n+2) { transform: rotate(.5deg); }
   .note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
@@ -224,7 +226,10 @@
 <div class="cover" id="cover">
   <!-- 1: the photo on its own, with the main button -->
   <section class="hero">
-    <h2 class="skytitle">2026 Thanksgiving<br>Dinner<small>Photos</small></h2>
+    <div class="langpick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/></svg>
+      <label class="sr" for="langSel">Language / Idioma / 語言</label>
+      <select id="langSel"><option value="en" lang="en">English</option><option value="es" lang="es">Español</option><option value="zh" lang="zh-Hant">繁體中文</option><option value="zs" lang="zh-Hans">简体中文</option></select></div>
+    <h2 class="skytitle" data-i18n="sky">2026 Thanksgiving<br>Dinner<small>Photos</small></h2>
     <div class="actions">
       <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><svg viewBox="-16 -2 232 204" aria-hidden="true"> <g transform="translate(100 112)"> <g> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(-72)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(-48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(-24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#7fae6a"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(72)"/> </g> <g fill="#fbf3e2" opacity=".55"> <ellipse rx="7" ry="30" cy="-62" transform="rotate(-48)"/><ellipse rx="7" ry="30" cy="-62"/><ellipse rx="7" ry="30" cy="-62" transform="rotate(48)"/> </g> <ellipse cy="10" rx="42" ry="44" fill="#7a4a30"/> <ellipse cy="22" rx="26" ry="26" fill="#9a6440"/> <circle cy="-34" r="23" fill="#8a5636"/> <circle cx="-8" cy="-39" r="5.5" fill="#fff"/><circle cx="8" cy="-39" r="5.5" fill="#fff"/> <circle cx="-7" cy="-38.5" r="3" fill="#2b1d16"/><circle cx="9" cy="-38.5" r="3" fill="#2b1d16"/> <path d="M-7 -29 L7 -29 L0 -18 Z" fill="#f2b33d"/> <path d="M3 -24 q9 4 4 16 q-6 3 -7 -6 z" fill="#d7463c"/> <g stroke="#e0913a" stroke-width="5" stroke-linecap="round" fill="none"> <path d="M-14 52 v14 M-14 66 l-7 5 M-14 66 l7 5"/><path d="M14 52 v14 M14 66 l-7 5 M14 66 l7 5"/> </g> </g> </svg></button>
     </div>
@@ -232,12 +237,11 @@
   <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
   <div class="divider" aria-hidden="true"><span></span><i></i><span></span></div>
   <section class="info" id="info">
-    <p class="thanks-come">The Church in Burlingame<br>thanks you for coming!</p>
-    <button class="go" id="go" type="button" hidden>See all photos</button>
-    <div class="soon" id="msgText">Loading the photos…</div>
+    <p class="thanks-come" data-i18n="thanks">The Church in Burlingame<br>thanks you for coming!</p>
+    <button class="go" id="go" type="button" data-dyn hidden>See all photos</button>
+    <div class="soon" id="msgText" data-dyn>Loading the photos…</div>
     <p class="invite">We’d love to read God’s word with you — over a meal, in a home, or wherever is easy for you.</p>
     <a class="go link" href="https://biblewfriends.org/connect.html">Connect with us</a>
-    <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God.”<cite>Philippians 4:6</cite></blockquote>
 
     <!-- gratitude notes (in place of the gratitude tree) -->
     <div class="grat">
@@ -250,14 +254,14 @@
         <label for="gName">Your name</label>
         <input id="gName" maxlength="40" autocomplete="name" placeholder="Your name">
         <input class="hp" id="gWeb" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="go small" id="gSend" type="submit">Share my thanks 🍂</button>
-        <p class="err" id="gErr" role="alert"></p>
+        <button class="go small" id="gSend" type="submit" data-dyn>Share my thanks 🍂</button>
+        <p class="err" id="gErr" data-dyn role="alert"></p>
       </form>
     </div>
     <!-- the gratitude tree: every thank-you is a leaf -->
     <div class="gtwrap">
       <h2 class="gt-title">Our gratitude tree</h2>
-      <p class="gt-sub" id="gtSub">Tap a leaf to read it</p>
+      <blockquote class="verse" data-i18n="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God.”<cite>Philippians 4:6</cite></blockquote>
       <div class="gtree" id="gtree">
         <svg viewBox="60 40 880 730" aria-hidden="true">
           <defs><linearGradient id="gbark" x1="0" x2="1"><stop offset="0" stop-color="#4f301b"/><stop offset=".5" stop-color="#6e4628"/><stop offset="1" stop-color="#4f301b"/></linearGradient></defs>
@@ -292,19 +296,19 @@
           <path d="M432 730 C452 640 470 556 476 470 C478 452 490 440 500 440 C510 440 522 452 524 470 C530 556 548 640 568 730 Z" fill="url(#gbark)"/>
           <path d="M432 730 C400 736 380 744 372 752 L628 752 C620 744 600 736 568 730 Z" fill="#4f301b"/>
           <path id="gtLine" d="M500 722 L500 476" fill="none"/>
-          <text font-family="Georgia, serif" font-style="italic" font-size="27" fill="#f8e4c6" fill-opacity=".92" text-anchor="middle" dominant-baseline="central"><textPath href="#gtLine" startOffset="50%">Thankful</textPath></text>
+          <text id="gtTrunk" font-family="Georgia, serif" font-style="italic" font-size="27" fill="#f8e4c6" fill-opacity=".92" text-anchor="middle" dominant-baseline="central"><textPath href="#gtLine" startOffset="50%">Thankful</textPath></text>
+          <text id="gtTrunkV" font-family="serif" font-size="30" fill="#f8e4c6" fill-opacity=".92" text-anchor="middle" dominant-baseline="central" display="none"><tspan x="500" y="582">感</tspan><tspan x="500" y="620">恩</tspan></text>
         </svg>
-        <div class="gleaves" id="gLeaves"></div>
+        <div class="gleaves" id="gLeaves" aria-hidden="true" data-dyn></div>
       </div>
-      <button class="gt-all" id="gtAll" type="button" hidden>Read all thank-yous</button>
-      <div class="notes" id="gNotes" aria-live="polite" hidden></div>
+      <div class="notes" id="gNotes" aria-live="polite" data-dyn></div>
     </div>
   </section>
 </div>
 
 <div class="top">
   <button class="ico" id="backBtn" type="button" aria-label="Back to the gallery" title="Gallery"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <div class="title"><span id="albumName">2026 Thanksgiving Dinner</span><button class="home small" type="button" data-home aria-label="Back to the Thanksgiving home page">Church in Burlingame</button></div>
+  <div class="title"><span id="albumName" data-dyn>2026 Thanksgiving Dinner</span><button class="home small" type="button" data-home aria-label="Back to the Thanksgiving home page">Church in Burlingame</button></div>
   <button class="ico" id="gridBtn" type="button" aria-label="All photos in this album" title="All photos in this album"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
   <button class="ico" id="shareBtn" type="button" aria-label="Share this photo" title="Share this photo"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M5 11v9h14v-9"/></svg></button>
   <a class="ico" id="dl" target="_blank" rel="noopener" aria-label="Download the original photo" title="Download the original"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg></a>
@@ -313,45 +317,187 @@
 <button class="nav prev" id="prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
 <button class="nav next" id="next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <div class="bottom">
-  <span class="count" id="count" aria-live="polite"></span>
+  <span class="count" id="count" data-dyn aria-live="polite"></span>
   <button class="pill play" id="playBtn" type="button" aria-label="Play a slideshow" aria-pressed="false"><svg viewBox="0 0 24 24"><path class="pl" d="M8 5v14l11-7z"/><path class="pa" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
-  <button class="pill heart" id="heartBtn" type="button" aria-pressed="false" aria-label="Heart this photo"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.3 5c2 0 3.3 1.1 4 2.3h3.4C14.4 6.1 15.7 5 17.7 5 21 5 22.8 8.3 21.2 11.4 19 15.6 12 20 12 20z"/></svg><b id="hN"></b></button>
-  <button class="pill" id="talkBtn" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Comments <b id="cmN"></b></button>
+  <button class="pill heart" id="heartBtn" type="button" aria-pressed="false" aria-label="Heart this photo"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.3 5c2 0 3.3 1.1 4 2.3h3.4C14.4 6.1 15.7 5 17.7 5 21 5 22.8 8.3 21.2 11.4 19 15.6 12 20 12 20z"/></svg><b id="hN" data-dyn></b></button>
+  <button class="pill" id="talkBtn" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Comments <b id="cmN" data-dyn></b></button>
   <span class="count" aria-hidden="true"></span>
 </div>
 
 <aside class="panel" id="panel" aria-label="Comments on this photo">
-  <header><h2 id="panelTitle">Comments</h2><button class="ico" id="closeTalk" type="button" aria-label="Close comments"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
-  <div class="list" id="list"></div>
+  <header><h2 id="panelTitle" data-dyn>Comments</h2><button class="ico" id="closeTalk" type="button" aria-label="Close comments"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <div class="list" id="list" data-dyn></div>
   <form id="form" autocomplete="on">
     <label class="sr" for="text">Your comment</label>
     <textarea id="text" maxlength="500" placeholder="Leave a comment on this photo…" required></textarea>
     <div class="row">
       <label class="sr" for="name">Your name</label>
       <input id="name" maxlength="40" placeholder="Your name (optional)" autocomplete="given-name">
-      <button class="send" id="send" type="submit">Post</button>
+      <button class="send" id="send" type="submit" data-dyn>Post</button>
     </div>
     <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <p class="err" id="err" role="alert"></p>
+    <p class="err" id="err" data-dyn role="alert"></p>
   </form>
 </aside>
 
 <div class="albums" id="albums" role="dialog" aria-label="Albums">
   <div class="gtop"><button class="title home" type="button" data-home aria-label="Back to the Thanksgiving home page">Church in Burlingame<small>2026 Thanksgiving Dinner</small></button><a class="topconnect" href="https://biblewfriends.org/connect.html">Connect with us</a></div>
-  <div class="alist" id="alist"></div>
+  <div class="alist" id="alist" data-dyn></div>
 </div>
 
 <div class="grid" id="grid" role="dialog" aria-label="All photos">
-  <div class="gtop"><button class="ico" id="gridClose" type="button" aria-label="Back to the albums" title="Albums"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div class="title" style="margin-left:8px"><span id="gridTitle">All photos</span> <small id="gridN"></small></div></div>
+  <div class="gtop"><button class="ico" id="gridClose" type="button" aria-label="Back to the albums" title="Albums"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><div class="title" style="margin-left:8px"><span id="gridTitle" data-dyn>All photos</span> <small id="gridN" data-dyn></small></div></div>
   <div class="tiles" id="tiles"></div>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" data-dyn></div>
 
 <script>
 // The Apps Script web app link (ends in /exec). Leave empty until the photos are uploaded.
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dXc1toyUu0fFDf9nZUlBchNZea_Y_TnwsXxCmDbMVsdqTS4TlNA/exec";
 </script>
 <script>
+// ---------- languages: English / Español / 繁體中文 / 简体中文 (same choice as Bible with Friends) ----------
+const LANGS = { en: "en", es: "es", zh: "zh-Hant", zs: "zh-Hans" };
+let LANG = (() => {
+  try { const v = localStorage.getItem("bwf-lang"); if (LANGS[v]) return v; } catch (e) {}
+  const n = navigator.language || "";
+  return /^es\b/i.test(n) ? "es" : /^zh-(TW|HK|MO|Hant)/i.test(n) ? "zh" : /^zh\b/i.test(n) ? "zs" : "en";
+})();
+const TX = {
+  es: {
+    "Loading the photos…": "Cargando las fotos…",
+    "We’d love to read God’s word with you — over a meal, in a home, or wherever is easy for you.": "Nos encantaría leer la palabra de Dios contigo: en una comida, en un hogar o donde te quede más cómodo.",
+    "Connect with us": "Contáctanos",
+    "What are you thankful for this year?": "¿Por qué estás agradecido este año?",
+    "I’m thankful for…": "Estoy agradecido por…",
+    "How did you feel after the dinner?": "¿Cómo te sentiste después de la cena?",
+    "(optional)": "(opcional)", "Your name": "Tu nombre", "Your comment": "Tu comentario",
+    "Share my thanks 🍂": "Compartir mi gratitud 🍂", "Sharing…": "Compartiendo…",
+    "Our gratitude tree": "Nuestro árbol de gratitud", "Thankful": "Agradecidos",
+    "Be the first to hang a leaf of thanks 🍂": "Sé el primero en colgar una hoja de gratitud 🍂",
+    "A guest": "Un invitado",
+    "Share what you’re thankful for first": "Primero comparte por qué estás agradecido",
+    "Sharing opens soon.": "Pronto podrás compartir.", "Couldn’t share right now": "No se pudo compartir ahora",
+    "Your leaf is on the tree 🍂": "Tu hoja ya está en el árbol 🍂",
+    "Share what you’re thankful for this year": "Comparte por qué estás agradecido este año",
+    "A word or a few lines": "Una palabra o unas líneas",
+    "2026 Thanksgiving Dinner": "Cena de Acción de Gracias 2026", "Church in Burlingame": "Iglesia en Burlingame",
+    "2026 Thanksgiving Dinner · Church in Burlingame": "Cena de Acción de Gracias 2026 · Iglesia en Burlingame",
+    "Comments": "Comentarios", "All photos": "Todas las fotos", "Albums": "Álbumes", "Gallery": "Galería",
+    "Favorites": "Favoritas", "Photos people hearted": "Fotos con corazones",
+    "Welcome": "Bienvenida", "Dinner": "Cena", "Testimonies": "Testimonios", "Children Singing": "Canto de los niños",
+    "YP Singing and Testimonies": "Canto y testimonios de los jóvenes", "Close and Cleaning": "Cierre y limpieza",
+    "The photos will be here soon.": "Las fotos estarán aquí pronto.",
+    "Couldn’t load the photos. Please refresh in a minute.": "No se pudieron cargar las fotos. Actualiza la página en un minuto.",
+    "This photo couldn’t load": "No se pudo cargar esta foto",
+    "No comments yet. Be the first!": "Aún no hay comentarios. ¡Sé el primero!", "Someone": "Alguien",
+    "Leave a comment on this photo…": "Deja un comentario en esta foto…", "Your name (optional)": "Tu nombre (opcional)",
+    "Post": "Publicar", "Posting…": "Publicando…", "Write a comment first": "Primero escribe un comentario",
+    "Couldn’t post": "No se pudo publicar", "Comment posted 🙏": "Comentario publicado 🙏",
+    "Link copied — paste it to share": "Enlace copiado: pégalo para compartir", "Copy this link:": "Copia este enlace:",
+    "A photo from our 2026 Thanksgiving Dinner": "Una foto de nuestra Cena de Acción de Gracias 2026",
+    "About this dinner and the church": "Sobre esta cena y la iglesia", "Back to the gallery": "Volver a la galería",
+    "Back to the Thanksgiving home page": "Volver a la página principal", "All photos in this album": "Todas las fotos de este álbum",
+    "Share this photo": "Compartir esta foto", "Download the original photo": "Descargar la foto original", "Download the original": "Descargar el original",
+    "Full screen": "Pantalla completa", "Previous photo": "Foto anterior", "Next photo": "Foto siguiente",
+    "Play a slideshow": "Ver como presentación", "Pause the slideshow": "Pausar la presentación", "Heart this photo": "Dar corazón a esta foto",
+    "Comments on this photo": "Comentarios de esta foto", "Close comments": "Cerrar comentarios", "Back to the albums": "Volver a los álbumes",
+    "Thanksgiving photo": "Foto de Acción de Gracias", "Photo": "Foto"
+  },
+  zh: {
+    "Loading the photos…": "正在載入相片…",
+    "We’d love to read God’s word with you — over a meal, in a home, or wherever is easy for you.": "我們很樂意與你一起讀神的話——在用餐時、在家中，或在任何對你方便的地方。",
+    "Connect with us": "聯絡我們",
+    "What are you thankful for this year?": "今年你為甚麼感恩？",
+    "I’m thankful for…": "我感恩的是…",
+    "How did you feel after the dinner?": "晚宴後你的感受如何？",
+    "(optional)": "（選填）", "Your name": "你的名字", "Your comment": "你的留言",
+    "Share my thanks 🍂": "分享我的感恩 🍂", "Sharing…": "分享中…",
+    "Our gratitude tree": "我們的感恩樹", "Thankful": "感恩",
+    "Be the first to hang a leaf of thanks 🍂": "成為第一個掛上感恩葉子的人 🍂",
+    "A guest": "一位來賓",
+    "Share what you’re thankful for first": "請先分享你感恩的事",
+    "Sharing opens soon.": "即將開放分享。", "Couldn’t share right now": "目前無法分享",
+    "Your leaf is on the tree 🍂": "你的葉子已掛在樹上 🍂",
+    "Share what you’re thankful for this year": "分享今年你感恩的事",
+    "A word or a few lines": "一個詞或幾句話",
+    "2026 Thanksgiving Dinner": "2026 感恩節晚宴", "Church in Burlingame": "Burlingame 召會",
+    "2026 Thanksgiving Dinner · Church in Burlingame": "2026 感恩節晚宴 · Burlingame 召會",
+    "Comments": "留言", "All photos": "所有相片", "Albums": "相簿", "Gallery": "相簿",
+    "Favorites": "最愛", "Photos people hearted": "大家點了愛心的相片",
+    "Welcome": "歡迎", "Dinner": "晚宴", "Testimonies": "見證", "Children Singing": "兒童唱詩",
+    "YP Singing and Testimonies": "青少年唱詩與見證", "Close and Cleaning": "結束與清潔",
+    "The photos will be here soon.": "相片很快就會上傳。",
+    "Couldn’t load the photos. Please refresh in a minute.": "無法載入相片，請稍後重新整理。",
+    "This photo couldn’t load": "這張相片無法載入",
+    "No comments yet. Be the first!": "還沒有留言，來當第一個吧！", "Someone": "一位朋友",
+    "Leave a comment on this photo…": "為這張相片留言…", "Your name (optional)": "你的名字（選填）",
+    "Post": "發佈", "Posting…": "發佈中…", "Write a comment first": "請先寫下留言",
+    "Couldn’t post": "無法發佈", "Comment posted 🙏": "留言已發佈 🙏",
+    "Link copied — paste it to share": "連結已複製，貼上即可分享", "Copy this link:": "複製這個連結：",
+    "A photo from our 2026 Thanksgiving Dinner": "我們 2026 感恩節晚宴的一張相片",
+    "About this dinner and the church": "關於這次晚宴和召會", "Back to the gallery": "回到相簿",
+    "Back to the Thanksgiving home page": "回到首頁", "All photos in this album": "這本相簿的所有相片",
+    "Share this photo": "分享這張相片", "Download the original photo": "下載原始相片", "Download the original": "下載原始檔",
+    "Full screen": "全螢幕", "Previous photo": "上一張", "Next photo": "下一張",
+    "Play a slideshow": "播放幻燈片", "Pause the slideshow": "暫停幻燈片", "Heart this photo": "為這張相片點愛心",
+    "Comments on this photo": "這張相片的留言", "Close comments": "關閉留言", "Back to the albums": "回到相簿",
+    "Thanksgiving photo": "感恩節相片", "Photo": "相片"
+  }
+};
+// 简体: turn the 繁體 text into simplified wording
+const ZS = {
+  "正在載入相片…": "正在加载照片…", "我們很樂意與你一起讀神的話——在用餐時、在家中，或在任何對你方便的地方。": "我们很乐意与你一起读神的话——在用餐时、在家中，或在任何对你方便的地方。",
+  "聯絡我們": "联系我们", "今年你為甚麼感恩？": "今年你为什么感恩？", "晚宴後你的感受如何？": "晚宴后你的感受如何？", "（選填）": "（选填）",
+  "分享中…": "分享中…", "我們的感恩樹": "我们的感恩树", "成為第一個掛上感恩葉子的人 🍂": "成为第一个挂上感恩叶子的人 🍂", "一位來賓": "一位来宾",
+  "請先分享你感恩的事": "请先分享你感恩的事", "即將開放分享。": "即将开放分享。", "目前無法分享": "目前无法分享", "你的葉子已掛在樹上 🍂": "你的叶子已挂在树上 🍂",
+  "一個詞或幾句話": "一个词或几句话", "2026 感恩節晚宴": "2026 感恩节晚宴", "Burlingame 召會": "Burlingame 召会",
+  "2026 感恩節晚宴 · Burlingame 召會": "2026 感恩节晚宴 · Burlingame 召会", "所有相片": "所有照片", "相簿": "相册", "最愛": "最爱",
+  "大家點了愛心的相片": "大家点了爱心的照片", "歡迎": "欢迎", "見證": "见证", "兒童唱詩": "儿童唱诗", "青少年唱詩與見證": "青少年唱诗与见证", "結束與清潔": "结束与清洁",
+  "相片很快就會上傳。": "照片很快就会上传。", "無法載入相片，請稍後重新整理。": "无法加载照片，请稍后刷新。", "這張相片無法載入": "这张照片无法加载",
+  "還沒有留言，來當第一個吧！": "还没有留言，来当第一个吧！", "為這張相片留言…": "为这张照片留言…", "你的名字（選填）": "你的名字（选填）",
+  "發佈": "发布", "發佈中…": "发布中…", "請先寫下留言": "请先写下留言", "無法發佈": "无法发布", "留言已發佈 🙏": "留言已发布 🙏",
+  "連結已複製，貼上即可分享": "链接已复制，粘贴即可分享", "複製這個連結：": "复制这个链接：", "我們 2026 感恩節晚宴的一張相片": "我们 2026 感恩节晚宴的一张照片",
+  "關於這次晚宴和召會": "关于这次晚宴和召会", "回到相簿": "回到相册", "回到首頁": "回到首页", "這本相簿的所有相片": "这本相册的所有照片",
+  "分享這張相片": "分享这张照片", "下載原始相片": "下载原始照片", "下載原始檔": "下载原始文件", "全螢幕": "全屏", "上一張": "上一张", "下一張": "下一张",
+  "播放幻燈片": "播放幻灯片", "暫停幻燈片": "暂停幻灯片", "為這張相片點愛心": "为这张照片点爱心", "這張相片的留言": "这张照片的留言", "關閉留言": "关闭留言",
+  "感恩節相片": "感恩节照片", "相片": "照片"
+};
+const HTML_TX = {
+  es: { sky: "Cena de Acción<br>de Gracias 2026<small>Fotos</small>",
+        thanks: "¡La iglesia en Burlingame<br>te agradece por venir!",
+        verse: "“Por nada estéis afanosos, sino en todo, mediante oración y súplica con acción de gracias, sean dadas a conocer vuestras peticiones a Dios.”<cite>Filipenses 4:6</cite>" },
+  zh: { sky: "2026<br>感恩節晚宴<small>相片</small>",
+        thanks: "Burlingame 召會<br>感謝你的光臨！",
+        verse: "「應當一無罣慮，只要凡事藉著禱告、祈求，帶著感謝，將你們所要的告訴神。」<cite>腓立比書 4:6</cite>" },
+  zs: { sky: "2026<br>感恩节晚宴<small>照片</small>",
+        thanks: "Burlingame 召会<br>感谢你的光临！",
+        verse: "“应当一无挂虑，只要凡事借着祷告、祈求，带着感谢，将你们所要的告诉神。”<cite>腓立比书 4:6</cite>" }
+};
+const t = en => { if (LANG === "en") return en; const z = TX[LANG === "zs" ? "zh" : LANG] || {}, v = z[en]; if (!v) return en; return LANG === "zs" ? (ZS[v] || v) : v; };
+const nPhotos = n => LANG === "es" ? n + (n === 1 ? " foto" : " fotos") : LANG === "zh" ? n + " 張相片" : LANG === "zs" ? n + " 张照片" : n + (n === 1 ? " photo" : " photos");
+const seeAll = n => LANG === "es" ? "Ver las " + n + " fotos" : LANG === "zh" ? "查看全部 " + n + " 張相片" : LANG === "zs" ? "查看全部 " + n + " 张照片" : "See all " + n + " photos";
+const ORIG = new Map();
+function applyStatic() {
+  document.documentElement.lang = LANGS[LANG];
+  document.title = t("2026 Thanksgiving Dinner · Church in Burlingame");
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    if (!ORIG.has(el)) ORIG.set(el, el.innerHTML);
+    el.innerHTML = (HTML_TX[LANG] || {})[el.dataset.i18n] || ORIG.get(el);
+  });
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => {
+    const el = n.parentNode; if (!el || /SCRIPT|STYLE|OPTION/.test(el.nodeName) || el.closest("[data-i18n], [data-dyn]")) return NodeFilter.FILTER_REJECT;
+    if (el.closest("svg") && !el.closest("#gtTrunk")) return NodeFilter.FILTER_REJECT;
+    return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+  let n; while ((n = w.nextNode())) { if (!ORIG.has(n)) ORIG.set(n, n.nodeValue); const en = ORIG.get(n); n.nodeValue = en.replace(en.trim(), t(en.replace(/\s+/g, " ").trim())); }
+  document.querySelectorAll("[placeholder], [aria-label], [title]").forEach(el => ["placeholder", "aria-label", "title"].forEach(a => {
+    if (!el.hasAttribute(a) || el.closest("svg")) return; const k = "en" + a.replace("-", ""); if (!el.dataset[k]) el.dataset[k] = el.getAttribute(a);
+    el.setAttribute(a, t(el.dataset[k])); }));
+  const zhT = LANG === "zh" || LANG === "zs";   // Chinese reads upright down the trunk
+  document.getElementById("gtTrunk").setAttribute("display", zhT ? "none" : "inline"); document.getElementById("gtTrunkV").setAttribute("display", zhT ? "inline" : "none");
+  const sel = document.getElementById("langSel"); if (sel) sel.value = LANG;
+}
+applyStatic();
 (() => {
   const $ = id => document.getElementById(id);
   const img = $("img");
@@ -364,7 +510,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   };
   const cur = () => A === "fav" ? favAlbum() : albums[A];
   let mine = {}; try { mine = JSON.parse(localStorage.getItem("tg_hearts") || "{}"); } catch (e) {}
-  const label = n => String(n).replace(/^\s*\d+\s*[-–.)]\s*/, "");   // "1 - Welcome" → "Welcome"
+  const label = n => t(String(n).replace(/^\s*\d+\s*[-–.)]\s*/, ""));   // "1 - Welcome" → "Welcome" (in the chosen language)
+  const albumTitle = () => A === "fav" ? t("Favorites") : label(albums[A].name);
+  let msgKey = "Loading the photos…", totalN = 0, lastThanks = [];
+  const setMsg = k => { msgKey = k; $("msgText").textContent = k ? t(k) : ""; };
 
   // ---------- photo addresses (Google Drive) ----------
   // shown at the size of the screen (sharp on phones and big monitors); "download" gives the untouched original
@@ -377,7 +526,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
 
   // ---------- data ----------
   async function load() {
-    if (!SCRIPT_URL) { $("msgText").textContent = "The photos will be here soon."; return; }
+    if (!SCRIPT_URL) { setMsg("The photos will be here soon."); return; }
     try {
       const r = await fetch(SCRIPT_URL + "?action=list&t=" + Date.now());
       const d = await r.json();
@@ -385,8 +534,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       albums = (d.albums || []).map(x => ({ name: x.name, photos: (x.photos || []).map(id => ({ id })) })).filter(x => x.photos.length);
       comments = d.comments || []; hearts = d.hearts || {}; renderThanks(d.thanks);
       const total = albums.reduce((n, x) => n + x.photos.length, 0);
-      if (!total) { $("msgText").textContent = "The photos will be here soon."; return; }
-      $("msgText").textContent = ""; $("go").textContent = "See all " + total + " photos"; $("go").hidden = false;
+      if (!total) { setMsg("The photos will be here soon."); return; }
+      setMsg(""); totalN = total; $("go").textContent = seeAll(total); $("go").hidden = false;
       $("go").onclick = () => { document.body.classList.add("started"); openAlbums(); };
       // a shared link to one photo (#album-photo) opens it right away
       const m = location.hash.match(/^#(\d+|fav)-(\d+)$/);
@@ -395,7 +544,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       else if (/^#(\d+|fav)$/.test(location.hash) && (location.hash === "#fav" ? favAlbum().photos.length : albums[location.hash.slice(1) - 1])) { document.body.classList.add("started"); openAlbum(location.hash === "#fav" ? "fav" : location.hash.slice(1) - 1); }
       else if (location.hash === "#albums") { document.body.classList.add("started"); openAlbums(); }
       else new Image().src = thumb(albums[0].photos[0].id);
-    } catch (e) { $("msgText").textContent = "Couldn’t load the photos. Please refresh in a minute."; }
+    } catch (e) { setMsg("Couldn’t load the photos. Please refresh in a minute."); }
   }
 
   // tapping "Church in Burlingame" goes back to the Thanksgiving home page (the cover)
@@ -443,19 +592,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     for (let k = GSPOTS.length - 1; k > 0; k--) { const j = (rnd() * (k + 1)) | 0; [GSPOTS[k], GSPOTS[j]] = [GSPOTS[j], GSPOTS[k]]; }
   })();
   let gNewKey = null;
-  function openNote(t) {
-    const pop = document.createElement("div"); pop.className = "gnote-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Thank-you note");
-    const d = document.createElement("div"); d.className = "note";
-    const x = document.createElement("button"); x.className = "x"; x.type = "button"; x.setAttribute("aria-label", "Close"); x.textContent = "×"; d.appendChild(x);
-    const p = document.createElement("p"); p.textContent = "🍂 " + t.thankful; d.appendChild(p);
-    if (t.felt) { const f = document.createElement("p"); f.className = "felt"; f.textContent = t.felt; d.appendChild(f); }
-    const b = document.createElement("b"); b.textContent = "— " + (t.name || "A guest"); d.appendChild(b);
-    pop.appendChild(d); document.body.appendChild(pop);
-    const close = () => { pop.remove(); document.removeEventListener("keydown", esc); };
-    const esc = e => { if (e.key === "Escape") close(); };
-    pop.onclick = e => { if (e.target === pop || e.target === x) close(); };
-    document.addEventListener("keydown", esc); x.focus();
-  }
   function renderTree(list) {
     const box = $("gLeaves"); box.innerHTML = "";
     const all = (list || []).slice().reverse();               // oldest first, so each note keeps its leaf
@@ -464,27 +600,24 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       const ring = Math.floor(k / n), sp = GSPOTS[k % n];
       const x = sp[0] + ring * 12 * (k % 2 ? 1 : -1), y = sp[1] - ring * 9, r = sp[2] + ring * 25 * (k % 2 ? 1 : -1);
       const key = t.at + "|" + t.thankful, h = ghash(key);
-      const b = document.createElement("button"); b.type = "button"; b.className = "gleaf" + (key === gNewKey ? " new" : "");
+      const b = document.createElement("span"); b.className = "gleaf" + (key === gNewKey ? " new" : "");
       b.style.left = ((x - 60) / 880 * 100) + "%"; b.style.top = ((y - 40) / 730 * 100) + "%";
       b.style.setProperty("--r", r.toFixed(0) + "deg"); b.style.setProperty("--sw", 3 + (h % 30) / 10 + "s"); b.style.setProperty("--dl", -(h % 40) / 10 + "s");
-      b.setAttribute("aria-label", "Thank-you from " + (t.name || "a guest") + ". Tap to read.");
       b.innerHTML = `<svg viewBox="0 0 40 40">${LEAF(GCOL[h % GCOL.length])}</svg>`;
-      b.onclick = () => openNote(t);
       box.appendChild(b);
     });
-    if (!all.length) box.innerHTML = '<div class="gt-empty">Be the first to hang a leaf of thanks 🍂</div>';
-    $("gtSub").textContent = all.length ? all.length + (all.length === 1 ? " thank-you" : " thank-yous") + " · tap a leaf to read it" : "Share above and your thanks will hang here";
-    $("gtAll").hidden = !all.length; gNewKey = null;
+    if (!all.length) { const e = document.createElement("div"); e.className = "gt-empty"; e.textContent = t("Be the first to hang a leaf of thanks 🍂"); box.appendChild(e); }
+    gNewKey = null;
   }
-  $("gtAll").onclick = () => { const n = $("gNotes"); n.hidden = !n.hidden; $("gtAll").textContent = n.hidden ? "Read all thank-yous" : "Hide the list"; };
   function renderThanks(list) {
+    lastThanks = list || [];
     renderTree(list);
     const box = $("gNotes"); box.innerHTML = "";
-    (list || []).forEach(t => {
+    (list || []).forEach(x => {
       const d = document.createElement("div"); d.className = "note";
-      const p = document.createElement("p"); p.textContent = "🍂 " + t.thankful; d.appendChild(p);
-      if (t.felt) { const f = document.createElement("p"); f.className = "felt"; f.textContent = t.felt; d.appendChild(f); }
-      const b = document.createElement("b"); b.textContent = "— " + (t.name || "A guest"); d.appendChild(b);
+      const p = document.createElement("p"); p.textContent = "🍂 " + x.thankful; d.appendChild(p);
+      if (x.felt) { const f = document.createElement("p"); f.className = "felt"; f.textContent = x.felt; d.appendChild(f); }
+      const b = document.createElement("b"); b.textContent = "— " + (x.name || t("A guest")); d.appendChild(b);
       box.appendChild(d);
     });
   }
@@ -493,20 +626,20 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     e.preventDefault();
     const thankful = $("gThank").value.trim(), felt = $("gFelt").value.trim(), name = $("gName").value.trim();
     $("gErr").textContent = "";
-    if (!thankful) { $("gErr").textContent = "Share what you’re thankful for first"; return; }
-    if (!SCRIPT_URL) { $("gErr").textContent = "Sharing opens soon."; return; }
-    $("gSend").disabled = true; $("gSend").textContent = "Sharing…";
+    if (!thankful) { $("gErr").textContent = t("Share what you’re thankful for first"); return; }
+    if (!SCRIPT_URL) { $("gErr").textContent = t("Sharing opens soon."); return; }
+    $("gSend").disabled = true; $("gSend").textContent = t("Sharing…");
     try {
       const r = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "thanks", thankful, felt, name, website: $("gWeb").value }) });
       const d = await r.json();
-      if (!d.ok) throw new Error(d.error || "Couldn’t share right now");
+      if (!d.ok) throw new Error(d.error || t("Couldn’t share right now"));
       try { localStorage.setItem("tg_name", name); } catch (x) {}
       $("gThank").value = ""; $("gFelt").value = "";
       if (d.thanks && d.thanks[0]) gNewKey = d.thanks[0].at + "|" + d.thanks[0].thankful;
-      renderThanks(d.thanks); toast("Your leaf is on the tree 🍂");
+      renderThanks(d.thanks); toast(t("Your leaf is on the tree 🍂"));
       $("gtree").scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (err) { $("gErr").textContent = err.message; }
-    $("gSend").disabled = false; $("gSend").textContent = "Share my thanks 🍂";
+    $("gSend").disabled = false; $("gSend").textContent = t("Share my thanks 🍂");
   };
 
   $("moreBtn").onclick = () => $("info").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -519,8 +652,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     const card = (al, key, num) => {
       const b = document.createElement("button"); b.type = "button"; b.className = "album" + (al.fav ? " fav" : "");
       b.innerHTML = `<img alt="" loading="lazy" src="${thumbBig(al.photos[0].id)}"><span class="num">${num}</span><span class="cap"><b></b><small></small></span>`;
-      b.querySelector("b").textContent = al.fav ? "Favorites" : label(al.name);
-      b.querySelector("small").textContent = al.fav ? "Photos people hearted" : al.photos.length + (al.photos.length === 1 ? " photo" : " photos");
+      b.querySelector("b").textContent = al.fav ? t("Favorites") : label(al.name);
+      b.querySelector("small").textContent = al.fav ? t("Photos people hearted") : nPhotos(al.photos.length);
       b.onclick = () => openAlbum(key);
       box.appendChild(b);
     };
@@ -533,7 +666,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   // an album opens to its gallery first; a shared photo link (start given) opens that photo
   function openAlbum(k, start) {
     A = k; photos = cur().photos; i = 0;
-    $("albumName").textContent = A === "fav" ? "Favorites" : label(albums[k].name);
+    $("albumName").textContent = albumTitle();
     $("tiles").innerHTML = "";
     document.body.classList.remove("albumson");
     if (start === undefined || start === null) { openGrid(); return; }
@@ -548,8 +681,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     const id = photos[i].id, token = ++loadToken;
     img.classList.remove("on"); $("spin").hidden = false;
     const im = new Image();
-    im.onload = () => { if (token !== loadToken) return; img.src = im.src; img.alt = "Thanksgiving photo " + (i + 1); img.classList.add("on"); $("spin").hidden = true; };
-    im.onerror = () => { if (token !== loadToken) return; if (!im.dataset.alt) { im.dataset.alt = 1; im.src = bigAlt(id); } else { $("spin").hidden = true; toast("This photo couldn’t load"); } };
+    im.onload = () => { if (token !== loadToken) return; img.src = im.src; img.alt = t("Thanksgiving photo") + " " + (i + 1); img.classList.add("on"); $("spin").hidden = true; };
+    im.onerror = () => { if (token !== loadToken) return; if (!im.dataset.alt) { im.dataset.alt = 1; im.src = bigAlt(id); } else { $("spin").hidden = true; toast(t("This photo couldn’t load")); } };
     im.src = big(id);
     $("count").textContent = (i + 1) + " / " + photos.length;
     $("dl").href = original(id);
@@ -594,14 +727,14 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     if (!box.children.length) {
       const counts = countMap();
       photos.forEach((p, k) => {
-        const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Photo " + (k + 1));
+        const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", t("Photo") + " " + (k + 1));
         b.innerHTML = `<img loading="lazy" alt="" src="${thumb(p.id)}">` + (counts[p.id] ? `<span>💬 ${counts[p.id]}</span>` : "");
         b.onclick = () => { document.body.classList.remove("gridon"); show(k); };
         box.appendChild(b);
       });
     }
     [...box.children].forEach((b, k) => b.classList.toggle("cur", k === i));
-    $("gridTitle").textContent = A === "fav" ? "Favorites" : label(albums[A].name); $("gridN").textContent = photos.length + " photos";
+    $("gridTitle").textContent = albumTitle(); $("gridN").textContent = nPhotos(photos.length);
     document.body.classList.add("gridon");
     const cur = box.children[i]; if (cur) cur.scrollIntoView({ block: "center" });
     history.replaceState(null, "", "#" + (A === "fav" ? "fav" : A + 1));
@@ -612,16 +745,16 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   // ---------- share this photo ----------
   $("shareBtn").onclick = async () => {
     const url = location.href.split("#")[0] + "#" + (A === "fav" ? "fav" : A + 1) + "-" + (i + 1);
-    const data = { title: "Church in Burlingame · 2026 Thanksgiving Dinner", text: "A photo from our 2026 Thanksgiving Dinner", url };
+    const data = { title: t("Church in Burlingame") + " · " + t("2026 Thanksgiving Dinner"), text: t("A photo from our 2026 Thanksgiving Dinner"), url };
     try {
       if (navigator.share) { await navigator.share(data); return; }
-      await navigator.clipboard.writeText(url); toast("Link copied — paste it to share");
-    } catch (e) { if (e && e.name !== "AbortError") { try { await navigator.clipboard.writeText(url); toast("Link copied — paste it to share"); } catch (x) { prompt("Copy this link:", url); } } }
+      await navigator.clipboard.writeText(url); toast(t("Link copied — paste it to share"));
+    } catch (e) { if (e && e.name !== "AbortError") { try { await navigator.clipboard.writeText(url); toast(t("Link copied — paste it to share")); } catch (x) { prompt(t("Copy this link:"), url); } } }
   };
 
   // ---------- slideshow ----------
   let playing = null;
-  function stopPlay() { if (playing) { clearTimeout(playing); playing = null; } $("playBtn").setAttribute("aria-pressed", "false"); $("playBtn").setAttribute("aria-label", "Play a slideshow"); }
+  function stopPlay() { if (playing) { clearTimeout(playing); playing = null; } $("playBtn").setAttribute("aria-pressed", "false"); $("playBtn").setAttribute("aria-label", t("Play a slideshow")); }
   function tick() {
     if (!playing) return;
     if (img.classList.contains("on")) show(i + 1);      // move on once the photo has loaded
@@ -629,7 +762,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   }
   $("playBtn").onclick = () => {
     if (playing) { stopPlay(); return; }
-    $("playBtn").setAttribute("aria-pressed", "true"); $("playBtn").setAttribute("aria-label", "Pause the slideshow");
+    $("playBtn").setAttribute("aria-pressed", "true"); $("playBtn").setAttribute("aria-label", t("Pause the slideshow"));
     document.body.classList.add("clean");
     playing = setTimeout(tick, 4500);
   };
@@ -659,18 +792,18 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     if (!photos.length) return;
     const id = photos[i].id, mine = comments.filter(c => c.photo === id);
     $("cmN").textContent = mine.length || "";
-    $("panelTitle").textContent = "Comments · " + (A === "fav" ? "Favorites" : label(albums[A].name)) + " " + (i + 1);
+    $("panelTitle").textContent = t("Comments") + " · " + albumTitle() + " " + (i + 1);
     const list = $("list"); list.innerHTML = "";
-    if (!mine.length) { list.innerHTML = '<p class="none">No comments yet. Be the first!</p>'; return; }
+    if (!mine.length) { list.innerHTML = ""; const no = document.createElement("p"); no.className = "none"; no.textContent = t("No comments yet. Be the first!"); list.appendChild(no); return; }
     mine.forEach(c => {
       const d = document.createElement("div"); d.className = "cm";
-      const b = document.createElement("b"); b.textContent = c.name || "Someone";
-      const t = document.createElement("time"); t.textContent = when(c.at);
+      const b = document.createElement("b"); b.textContent = c.name || t("Someone");
+      const tm = document.createElement("time"); tm.textContent = when(c.at);
       const p = document.createElement("p"); p.textContent = c.text;
-      d.append(b, t, p); list.appendChild(d);
+      d.append(b, tm, p); list.appendChild(d);
     });
   }
-  const when = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ", " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }); };
+  const when = iso => { const d = new Date(iso); const lc = LANGS[LANG]; return isNaN(d) ? "" : d.toLocaleDateString(lc, { month: "short", day: "numeric" }) + ", " + d.toLocaleTimeString(lc, { hour: "numeric", minute: "2-digit" }); };
   $("talkBtn").onclick = () => { stopPlay(); document.body.classList.add("talk"); document.body.classList.remove("clean"); setTimeout(() => $("text").focus({ preventScroll: true }), 320); };
   $("closeTalk").onclick = () => document.body.classList.remove("talk");
   try { $("name").value = localStorage.getItem("tg_name") || ""; } catch (e) {}
@@ -679,18 +812,18 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     e.preventDefault();
     const text = $("text").value.trim(), name = $("name").value.trim();
     $("err").textContent = "";
-    if (!text) { $("err").textContent = "Write a comment first"; return; }
-    $("send").disabled = true; $("send").textContent = "Posting…";
+    if (!text) { $("err").textContent = t("Write a comment first"); return; }
+    $("send").disabled = true; $("send").textContent = t("Posting…");
     try {
       const r = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "comment", photo: photos[i].id, text, name, website: $("website").value }) });
       const d = await r.json();
-      if (!d.ok) throw new Error(d.error || "Couldn’t post");
+      if (!d.ok) throw new Error(d.error || t("Couldn’t post"));
       if (d.comments) comments = d.comments;
       try { localStorage.setItem("tg_name", name); } catch (e) {}
-      $("text").value = ""; renderComments(); toast("Comment posted 🙏");
+      $("text").value = ""; renderComments(); toast(t("Comment posted 🙏"));
       $("tiles").innerHTML = "";
     } catch (err) { $("err").textContent = err.message; }
-    $("send").disabled = false; $("send").textContent = "Post";
+    $("send").disabled = false; $("send").textContent = t("Post");
   };
 
   function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); }
@@ -701,6 +834,18 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     try { const d = await (await fetch(SCRIPT_URL + "?action=comments&t=" + Date.now())).json(); if (d.ok) { comments = d.comments; if (d.hearts) hearts = d.hearts; renderComments(); renderHeart(); } } catch (e) {}
   }, 60000);
 
+  function applyDyn() {
+    $("gSend").textContent = t("Share my thanks 🍂"); $("send").textContent = t("Post");
+    setMsg(msgKey); if (totalN) $("go").textContent = seeAll(totalN);
+    renderThanks(lastThanks);
+    const b = document.body.classList;
+    if (!albums.length) { $("albumName").textContent = t("2026 Thanksgiving Dinner"); return; }
+    if (b.contains("albumson")) openAlbums();
+    if (photos.length) { $("albumName").textContent = albumTitle(); renderComments(); if (playing) $("playBtn").setAttribute("aria-label", t("Pause the slideshow")); }
+    $("tiles").innerHTML = ""; if (b.contains("gridon")) openGrid();
+  }
+  applyDyn();
+  $("langSel").onchange = e => { LANG = e.target.value; try { localStorage.setItem("bwf-lang", LANG); } catch (x) {} applyStatic(); applyDyn(); };
   load();
 })();
 </script>
