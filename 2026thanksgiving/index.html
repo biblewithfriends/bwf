@@ -27,6 +27,10 @@
   .cover { position: fixed; inset: 0; z-index: 12; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #0b1230; text-align: center; transition: opacity .5s; scroll-behavior: smooth; }
   .cover .hero { position: relative; height: 100vh; height: 100dvh; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; display: flex; align-items: flex-end; justify-content: center; }
   .cover .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(6,10,30,.55)); pointer-events: none; }
+  .cover .skytitle { position: absolute; z-index: 1; top: max(9vh, calc(env(safe-area-inset-top) + 40px)); left: 50%; transform: translateX(-50%); width: max-content; max-width: 92vw; margin: 0;
+    font: 400 clamp(2.3rem, 10vw, 5rem)/1.05 Georgia, "Times New Roman", serif; letter-spacing: .02em; color: #f6e7c8;
+    text-shadow: 0 0 18px rgba(246,231,200,.35), 0 0 42px rgba(232,199,150,.25), 0 2px 6px rgba(0,0,0,.5); }
+  @media (min-aspect-ratio: 4/3) { .cover .skytitle { left: 30%; top: 7vh; font-size: clamp(2.3rem, 5.4vw, 4.4rem); } }
   .cover .actions { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-bottom: max(26px, calc(env(safe-area-inset-bottom) + 16px)); }
   .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.1rem; padding: 15px 30px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
   .cover .go[hidden] { display: none; }
@@ -151,6 +155,7 @@
 <div class="cover" id="cover">
   <!-- 1: the photo on its own, with the main button -->
   <section class="hero">
+    <h2 class="skytitle">2026 Thanksgiving</h2>
     <div class="actions">
       <button class="go" id="go" type="button" hidden>See all photos</button>
       <div class="soon" id="msgText">Loading the photos…</div>
