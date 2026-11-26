@@ -9,18 +9,18 @@
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="turkey.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="turkey-180.png">
-<meta name="description" content="Photos from the Church in Burlingame 2026 Thanksgiving Dinner. Leave a heart or a comment.">
+<meta name="description" content="Photos from the Church in Burlingame 2026 Thanksgiving Dinner.">
 <meta property="og:site_name" content="Church in Burlingame">
 <meta property="og:title" content="2026 Thanksgiving Dinner · Church in Burlingame">
-<meta property="og:description" content="Photos from our Thanksgiving dinner. Tap to see them all, leave a ♥ or a comment.">
+<meta property="og:description" content="Photos from our Thanksgiving dinner.">
 <meta property="og:url" content="https://biblewfriends.org/2026thanksgiving/">
-<meta property="og:image" content="https://biblewfriends.org/2026thanksgiving/og.jpg?v=2">
+<meta property="og:image" content="https://biblewfriends.org/2026thanksgiving/og.jpg?v=3">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Events Wing at night with the words 2026 Thanksgiving Dinner">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://biblewfriends.org/2026thanksgiving/og.jpg?v=2">
+<meta name="twitter:image" content="https://biblewfriends.org/2026thanksgiving/og.jpg?v=3">
 <link rel="preload" as="image" href="art-1600.jpg">
 <style>
   :root { --bar: rgba(0, 0, 0, .55); --ink: #fff; --soft: rgba(255, 255, 255, .72); --gold: #E8C796; }
@@ -43,6 +43,7 @@
     .cover .hero { background: #0a112b url(art-1600.jpg) 66% 100% / auto 62% no-repeat; }
     .cover .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(#0a112b 0, #0a112b 38%, transparent 50%); pointer-events: none; }
   }
+  .cover .skytitle small { display: block; margin-top: 10px; font: 600 clamp(.85rem, 3.4vw, 1.05rem) system-ui, sans-serif; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); text-shadow: 0 1px 6px rgba(0,0,0,.6); }
   .cover .actions { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-bottom: max(26px, calc(env(safe-area-inset-bottom) + 16px)); }
   .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.1rem; padding: 15px 30px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
   .cover .go[hidden] { display: none; }
@@ -183,7 +184,7 @@
 <div class="cover" id="cover">
   <!-- 1: the photo on its own, with the main button -->
   <section class="hero">
-    <h2 class="skytitle">2026 Thanksgiving<br>Dinner</h2>
+    <h2 class="skytitle">2026 Thanksgiving<br>Dinner<small>Photos</small></h2>
     <div class="actions">
       <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><svg viewBox="-16 -2 232 204" aria-hidden="true"> <g transform="translate(100 112)"> <g> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(-72)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(-48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(-24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#7fae6a"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(72)"/> </g> <g fill="#fbf3e2" opacity=".55"> <ellipse rx="7" ry="30" cy="-62" transform="rotate(-48)"/><ellipse rx="7" ry="30" cy="-62"/><ellipse rx="7" ry="30" cy="-62" transform="rotate(48)"/> </g> <ellipse cy="10" rx="42" ry="44" fill="#7a4a30"/> <ellipse cy="22" rx="26" ry="26" fill="#9a6440"/> <circle cy="-34" r="23" fill="#8a5636"/> <circle cx="-8" cy="-39" r="5.5" fill="#fff"/><circle cx="8" cy="-39" r="5.5" fill="#fff"/> <circle cx="-7" cy="-38.5" r="3" fill="#2b1d16"/><circle cx="9" cy="-38.5" r="3" fill="#2b1d16"/> <path d="M-7 -29 L7 -29 L0 -18 Z" fill="#f2b33d"/> <path d="M3 -24 q9 4 4 16 q-6 3 -7 -6 z" fill="#d7463c"/> <g stroke="#e0913a" stroke-width="5" stroke-linecap="round" fill="none"> <path d="M-14 52 v14 M-14 66 l-7 5 M-14 66 l7 5"/><path d="M14 52 v14 M14 66 l-7 5 M14 66 l7 5"/> </g> </g> </svg></button>
     </div>
