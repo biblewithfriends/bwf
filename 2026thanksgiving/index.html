@@ -28,7 +28,7 @@
   .cover .hero { position: relative; height: 100vh; height: 100dvh; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; display: flex; align-items: flex-end; justify-content: center; }
   .cover .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(6,10,30,.55)); pointer-events: none; }
   .cover .skytitle { position: absolute; z-index: 1; top: max(9vh, calc(env(safe-area-inset-top) + 40px)); left: 50%; transform: translateX(-50%); width: max-content; max-width: 92vw; margin: 0;
-    font: 400 clamp(2.3rem, 10vw, 5rem)/1.05 Georgia, "Times New Roman", serif; letter-spacing: .02em; color: #f6e7c8;
+    font: 400 clamp(2.3rem, 10vw, 5rem)/1.05 Georgia, "Times New Roman", serif; letter-spacing: .02em; color: #f6e7c8; text-align: center; line-height: 1.08;
     text-shadow: 0 0 18px rgba(246,231,200,.35), 0 0 42px rgba(232,199,150,.25), 0 2px 6px rgba(0,0,0,.5); }
   @media (min-aspect-ratio: 4/3) { .cover .skytitle { left: 30%; top: 7vh; font-size: clamp(2.3rem, 5.4vw, 4.4rem); } }
   .cover .actions { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-bottom: max(26px, calc(env(safe-area-inset-bottom) + 16px)); }
@@ -40,7 +40,7 @@
   @keyframes nudge { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(5px); } 90% { transform: translateY(-2px); } }
   @media (prefers-reduced-motion: reduce) { .cover .turkey { animation: none; } }
   .cover .info { padding: 48px 22px max(56px, calc(env(safe-area-inset-bottom) + 40px)); max-width: 640px; margin: 0 auto; }
-  .cover h1 { margin: 0; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
+  .cover h1 { margin: 0 0 22px; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
   .cover .sub { margin: 6px 0 22px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
   .cover .verse { margin: 0 auto 26px; max-width: 520px; font: italic 400 clamp(1rem, 3.9vw, 1.12rem)/1.6 Georgia, "Times New Roman", serif; color: #ece3d3; }
   .cover .verse cite { display: block; margin-top: 8px; font: 600 .88rem system-ui, sans-serif; font-style: normal; color: var(--gold); letter-spacing: .04em; }
@@ -155,7 +155,7 @@
 <div class="cover" id="cover">
   <!-- 1: the photo on its own, with the main button -->
   <section class="hero">
-    <h2 class="skytitle">2026 Thanksgiving</h2>
+    <h2 class="skytitle">2026 Thanksgiving<br>Dinner</h2>
     <div class="actions">
       <button class="go" id="go" type="button" hidden>See all photos</button>
       <div class="soon" id="msgText">Loading the photos…</div>
@@ -165,7 +165,6 @@
   <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
   <section class="info" id="info">
     <h1>Church in Burlingame</h1>
-    <p class="sub">2026 Thanksgiving Dinner</p>
     <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God; and the peace of God, which surpasses every man’s understanding, will guard your hearts and your thoughts in Christ Jesus.”<cite>Philippians 4:6–7</cite></blockquote>
     <p class="welcome">New here? We’d love to read the Bible with you.</p>
     <a class="connect btn2" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
