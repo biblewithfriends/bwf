@@ -7,9 +7,8 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#000000">
-<link rel="icon" href="../favicon.svg?v=4" type="image/svg+xml">
-<link rel="icon" href="../favicon-32.png?v=4" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="turkey.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="turkey-180.png">
 <meta property="og:title" content="Church in Burlingame · 2026 Thanksgiving Dinner">
 <meta property="og:description" content="Photos from the 2026 Thanksgiving Dinner of the church in Burlingame.">
 <meta property="og:image" content="https://biblewfriends.org/2026thanksgiving/og.jpg">
@@ -36,7 +35,8 @@
   .cover .go[hidden] { display: none; }
   .cover .soon { color: #f3e6cf; font-weight: 600; background: rgba(8,12,30,.7); padding: 8px 16px; border-radius: 999px; }
   .cover .go:not([hidden]) + .soon { display: none; }
-  .cover .turkey { width: 58px; height: 58px; border-radius: 50%; background: rgba(8,12,30,.78); border: 1px solid rgba(232,199,150,.5); font-size: 1.75rem; line-height: 1; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.45); animation: nudge 2.4s ease-in-out infinite; }
+  .cover .turkey { width: 64px; height: 64px; border-radius: 18px; background: #fbf3e2; border: 0; padding: 6px; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.45); animation: nudge 2.4s ease-in-out infinite; }
+  .cover .turkey svg { width: 100%; height: 100%; display: block; }
   @keyframes nudge { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(5px); } 90% { transform: translateY(-2px); } }
   @media (prefers-reduced-motion: reduce) { .cover .turkey { animation: none; } }
   .cover .info { padding: 48px 22px max(56px, calc(env(safe-area-inset-bottom) + 40px)); max-width: 640px; margin: 0 auto; }
@@ -159,7 +159,7 @@
     <div class="actions">
       <button class="go" id="go" type="button" hidden>See all photos</button>
       <div class="soon" id="msgText">Loading the photos…</div>
-      <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><span aria-hidden="true">🦃</span></button>
+      <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><svg viewBox="-16 -2 232 204" aria-hidden="true"> <g transform="translate(100 112)"> <g> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(-72)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(-48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(-24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#7fae6a"/> <ellipse rx="22" ry="62" cy="-48" fill="#e9bf4f" transform="rotate(24)"/> <ellipse rx="22" ry="62" cy="-48" fill="#e0913a" transform="rotate(48)"/> <ellipse rx="22" ry="62" cy="-48" fill="#c0503a" transform="rotate(72)"/> </g> <g fill="#fbf3e2" opacity=".55"> <ellipse rx="7" ry="30" cy="-62" transform="rotate(-48)"/><ellipse rx="7" ry="30" cy="-62"/><ellipse rx="7" ry="30" cy="-62" transform="rotate(48)"/> </g> <ellipse cy="10" rx="42" ry="44" fill="#7a4a30"/> <ellipse cy="22" rx="26" ry="26" fill="#9a6440"/> <circle cy="-34" r="23" fill="#8a5636"/> <circle cx="-8" cy="-39" r="5.5" fill="#fff"/><circle cx="8" cy="-39" r="5.5" fill="#fff"/> <circle cx="-7" cy="-38.5" r="3" fill="#2b1d16"/><circle cx="9" cy="-38.5" r="3" fill="#2b1d16"/> <path d="M-7 -29 L7 -29 L0 -18 Z" fill="#f2b33d"/> <path d="M3 -24 q9 4 4 16 q-6 3 -7 -6 z" fill="#d7463c"/> <g stroke="#e0913a" stroke-width="5" stroke-linecap="round" fill="none"> <path d="M-14 52 v14 M-14 66 l-7 5 M-14 66 l7 5"/><path d="M14 52 v14 M14 66 l-7 5 M14 66 l7 5"/> </g> </g> </svg></button>
     </div>
   </section>
   <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
