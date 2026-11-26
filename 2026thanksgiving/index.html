@@ -23,27 +23,26 @@
 
   /* the painting of the Events Wing at night: cover screen and dim backdrop */
   .backdrop { position: fixed; inset: -30px; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; filter: blur(14px) brightness(.28); }
-  @media (min-width: 1700px), (min-resolution: 2dppx) and (min-width: 900px) { .backdrop, .cover { background-image: url(art-2400.jpg); } }
-  .cover { position: fixed; inset: 0; z-index: 12; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; display: flex; align-items: flex-end; justify-content: center; text-align: center; transition: opacity .5s; }
-  .cover::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,10,30,0) 50%, rgba(6,10,30,.45) 100%); }
-  .cover .in { position: relative; margin: 0 14px max(28px, calc(env(safe-area-inset-bottom) + 18px)); padding: 26px 18px 22px; max-width: 620px;
-    background: rgba(8, 12, 30, .78); border: 1px solid rgba(232,199,150,.35); border-radius: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-  .cover h1 { margin: 0; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
-  .cover .verse { margin: 0 auto 20px; max-width: 520px; font: italic 400 clamp(.92rem, 3.6vw, 1.05rem)/1.5 Georgia, "Times New Roman", serif; color: #ece3d3; }
-  .cover .verse cite { display: block; margin-top: 6px; font: 600 .85rem system-ui, sans-serif; font-style: normal; color: var(--gold); letter-spacing: .04em; }
-  .cover .welcome { margin: 18px 0 0; color: #ece3d3; font-size: .98rem; }
-  .cover .welcome + .connect { margin-top: 6px; }
-  .cover .sub { margin: 6px 0 16px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
-  .cover .go + .soon:empty { display: none; }
-  .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.05rem; padding: 14px 26px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  @media (min-width: 1700px), (min-resolution: 2dppx) and (min-width: 900px) { .backdrop, .cover .hero { background-image: url(art-2400.jpg); } }
+  .cover { position: fixed; inset: 0; z-index: 12; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #0b1230; text-align: center; transition: opacity .5s; scroll-behavior: smooth; }
+  .cover .hero { position: relative; height: 100vh; height: 100dvh; background: #0b1230 url(art-1600.jpg) center / cover no-repeat; display: flex; align-items: flex-end; justify-content: center; }
+  .cover .hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(6,10,30,.55)); pointer-events: none; }
+  .cover .actions { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; padding-bottom: max(26px, calc(env(safe-area-inset-bottom) + 16px)); }
+  .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.1rem; padding: 15px 30px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
   .cover .go[hidden] { display: none; }
-  .cover .soon { color: #f3e6cf; font-weight: 600; }
-  .connect { display: table; margin: 16px auto 0; color: #f3e6cf; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(243,230,207,.5); padding-bottom: 2px; }
-  .connect:hover { color: #fff; border-color: #fff; }
-  .connect.card-link { display: block; max-width: 1100px; margin: 22px auto 0; padding: 16px 18px; border: 1px solid rgba(232,199,150,.45); border-radius: 16px; background: rgba(10,14,34,.6); text-shadow: none; }
-  .connect.card-link b { display: block; font: 700 1.15rem Georgia, "Times New Roman", serif; color: var(--gold); }
-  .connect.card-link span { color: var(--soft); font-weight: 500; }
-  .albums .gtop .title small { display: block; font: 500 .8rem system-ui, sans-serif; color: var(--soft); }
+  .cover .soon { color: #f3e6cf; font-weight: 600; background: rgba(8,12,30,.7); padding: 8px 16px; border-radius: 999px; }
+  .cover .go:not([hidden]) + .soon { display: none; }
+  .cover .turkey { width: 58px; height: 58px; border-radius: 50%; background: rgba(8,12,30,.78); border: 1px solid rgba(232,199,150,.5); font-size: 1.75rem; line-height: 1; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.45); animation: nudge 2.4s ease-in-out infinite; }
+  @keyframes nudge { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(5px); } 90% { transform: translateY(-2px); } }
+  @media (prefers-reduced-motion: reduce) { .cover .turkey { animation: none; } }
+  .cover .info { padding: 48px 22px max(56px, calc(env(safe-area-inset-bottom) + 40px)); max-width: 640px; margin: 0 auto; }
+  .cover h1 { margin: 0; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
+  .cover .sub { margin: 6px 0 22px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
+  .cover .verse { margin: 0 auto 26px; max-width: 520px; font: italic 400 clamp(1rem, 3.9vw, 1.12rem)/1.6 Georgia, "Times New Roman", serif; color: #ece3d3; }
+  .cover .verse cite { display: block; margin-top: 8px; font: 600 .88rem system-ui, sans-serif; font-style: normal; color: var(--gold); letter-spacing: .04em; }
+  .cover .welcome { margin: 0 0 12px; color: #ece3d3; font-size: 1rem; }
+  .cover .connect.btn2 { display: inline-block; margin: 0; padding: 12px 22px; border: 1.5px solid var(--gold); border-radius: 999px; color: var(--gold); text-decoration: none; font-weight: 700; }
+  .cover .connect.btn2:hover { background: rgba(232,199,150,.12); }
   body.started .cover { opacity: 0; pointer-events: none; }
 
   /* the photo */
@@ -150,15 +149,22 @@
 <div class="stage" id="stage"><img id="img" alt=""></div>
 <div class="spin" id="spin" hidden></div>
 <div class="cover" id="cover">
-  <div class="in">
+  <!-- 1: the photo on its own, with the main button -->
+  <section class="hero">
+    <div class="actions">
+      <button class="go" id="go" type="button" hidden>See all photos</button>
+      <div class="soon" id="msgText">Loading the photos…</div>
+      <button class="turkey" id="moreBtn" type="button" aria-label="About this dinner and the church"><span aria-hidden="true">🦃</span></button>
+    </div>
+  </section>
+  <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
+  <section class="info" id="info">
     <h1>Church in Burlingame</h1>
     <p class="sub">2026 Thanksgiving Dinner</p>
     <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God; and the peace of God, which surpasses every man’s understanding, will guard your hearts and your thoughts in Christ Jesus.”<cite>Philippians 4:6–7</cite></blockquote>
-    <button class="go" id="go" type="button" hidden>See the photos</button>
-    <div class="soon" id="msgText">Loading the photos…</div>
     <p class="welcome">New here? We’d love to read the Bible with you.</p>
-    <a class="connect" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
-  </div>
+    <a class="connect btn2" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
+  </section>
 </div>
 
 <div class="top">
@@ -246,7 +252,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       comments = d.comments || []; hearts = d.hearts || {};
       const total = albums.reduce((n, x) => n + x.photos.length, 0);
       if (!total) { $("msgText").textContent = "The photos will be here soon."; return; }
-      $("msgText").textContent = ""; $("go").textContent = "See the " + total + " photos"; $("go").hidden = false;
+      $("msgText").textContent = ""; $("go").textContent = "See all " + total + " photos"; $("go").hidden = false;
       $("go").onclick = () => { document.body.classList.add("started"); openAlbums(); };
       // a shared link to one photo (#album-photo) opens it right away
       const m = location.hash.match(/^#(\d+|fav)-(\d+)$/);
@@ -256,6 +262,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       else new Image().src = thumb(albums[0].photos[0].id);
     } catch (e) { $("msgText").textContent = "Couldn’t load the photos. Please refresh in a minute."; }
   }
+
+  $("moreBtn").onclick = () => $("info").scrollIntoView({ behavior: "smooth", block: "start" });
 
   // ---------- albums ----------
   function openAlbums() {
