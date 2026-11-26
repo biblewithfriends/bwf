@@ -77,7 +77,7 @@
   .grat form { padding: 0; border: 0; display: grid; gap: 6px; }
   .grat label { font-weight: 600; color: #ece3d3; font-size: .95rem; margin-top: 8px; }
   .grat label span { color: var(--soft); font-weight: 400; }
-  .grat textarea { height: 88px; }
+  .grat textarea { height: 104px; }
   .grat .go.small { justify-self: center; margin-top: 14px; font-size: 1rem; padding: 12px 26px; }
   .grat .err { text-align: center; }
   .gtwrap { margin: 46px auto 0; max-width: 760px; }
@@ -255,9 +255,7 @@
       <h2>What are you thankful for this year?</h2>
       <form id="gForm" autocomplete="on">
         <label for="gThank">I’m thankful for…</label>
-        <textarea id="gThank" maxlength="500" required placeholder="Share what you’re thankful for this year"></textarea>
-        <label for="gFelt">How did you feel after the dinner? <span>(optional)</span></label>
-        <textarea id="gFelt" maxlength="500" placeholder="A word or a few lines"></textarea>
+        <textarea id="gThank" maxlength="500" required placeholder="My favorite food is the chicken feet… or the alfajores (caramel pastry)…"></textarea>
         <label for="gName">Your name</label>
         <input id="gName" maxlength="40" autocomplete="name" placeholder="Your name">
         <input class="hp" id="gWeb" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -386,7 +384,7 @@ const TX = {
     "Share what you’re thankful for first": "Primero comparte por qué estás agradecido",
     "Sharing opens soon.": "Pronto podrás compartir.", "Couldn’t share right now": "No se pudo compartir ahora",
     "Your leaf is on the tree 🍂": "Tu hoja ya está en el árbol 🍂",
-    "Share what you’re thankful for this year": "Comparte por qué estás agradecido este año",
+    "My favorite food is the chicken feet… or the alfajores (caramel pastry)…": "Mi comida favorita son las patas de pollo… o los alfajores…",
     "A word or a few lines": "Una palabra o unas líneas",
     "2026 Thanksgiving Dinner": "Cena de Acción de Gracias 2026", "Church in Burlingame": "Iglesia en Burlingame",
     "2026 Thanksgiving Dinner · Church in Burlingame": "Cena de Acción de Gracias 2026 · Iglesia en Burlingame",
@@ -426,7 +424,7 @@ const TX = {
     "Share what you’re thankful for first": "請先分享你感恩的事",
     "Sharing opens soon.": "即將開放分享。", "Couldn’t share right now": "目前無法分享",
     "Your leaf is on the tree 🍂": "你的葉子已掛在樹上 🍂",
-    "Share what you’re thankful for this year": "分享今年你感恩的事",
+    "My favorite food is the chicken feet… or the alfajores (caramel pastry)…": "我最喜歡的食物是鳳爪…或是 alfajores（焦糖夾心餅）…",
     "A word or a few lines": "一個詞或幾句話",
     "2026 Thanksgiving Dinner": "2026 感恩節晚宴", "Church in Burlingame": "Burlingame 召會",
     "2026 Thanksgiving Dinner · Church in Burlingame": "2026 感恩節晚宴 · Burlingame 召會",
@@ -458,7 +456,7 @@ const ZS = {
   "聯絡我們": "联系我们", "今年你為甚麼感恩？": "今年你为什么感恩？", "晚宴後你的感受如何？": "晚宴后你的感受如何？", "（選填）": "（选填）",
   "分享中…": "分享中…", "我們的感恩樹": "我们的感恩树", "成為第一個掛上感恩葉子的人 🍂": "成为第一个挂上感恩叶子的人 🍂", "一位來賓": "一位来宾",
   "請先分享你感恩的事": "请先分享你感恩的事", "即將開放分享。": "即将开放分享。", "目前無法分享": "目前无法分享", "你的葉子已掛在樹上 🍂": "你的叶子已挂在树上 🍂",
-  "一個詞或幾句話": "一个词或几句话", "2026 感恩節晚宴": "2026 感恩节晚宴", "Burlingame 召會": "Burlingame 召会",
+  "我最喜歡的食物是鳳爪…或是 alfajores（焦糖夾心餅）…": "我最喜欢的食物是凤爪…或是 alfajores（焦糖夹心饼）…", "2026 感恩節晚宴": "2026 感恩节晚宴", "Burlingame 召會": "Burlingame 召会",
   "2026 感恩節晚宴 · Burlingame 召會": "2026 感恩节晚宴 · Burlingame 召会", "所有相片": "所有照片", "相簿": "相册", "最愛": "最爱",
   "大家點了愛心的相片": "大家点了爱心的照片", "歡迎": "欢迎", "見證": "见证", "兒童唱詩": "儿童唱诗", "青少年唱詩與見證": "青少年唱诗与见证", "結束與清潔": "结束与清洁",
   "相片很快就會上傳。": "照片很快就会上传。", "無法載入相片，請稍後重新整理。": "无法加载照片，请稍后刷新。", "這張相片無法載入": "这张照片无法加载",
@@ -631,7 +629,7 @@ applyStatic();
   try { $("gName").value = localStorage.getItem("tg_name") || ""; } catch (e) {}
   $("gForm").onsubmit = async e => {
     e.preventDefault();
-    const thankful = $("gThank").value.trim(), felt = $("gFelt").value.trim(), name = $("gName").value.trim();
+    const thankful = $("gThank").value.trim(), felt = "", name = $("gName").value.trim();
     $("gErr").textContent = "";
     if (!thankful) { $("gErr").textContent = t("Share what you’re thankful for first"); return; }
     if (!SCRIPT_URL) { $("gErr").textContent = t("Sharing opens soon."); return; }
@@ -641,7 +639,7 @@ applyStatic();
       const d = await r.json();
       if (!d.ok) throw new Error(d.error || t("Couldn’t share right now"));
       try { localStorage.setItem("tg_name", name); } catch (x) {}
-      $("gThank").value = ""; $("gFelt").value = "";
+      $("gThank").value = "";
       if (d.thanks && d.thanks[0]) gNewKey = d.thanks[0].at + "|" + d.thanks[0].thankful;
       renderThanks(d.thanks); toast(t("Your leaf is on the tree 🍂"));
       $("gtree").scrollIntoView({ behavior: "smooth", block: "center" });
