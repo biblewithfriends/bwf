@@ -66,6 +66,24 @@
   .cover .verse { margin: 0 auto 26px; max-width: 520px; font: italic 400 clamp(1rem, 3.9vw, 1.12rem)/1.6 Georgia, "Times New Roman", serif; color: #ece3d3; }
   .cover .verse cite { display: block; margin-top: 8px; font: 600 .88rem system-ui, sans-serif; font-style: normal; color: var(--gold); letter-spacing: .04em; }
   .cover .btn2 + blockquote { margin-top: 32px; }
+  .cover .thanks-come { margin: 0 0 16px; font: italic 400 clamp(1.4rem, 6vw, 2rem) Georgia, "Times New Roman", serif; color: #f6e7c8; }
+  .cover .invite { margin: 0 auto 14px; max-width: 460px; color: #ece3d3; font-size: 1.02rem; line-height: 1.55; }
+  .cover h1 + .invite { margin-top: 0; }
+  .cover h1 { margin-bottom: 14px !important; }
+  .grat { margin: 44px auto 0; padding-top: 32px; border-top: 1px solid rgba(232,199,150,.35); max-width: 520px; text-align: left; }
+  .grat h2 { margin: 0 0 16px; text-align: center; font: 700 clamp(1.3rem, 5.4vw, 1.7rem)/1.2 Georgia, "Times New Roman", serif; color: #f6e7c8; }
+  .grat form { padding: 0; border: 0; display: grid; gap: 6px; }
+  .grat label { font-weight: 600; color: #ece3d3; font-size: .95rem; margin-top: 8px; }
+  .grat label span { color: var(--soft); font-weight: 400; }
+  .grat textarea { height: 88px; }
+  .grat .go.small { justify-self: center; margin-top: 14px; font-size: 1rem; padding: 12px 26px; }
+  .grat .err { text-align: center; }
+  .notes { margin-top: 26px; display: grid; gap: 12px; }
+  .note { background: #fbf3e2; color: #3b2a12; border-radius: 14px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+  .note:nth-child(3n+1) { transform: rotate(-.6deg); } .note:nth-child(3n+2) { transform: rotate(.5deg); }
+  .note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+  .note .felt { margin-top: 6px; color: #6b5233; font-style: italic; }
+  .note b { display: block; margin-top: 8px; font-size: .88rem; color: #8a5a1c; }
   .cover .welcome { margin: 0 0 12px; color: #ece3d3; font-size: 1rem; }
   .cover .connect.btn2 { display: inline-block; margin: 0; padding: 12px 22px; border: 1.5px solid var(--gold); border-radius: 999px; color: var(--gold); text-decoration: none; font-weight: 700; }
   .cover .connect.btn2:hover { background: rgba(232,199,150,.12); }
@@ -172,7 +190,7 @@
   .tiles span { position: absolute; right: 4px; bottom: 4px; background: rgba(0,0,0,.6); border-radius: 999px; padding: 0 7px; font-size: .75rem; }
   .tiles button.cur { outline: 3px solid var(--gold); outline-offset: -3px; }
 
-  .toast { position: fixed; left: 50%; top: max(70px, calc(env(safe-area-inset-top) + 60px)); transform: translateX(-50%); background: rgba(30,30,34,.95); padding: 9px 16px; border-radius: 999px; z-index: 20; font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; }
+  .toast { z-index: 30; white-space: nowrap; position: fixed; left: 50%; top: max(70px, calc(env(safe-area-inset-top) + 60px)); transform: translateX(-50%); background: rgba(30,30,34,.95); padding: 9px 16px; border-radius: 999px; z-index: 20; font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; }
   .toast.on { opacity: 1; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>
@@ -192,11 +210,30 @@
   <!-- 2: scroll down (or tap the turkey) for the church, the verse and connect -->
   <div class="divider" aria-hidden="true"><span></span><i></i><span></span></div>
   <section class="info" id="info">
+    <p class="thanks-come">Thank you for coming!</p>
     <button class="go" id="go" type="button" hidden>See all photos</button>
     <div class="soon" id="msgText">Loading the photos…</div>
     <h1>Church in Burlingame</h1>
+    <p class="invite">We’d love to read God’s word with you — over a meal, in a home, or wherever is easy for you.</p>
     <a class="connect btn2" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
-    <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God; and the peace of God, which surpasses every man’s understanding, will guard your hearts and your thoughts in Christ Jesus.”<cite>Philippians 4:6–7</cite></blockquote>
+    <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God.”<cite>Philippians 4:6</cite></blockquote>
+
+    <!-- gratitude notes (in place of the gratitude tree) -->
+    <div class="grat">
+      <h2>What are you thankful for this year?</h2>
+      <form id="gForm" autocomplete="on">
+        <label for="gThank">I’m thankful for…</label>
+        <textarea id="gThank" maxlength="500" required placeholder="Share what you’re thankful for this year"></textarea>
+        <label for="gFelt">How did you feel after the dinner? <span>(optional)</span></label>
+        <textarea id="gFelt" maxlength="500" placeholder="A word or a few lines"></textarea>
+        <label for="gName">Your name</label>
+        <input id="gName" maxlength="40" autocomplete="name" placeholder="Your name">
+        <input class="hp" id="gWeb" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="go small" id="gSend" type="submit">Share my thanks 🍂</button>
+        <p class="err" id="gErr" role="alert"></p>
+      </form>
+      <div class="notes" id="gNotes" aria-live="polite"></div>
+    </div>
   </section>
 </div>
 
@@ -281,7 +318,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       const d = await r.json();
       if (!d.ok) throw new Error(d.error || "Could not load");
       albums = (d.albums || []).map(x => ({ name: x.name, photos: (x.photos || []).map(id => ({ id })) })).filter(x => x.photos.length);
-      comments = d.comments || []; hearts = d.hearts || {};
+      comments = d.comments || []; hearts = d.hearts || {}; renderThanks(d.thanks);
       const total = albums.reduce((n, x) => n + x.photos.length, 0);
       if (!total) { $("msgText").textContent = "The photos will be here soon."; return; }
       $("msgText").textContent = ""; $("go").textContent = "See all " + total + " photos"; $("go").hidden = false;
@@ -304,6 +341,36 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     history.replaceState(null, "", location.pathname);
   }
   document.querySelectorAll("[data-home]").forEach(b => b.onclick = goHome);
+  // ---------- what guests are thankful for ----------
+  function renderThanks(list) {
+    const box = $("gNotes"); box.innerHTML = "";
+    (list || []).forEach(t => {
+      const d = document.createElement("div"); d.className = "note";
+      const p = document.createElement("p"); p.textContent = "🍂 " + t.thankful; d.appendChild(p);
+      if (t.felt) { const f = document.createElement("p"); f.className = "felt"; f.textContent = t.felt; d.appendChild(f); }
+      const b = document.createElement("b"); b.textContent = "— " + (t.name || "A guest"); d.appendChild(b);
+      box.appendChild(d);
+    });
+  }
+  try { $("gName").value = localStorage.getItem("tg_name") || ""; } catch (e) {}
+  $("gForm").onsubmit = async e => {
+    e.preventDefault();
+    const thankful = $("gThank").value.trim(), felt = $("gFelt").value.trim(), name = $("gName").value.trim();
+    $("gErr").textContent = "";
+    if (!thankful) { $("gErr").textContent = "Share what you’re thankful for first"; return; }
+    if (!SCRIPT_URL) { $("gErr").textContent = "Sharing opens soon."; return; }
+    $("gSend").disabled = true; $("gSend").textContent = "Sharing…";
+    try {
+      const r = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "thanks", thankful, felt, name, website: $("gWeb").value }) });
+      const d = await r.json();
+      if (!d.ok) throw new Error(d.error || "Couldn’t share right now");
+      try { localStorage.setItem("tg_name", name); } catch (x) {}
+      $("gThank").value = ""; $("gFelt").value = "";
+      renderThanks(d.thanks); toast("Thank you for sharing 🙏");
+    } catch (err) { $("gErr").textContent = err.message; }
+    $("gSend").disabled = false; $("gSend").textContent = "Share my thanks 🍂";
+  };
+
   $("moreBtn").onclick = () => $("info").scrollIntoView({ behavior: "smooth", block: "start" });
 
   // ---------- albums ----------
