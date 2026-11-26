@@ -63,7 +63,15 @@
   .pill svg { width: 19px; height: 19px; fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
   .pill b { background: var(--gold); color: #3b2a12; border-radius: 999px; padding: 0 8px; font-size: .82rem; }
   .pill b:empty { display: none; }
+  .pill.heart { padding: 10px 14px; }
+  .pill.heart svg { width: 21px; height: 21px; transition: transform .2s; }
+  .pill.heart path { fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
+  .pill.heart[aria-pressed="true"] path { fill: #ff4d6d; stroke: #ff4d6d; }
+  .pill.heart[aria-pressed="true"] svg { animation: pop .35s ease; }
+  .pill.heart b { background: none; color: #fff; padding: 0; font-size: .95rem; }
+  @keyframes pop { 40% { transform: scale(1.35); } }
   .count { color: var(--soft); font-variant-numeric: tabular-nums; min-width: 84px; text-align: center; }
+  @media (max-width: 600px) { .count { min-width: 0; margin-right: 4px; font-size: .9rem; } .count[aria-hidden] { display: none; } .pill { padding: 9px 14px; } }
 
   /* side arrows (bigger screens) */
   .nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 4; width: 54px; height: 54px; border-radius: 50%; background: rgba(0,0,0,.35); display: grid; place-items: center; transition: opacity .25s; }
@@ -151,6 +159,7 @@
 <button class="nav next" id="next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <div class="bottom">
   <span class="count" id="count" aria-live="polite"></span>
+  <button class="pill heart" id="heartBtn" type="button" aria-pressed="false" aria-label="Heart this photo"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.3 5c2 0 3.3 1.1 4 2.3h3.4C14.4 6.1 15.7 5 17.7 5 21 5 22.8 8.3 21.2 11.4 19 15.6 12 20 12 20z"/></svg><b id="hN"></b></button>
   <button class="pill" id="talkBtn" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Comments <b id="cmN"></b></button>
   <span class="count" aria-hidden="true"></span>
 </div>
@@ -191,7 +200,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
 (() => {
   const $ = id => document.getElementById(id);
   const img = $("img");
-  let albums = [], A = 0, photos = [], comments = [], i = 0, loadToken = 0;
+  let albums = [], A = 0, photos = [], comments = [], hearts = {}, i = 0, loadToken = 0;
+  let mine = {}; try { mine = JSON.parse(localStorage.getItem("tg_hearts") || "{}"); } catch (e) {}
   const label = n => String(n).replace(/^\s*\d+\s*[-–.)]\s*/, "");   // "1 - Welcome" → "Welcome"
 
   // ---------- photo addresses (Google Drive) ----------
@@ -211,7 +221,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       const d = await r.json();
       if (!d.ok) throw new Error(d.error || "Could not load");
       albums = (d.albums || []).map(x => ({ name: x.name, photos: (x.photos || []).map(id => ({ id })) })).filter(x => x.photos.length);
-      comments = d.comments || [];
+      comments = d.comments || []; hearts = d.hearts || {};
       const total = albums.reduce((n, x) => n + x.photos.length, 0);
       if (!total) { $("msgText").textContent = "The photos will be here soon."; return; }
       $("msgText").textContent = ""; $("go").textContent = "See the " + total + " photos"; $("go").hidden = false;
@@ -261,7 +271,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     $("count").textContent = (i + 1) + " / " + photos.length;
     $("dl").href = original(id);
     history.replaceState(null, "", "#" + (A + 1) + "-" + (i + 1));
-    renderComments();
+    renderComments(); renderHeart();
     // get the next and previous ones ready
     [1, -1, 2].forEach(k => { const p = photos[(i + k + photos.length) % photos.length]; if (p) new Image().src = big(p.id); });
   }
@@ -313,6 +323,25 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   };
   $("gridClose").onclick = () => document.body.classList.remove("gridon");
 
+  // ---------- hearts (one per phone; tap again to take it back) ----------
+  function renderHeart() {
+    if (!photos.length) return;
+    const id = photos[i].id;
+    $("heartBtn").setAttribute("aria-pressed", mine[id] ? "true" : "false");
+    $("hN").textContent = hearts[id] || "";
+  }
+  $("heartBtn").onclick = async () => {
+    const id = photos[i].id, on = !mine[id];
+    if (on) mine[id] = 1; else delete mine[id];
+    hearts[id] = Math.max(0, (hearts[id] || 0) + (on ? 1 : -1));
+    try { localStorage.setItem("tg_hearts", JSON.stringify(mine)); } catch (e) {}
+    renderHeart();
+    try {
+      const r = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "heart", photo: id, delta: on ? 1 : -1 }) });
+      const d = await r.json(); if (d.ok) { hearts[id] = d.hearts; if (photos[i] && photos[i].id === id) renderHeart(); }
+    } catch (e) {}
+  };
+
   // ---------- comments ----------
   const countMap = () => comments.reduce((m, c) => (m[c.photo] = (m[c.photo] || 0) + 1, m), {});
   function renderComments() {
@@ -358,7 +387,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   // check for new comments every minute
   setInterval(async () => {
     if (!SCRIPT_URL || document.hidden || !photos.length) return;
-    try { const d = await (await fetch(SCRIPT_URL + "?action=comments&t=" + Date.now())).json(); if (d.ok) { comments = d.comments; renderComments(); } } catch (e) {}
+    try { const d = await (await fetch(SCRIPT_URL + "?action=comments&t=" + Date.now())).json(); if (d.ok) { comments = d.comments; if (d.hearts) hearts = d.hearts; renderComments(); renderHeart(); } } catch (e) {}
   }, 60000);
 
   load();
