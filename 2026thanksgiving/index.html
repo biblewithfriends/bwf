@@ -29,7 +29,11 @@
   .cover .in { position: relative; margin: 0 14px max(28px, calc(env(safe-area-inset-bottom) + 18px)); padding: 26px 18px 22px; max-width: 620px;
     background: rgba(8, 12, 30, .78); border: 1px solid rgba(232,199,150,.35); border-radius: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   .cover h1 { margin: 0; font: 700 clamp(1.6rem, 7.3vw, 3.5rem)/1.08 Georgia, "Times New Roman", serif; letter-spacing: .01em; }
-  .cover .sub { margin: 6px 0 22px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
+  .cover .verse { margin: 0 auto 20px; max-width: 520px; font: italic 400 clamp(.92rem, 3.6vw, 1.05rem)/1.5 Georgia, "Times New Roman", serif; color: #ece3d3; }
+  .cover .verse cite { display: block; margin-top: 6px; font: 600 .85rem system-ui, sans-serif; font-style: normal; color: var(--gold); letter-spacing: .04em; }
+  .cover .welcome { margin: 18px 0 0; color: #ece3d3; font-size: .98rem; }
+  .cover .welcome + .connect { margin-top: 6px; }
+  .cover .sub { margin: 6px 0 16px; font: 400 clamp(1.45rem, 6.5vw, 3.05rem)/1.08 Georgia, "Times New Roman", serif; color: var(--gold); }
   .cover .go + .soon:empty { display: none; }
   .cover .go { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #3b2a12; font-weight: 700; font-size: 1.05rem; padding: 14px 26px; border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
   .cover .go[hidden] { display: none; }
@@ -56,7 +60,8 @@
   .bottom { bottom: 0; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bar)); justify-content: center; }
   body.clean .top, body.clean .bottom, body.clean .nav { opacity: 0; pointer-events: none; }
   .title { font-weight: 700; letter-spacing: .02em; margin-right: auto; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
-  .title small { display: block; font-weight: 500; color: var(--soft); font-size: .8rem; }
+  .title small { display: block; font-weight: 500; color: var(--soft); font-size: .8rem; white-space: nowrap; }
+  .top .title { min-width: 0; overflow: hidden; } .top .title span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ico { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 1.15rem; background: rgba(0,0,0,.35); text-decoration: none; color: #fff; }
   .ico:hover, .ico:focus-visible { background: rgba(255,255,255,.18); outline: none; }
   .ico svg { width: 21px; height: 21px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -64,7 +69,12 @@
   .pill svg { width: 19px; height: 19px; fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
   .pill b { background: var(--gold); color: #3b2a12; border-radius: 999px; padding: 0 8px; font-size: .82rem; }
   .pill b:empty { display: none; }
-  .pill.heart { padding: 10px 14px; }
+  .pill.heart, .pill.play { padding: 10px 14px; }
+  .pill.play svg { width: 20px; height: 20px; } .pill.play path { fill: #fff; stroke: none; }
+  .pill.play .pa { display: none; } .pill.play[aria-pressed="true"] .pa { display: inline; } .pill.play[aria-pressed="true"] .pl { display: none; }
+  .pill.play[aria-pressed="true"] { background: rgba(232,199,150,.25); border-color: var(--gold); }
+  .album.fav { outline: 2px solid #ff4d6d; outline-offset: -2px; }
+  .album.fav .num { background: #ff4d6d; color: #fff; }
   .pill.heart svg { width: 21px; height: 21px; transition: transform .2s; }
   .pill.heart path { fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
   .pill.heart[aria-pressed="true"] path { fill: #ff4d6d; stroke: #ff4d6d; }
@@ -143,8 +153,10 @@
   <div class="in">
     <h1>Church in Burlingame</h1>
     <p class="sub">2026 Thanksgiving Dinner</p>
+    <blockquote class="verse">“In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God; and the peace of God, which surpasses every man’s understanding, will guard your hearts and your thoughts in Christ Jesus.”<cite>Philippians 4:6–7</cite></blockquote>
     <button class="go" id="go" type="button" hidden>See the photos</button>
     <div class="soon" id="msgText">Loading the photos…</div>
+    <p class="welcome">New here? We’d love to read the Bible with you.</p>
     <a class="connect" href="https://biblewfriends.org/connect.html">Connect with us · Bible with Friends →</a>
   </div>
 </div>
@@ -153,6 +165,7 @@
   <button class="ico" id="backBtn" type="button" aria-label="Back to the albums" title="Albums"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
   <div class="title"><span id="albumName">2026 Thanksgiving Dinner</span><small>Church in Burlingame</small></div>
   <button class="ico" id="gridBtn" type="button" aria-label="All photos in this album" title="All photos in this album"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+  <button class="ico" id="shareBtn" type="button" aria-label="Share this photo" title="Share this photo"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M5 11v9h14v-9"/></svg></button>
   <a class="ico" id="dl" target="_blank" rel="noopener" aria-label="Download the original photo" title="Download the original"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg></a>
   <button class="ico" id="fsBtn" type="button" aria-label="Full screen" title="Full screen" hidden><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
 </div>
@@ -160,6 +173,7 @@
 <button class="nav next" id="next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 <div class="bottom">
   <span class="count" id="count" aria-live="polite"></span>
+  <button class="pill play" id="playBtn" type="button" aria-label="Play a slideshow" aria-pressed="false"><svg viewBox="0 0 24 24"><path class="pl" d="M8 5v14l11-7z"/><path class="pa" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
   <button class="pill heart" id="heartBtn" type="button" aria-pressed="false" aria-label="Heart this photo"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.3 3 5 6.3 5c2 0 3.3 1.1 4 2.3h3.4C14.4 6.1 15.7 5 17.7 5 21 5 22.8 8.3 21.2 11.4 19 15.6 12 20 12 20z"/></svg><b id="hN"></b></button>
   <button class="pill" id="talkBtn" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Comments <b id="cmN"></b></button>
   <span class="count" aria-hidden="true"></span>
@@ -202,6 +216,13 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
   const $ = id => document.getElementById(id);
   const img = $("img");
   let albums = [], A = 0, photos = [], comments = [], hearts = {}, i = 0, loadToken = 0;
+  const FAV_MIN = 1;   // photos with at least this many hearts go into Favorites
+  const favAlbum = () => {
+    const all = []; albums.forEach(al => al.photos.forEach(p => { if ((hearts[p.id] || 0) >= FAV_MIN) all.push(p); }));
+    all.sort((a, b) => (hearts[b.id] || 0) - (hearts[a.id] || 0));
+    return { name: "Favorites", photos: all, fav: true };
+  };
+  const cur = () => A === "fav" ? favAlbum() : albums[A];
   let mine = {}; try { mine = JSON.parse(localStorage.getItem("tg_hearts") || "{}"); } catch (e) {}
   const label = n => String(n).replace(/^\s*\d+\s*[-–.)]\s*/, "");   // "1 - Welcome" → "Welcome"
 
@@ -228,8 +249,9 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       $("msgText").textContent = ""; $("go").textContent = "See the " + total + " photos"; $("go").hidden = false;
       $("go").onclick = () => { document.body.classList.add("started"); openAlbums(); };
       // a shared link to one photo (#album-photo) opens it right away
-      const m = location.hash.match(/^#(\d+)-(\d+)$/);
-      if (m && albums[m[1] - 1] && m[2] >= 1 && m[2] <= albums[m[1] - 1].photos.length) { document.body.classList.add("started"); openAlbum(m[1] - 1, m[2] - 1); }
+      const m = location.hash.match(/^#(\d+|fav)-(\d+)$/);
+      const key = m ? (m[1] === "fav" ? "fav" : m[1] - 1) : null, al = key === null ? null : key === "fav" ? favAlbum() : albums[key];
+      if (al && m[2] >= 1 && m[2] <= al.photos.length) { document.body.classList.add("started"); openAlbum(key, m[2] - 1); }
       else if (location.hash === "#albums") { document.body.classList.add("started"); openAlbums(); }
       else new Image().src = thumb(albums[0].photos[0].id);
     } catch (e) { $("msgText").textContent = "Couldn’t load the photos. Please refresh in a minute."; }
@@ -237,22 +259,26 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
 
   // ---------- albums ----------
   function openAlbums() {
-    const box = $("alist");
-    if (!box.children.length) albums.forEach((al, k) => {
-      const b = document.createElement("button"); b.type = "button"; b.className = "album";
-      b.innerHTML = `<img alt="" loading="lazy" src="${thumbBig(al.photos[0].id)}"><span class="num">${k + 1}</span><span class="cap"><b></b><small></small></span>`;
-      b.querySelector("b").textContent = label(al.name);
-      b.querySelector("small").textContent = al.photos.length + (al.photos.length === 1 ? " photo" : " photos");
-      b.onclick = () => openAlbum(k, 0);
+    stopPlay();
+    const box = $("alist"); box.innerHTML = "";
+    const fav = favAlbum();
+    const card = (al, key, num) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "album" + (al.fav ? " fav" : "");
+      b.innerHTML = `<img alt="" loading="lazy" src="${thumbBig(al.photos[0].id)}"><span class="num">${num}</span><span class="cap"><b></b><small></small></span>`;
+      b.querySelector("b").textContent = al.fav ? "Favorites" : label(al.name);
+      b.querySelector("small").textContent = al.fav ? "Photos people hearted" : al.photos.length + (al.photos.length === 1 ? " photo" : " photos");
+      b.onclick = () => openAlbum(key, 0);
       box.appendChild(b);
-    });
+    };
+    if (fav.photos.length) card(fav, "fav", "♥");
+    albums.forEach((al, k) => card(al, k, k + 1));
     document.body.classList.remove("talk", "gridon", "clean");
     document.body.classList.add("albumson");
     history.replaceState(null, "", "#albums");
   }
   function openAlbum(k, start) {
-    A = k; photos = albums[k].photos;
-    $("albumName").textContent = label(albums[k].name);
+    A = k; photos = cur().photos;
+    $("albumName").textContent = A === "fav" ? "Favorites" : label(albums[k].name);
     $("tiles").innerHTML = "";
     document.body.classList.remove("albumson");
     show(start || 0);
@@ -271,12 +297,12 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     im.src = big(id);
     $("count").textContent = (i + 1) + " / " + photos.length;
     $("dl").href = original(id);
-    history.replaceState(null, "", "#" + (A + 1) + "-" + (i + 1));
+    history.replaceState(null, "", "#" + (A === "fav" ? "fav" : A + 1) + "-" + (i + 1));
     renderComments(); renderHeart();
     // get the next and previous ones ready
     [1, -1, 2].forEach(k => { const p = photos[(i + k + photos.length) % photos.length]; if (p) new Image().src = big(p.id); });
   }
-  const next = () => show(i + 1), prev = () => show(i - 1);
+  const next = () => { stopPlay(); show(i + 1); }, prev = () => { stopPlay(); show(i - 1); };
   $("next").onclick = next; $("prev").onclick = prev;
   addEventListener("keydown", e => {
     if (/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
@@ -299,14 +325,15 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     else if (Math.abs(dx) < 10 && Math.abs(dy) < 10 && Date.now() - st < 300) toggleBars();
   }, { passive: true });
   stage.addEventListener("click", e => { if (matchMedia("(hover: hover)").matches) toggleBars(); });
-  function toggleBars() { if (document.body.classList.contains("talk")) { document.body.classList.remove("talk"); return; } document.body.classList.toggle("clean"); }
+  function toggleBars() {
+    if (playing && document.body.classList.contains("clean")) { document.body.classList.remove("clean"); return; } if (document.body.classList.contains("talk")) { document.body.classList.remove("talk"); return; } document.body.classList.toggle("clean"); }
 
   // full screen (where the browser allows it)
   const root = document.documentElement;
   if (root.requestFullscreen) { $("fsBtn").hidden = false; $("fsBtn").onclick = () => document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen().catch(() => {}); }
 
   // ---------- all photos ----------
-  $("gridBtn").onclick = () => {
+  $("gridBtn").onclick = () => { stopPlay();
     const box = $("tiles");
     if (!box.children.length) {
       const counts = countMap();
@@ -318,11 +345,36 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
       });
     }
     [...box.children].forEach((b, k) => b.classList.toggle("cur", k === i));
-    $("gridTitle").textContent = label(albums[A].name); $("gridN").textContent = photos.length + " photos";
+    $("gridTitle").textContent = A === "fav" ? "Favorites" : label(albums[A].name); $("gridN").textContent = photos.length + " photos";
     document.body.classList.add("gridon");
     const cur = box.children[i]; if (cur) cur.scrollIntoView({ block: "center" });
   };
   $("gridClose").onclick = () => document.body.classList.remove("gridon");
+
+  // ---------- share this photo ----------
+  $("shareBtn").onclick = async () => {
+    const url = location.href.split("#")[0] + "#" + (A === "fav" ? "fav" : A + 1) + "-" + (i + 1);
+    const data = { title: "Church in Burlingame · 2026 Thanksgiving Dinner", text: "A photo from our 2026 Thanksgiving Dinner", url };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+      await navigator.clipboard.writeText(url); toast("Link copied — paste it to share");
+    } catch (e) { if (e && e.name !== "AbortError") { try { await navigator.clipboard.writeText(url); toast("Link copied — paste it to share"); } catch (x) { prompt("Copy this link:", url); } } }
+  };
+
+  // ---------- slideshow ----------
+  let playing = null;
+  function stopPlay() { if (playing) { clearTimeout(playing); playing = null; } $("playBtn").setAttribute("aria-pressed", "false"); $("playBtn").setAttribute("aria-label", "Play a slideshow"); }
+  function tick() {
+    if (!playing) return;
+    if (img.classList.contains("on")) show(i + 1);      // move on once the photo has loaded
+    playing = setTimeout(tick, 4500);
+  }
+  $("playBtn").onclick = () => {
+    if (playing) { stopPlay(); return; }
+    $("playBtn").setAttribute("aria-pressed", "true"); $("playBtn").setAttribute("aria-label", "Pause the slideshow");
+    document.body.classList.add("clean");
+    playing = setTimeout(tick, 4500);
+  };
 
   // ---------- hearts (one per phone; tap again to take it back) ----------
   function renderHeart() {
@@ -349,7 +401,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     if (!photos.length) return;
     const id = photos[i].id, mine = comments.filter(c => c.photo === id);
     $("cmN").textContent = mine.length || "";
-    $("panelTitle").textContent = "Comments · " + label(albums[A].name) + " " + (i + 1);
+    $("panelTitle").textContent = "Comments · " + (A === "fav" ? "Favorites" : label(albums[A].name)) + " " + (i + 1);
     const list = $("list"); list.innerHTML = "";
     if (!mine.length) { list.innerHTML = '<p class="none">No comments yet. Be the first!</p>'; return; }
     mine.forEach(c => {
@@ -361,7 +413,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybImmZ74kwhX_ni85dX
     });
   }
   const when = iso => { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ", " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }); };
-  $("talkBtn").onclick = () => { document.body.classList.add("talk"); document.body.classList.remove("clean"); setTimeout(() => $("text").focus({ preventScroll: true }), 320); };
+  $("talkBtn").onclick = () => { stopPlay(); document.body.classList.add("talk"); document.body.classList.remove("clean"); setTimeout(() => $("text").focus({ preventScroll: true }), 320); };
   $("closeTalk").onclick = () => document.body.classList.remove("talk");
   try { $("name").value = localStorage.getItem("tg_name") || ""; } catch (e) {}
 
