@@ -110,7 +110,7 @@
   function render() {
     document.querySelectorAll("#gameSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === game));
     document.querySelectorAll("#rangeSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.r === range));
-    $("playLink").href = game === "bubbles" ? "../#blitz" : game + ".html";
+    $("playLink").href = game === "bubbles" ? "bubbles.html" : game + ".html";
     $("playLink").textContent = "Play " + SCORES.GAMES[game].name + " ▸";
     const list = SCORES.best(filter(), game);
     const pod = $("podium"); pod.innerHTML = "";

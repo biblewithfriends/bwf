@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bubble Blitz 🫧 · Burlingame YP</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/common.css">
+<link rel="icon" type="image/svg+xml" href="../assets/icons/logo-rounded.svg?v=12">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=12">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=12">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#24402f">
+<meta name="apple-mobile-web-app-title" content="Burlingame YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png?v=12">
+<style>
+  .top { padding: 34px 0 20px; text-align: center; }
+  .top h1 { font-size: clamp(2.6rem, 10vw, 4.6rem); margin: 0; }
+  .top p { font-weight: 700; margin: 6px 0 0; color: var(--soft); }
+  main { padding-bottom: 30px; }
+  /* the play area: a big green box the bubbles float up through */
+  .arena { position: relative; overflow: hidden; height: min(66vh, 620px); min-height: 420px; border-radius: 34px; border: 1.5px solid var(--line);
+    background: linear-gradient(180deg, #e3f0d2, #c4dda7); box-shadow: var(--shadow); }
+  .startcard { position: absolute; inset: 0; z-index: 3; display: grid; place-content: center; text-align: center; gap: 10px; pointer-events: none; }
+  .startcard > * { pointer-events: auto; }
+  .startcard .rule { font-weight: 700; background: var(--paper); border-radius: var(--wob); padding: 6px 16px; margin: 0 auto; }
+  .startcard .go { font-size: 1.3rem; padding: 14px 30px; }
+  .arena.blitzing .startcard { display: none; }
+  .blitz { left: 14px; justify-content: space-between; }
+  .back { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  /* bubbles */
+  .bubbles { position: absolute; inset: 0; z-index: 2; overflow: hidden; }
+  .bubble { position: absolute; bottom: -90px; width: var(--size); height: var(--size); border-radius: 50%; padding: 0;
+    display: grid; place-items: center; font-size: calc(var(--size) * .46);
+    background: radial-gradient(circle at 30% 26%, #fff 0 9%, rgba(255,255,255,.2) 10% 40%, rgba(255, 253, 248, .35) 70%, rgba(255, 211, 220, .5) 100%);
+    border: 2px solid rgba(255, 255, 255, .85); box-shadow: inset -5px -7px 12px rgba(36, 64, 47, .12), 0 4px 12px rgba(36,64,47,.12);
+    cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+    animation: rise var(--dur) linear forwards, sway 3s ease-in-out infinite alternate; }
+  .bubble:hover { border-color: var(--ink); }
+  .bubble.popping { animation: popb .26s ease-out forwards !important; pointer-events: none; }
+  @keyframes rise { to { bottom: 110%; } }
+  @keyframes sway { from { margin-left: -14px; } to { margin-left: 14px; } }
+  @keyframes popb { 60% { transform: scale(1.45); opacity: .6; } 100% { transform: scale(1.8); opacity: 0; } }
+  .spark { position: absolute; z-index: 6; pointer-events: none; font-size: 20px; animation: spark .7s ease-out forwards; }
+  @keyframes spark { to { transform: translate(var(--dx), var(--dy)) scale(.4); opacity: 0; } }
+  .pop-label { position: absolute; z-index: 7; pointer-events: none; transform: translate(-50%, -50%); background: var(--ink); color: #fff;
+    font-weight: 700; font-size: .88rem; padding: 4px 13px; border-radius: 999px; white-space: nowrap; animation: label 1.4s ease-out forwards; }
+  @keyframes label { 0% { opacity: 0; margin-top: 0; } 15% { opacity: 1; } 100% { opacity: 0; margin-top: -50px; } }
+  .blitz { position: absolute; right: 14px; bottom: 14px; z-index: 4; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .pop-count { background: var(--paper); border-radius: var(--wob); padding: 5px 14px; font-weight: 700; font-size: .9rem; }
+  .blitz.on .pop-count { background: var(--yellow); font-size: 1.05rem; }
+  .sound { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--paper); cursor: pointer; font-size: 1.05rem; padding: 0; }
+  .blitz-banner { position: absolute; left: 50%; top: 14px; transform: translateX(-50%) rotate(-1deg); z-index: 8; background: var(--ink); color: #fff; font-family: var(--font-display); font-size: 1.2rem;
+    padding: 6px 20px; border-radius: var(--wob); pointer-events: none; white-space: nowrap; }
+  dialog.blitz-end { border: 1.5px solid var(--line); border-radius: var(--wob); box-shadow: var(--shadow); max-width: 420px; width: calc(100% - 28px); padding: 22px; text-align: center; background: var(--paper); color: var(--ink); }
+  dialog.blitz-end::backdrop { background: rgba(251, 251, 246, .75); }
+  dialog.blitz-end .big { font: 600 3.4rem var(--font-display); margin: 0; }
+  dialog.blitz-end p { font-weight: 700; color: var(--soft); margin: 4px 0; }
+
+  .combo { position: absolute; z-index: 8; pointer-events: none; transform: translate(-50%, -50%); font: 600 1.7rem var(--font-display); color: var(--red); text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 -2px 0 #fff; animation: comboUp .8s cubic-bezier(.3, 1.8, .5, 1) forwards; }
+  @keyframes comboUp { 0% { transform: translate(-50%, -50%) scale(.3); } 40% { transform: translate(-50%, -90%) scale(1.25) rotate(-8deg); } 100% { transform: translate(-50%, -160%) scale(1); opacity: 0; } }
+  body.blitz-on .topnav { pointer-events: none; }
+  body.blitz-on .blitz .pop-count, body.blitz-on .blitz .sound { pointer-events: none; }
+  .arena, .bubbles, .bubble { touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+</style>
+</head>
+<body>
+<div id="demoBanner" class="demo-banner" hidden>👀 Preview mode — sample data until the Apps Script link is added</div>
+<nav class="topnav"><div class="wrap" style="width:min(1040px,100% - 32px)">
+  <a class="logo" href="../"><img src="../assets/icons/logo-rounded.svg" alt="" width="30" height="30">Burlingame <b>YP</b></a>
+  <div class="links">
+    <a href="../">🏠<span class="t"> Home</span></a>
+    <a href="../tree.html">🍂<span class="t"> Tree</span></a>
+    <a href="../qbox.html">❓<span class="t"> Questions</span></a>
+    <a href="./" aria-current="page">🎮<span class="t"> Games</span></a>
+    <a href="scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<header class="top"><h1>Bubble Blitz 🫧</h1><p>Pop as many bubbles as you can in 30 seconds.</p></header>
+
+<main class="wrap">
+  <div class="arena" id="arena">
+    <div class="bubbles" id="bubbles"></div>
+    <div class="startcard">
+      <button class="btn go" type="button" id="blitzBtn">⏱️ Start the Blitz</button>
+      <p class="rule">or just pop for fun 🫧</p>
+    </div>
+    <div class="blitz" id="blitz">
+      <button class="sound" type="button" id="soundBtn" aria-label="Bubble sound on or off">🔊</button>
+      <span class="pop-count" id="popCount" aria-live="polite">🫧 tap the bubbles!</span>
+    </div>
+  </div>
+  <div class="back"><a class="btn white" href="scores.html?game=bubbles">🏆 Bubble Blitz high scores</a> <a class="btn white" href="./">🎮 All games</a></div>
+</main>
+
+<dialog class="blitz-end" id="blitzEnd">
+  <p style="font-size:2.4rem;margin:0">🫧</p>
+  <p class="big" id="blitzScore">0</p>
+  <p id="blitzText">bubbles in 30 seconds!</p>
+  <div id="blitzSave"></div>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+    <button class="btn" type="button" id="blitzAgain">↺ Play again</button>
+    <button class="btn white" type="button" id="blitzClose">Close</button>
+  </div>
+</dialog>
+
+<footer class="site"><div class="wrap"><p>🧋 Tip: tap fast — 3 pops in a row starts a combo!</p><p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p></div></footer>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/bible.js"></script>
+<script src="../assets/api.js"></script>
+<script src="../assets/fun.js"></script>
+<script src="scoreboard.js"></script>
+<script>
+(() => {
+  const { FUN, API, DATES, SCORES } = window;
+  const $ = id => document.getElementById(id);
+  const T = DATES.today();
+  if (API.demo) $("demoBanner").hidden = false;
+
+  // ---------- bubbles ----------
+  const field = $("bubbles"), hero = $("arena");
+  let popped = 0;
+  let calmOpen = false, blitz = null, combo = 0, lastPop = 0;
+  const BEST_KEY = "yp_bubble_best";
+  function counterText() {
+    if (blitz) return "⏱️ " + blitz.left + "s · 🫧 " + blitz.n;
+    const best = API.store.get(BEST_KEY, 0);
+    return "🫧 " + popped + " popped" + (best ? " · 🏆 best " + best : "");
+  }
+  function spawn(x) {
+    if (document.hidden || calmOpen || field.childElementCount > (blitz ? 24 : 14)) return;
+    const [emoji, name, line] = FUN.INTERESTS[Math.floor(Math.random() * FUN.INTERESTS.length)];
+    const b = document.createElement("button");
+    b.className = "bubble"; b.type = "button"; b.textContent = emoji; b.setAttribute("aria-label", "Pop the " + name + " bubble");
+    b.style.setProperty("--size", 54 + Math.random() * 40 + "px"); b.style.setProperty("--dur", 9 + Math.random() * 7 + "s");
+    b.style.left = (x === undefined ? Math.random() * 92 : x) + "%";
+    b._info = [emoji, name, line];
+    // keyboard / screen-reader activation (taps are handled by the touch handler below)
+    b.addEventListener("click", e => { if (e.detail === 0) pop(b, emoji, name, line); });
+    b.addEventListener("animationend", e => { if (e.animationName === "rise") b.remove(); });
+    field.appendChild(b);
+  }
+  function pop(b, emoji, name, line) {
+    if (b._popped) return; b._popped = true;
+    const r = b.getBoundingClientRect(), f = hero.getBoundingClientRect();
+    const cx = r.left - f.left + r.width / 2, cy = r.top - f.top + r.height / 2;
+    b.classList.add("popping"); setTimeout(() => b.remove(), 300);
+    FUN.pop(r.width);
+    popped++; if (blitz) blitz.n++;
+    const now = Date.now(); combo = now - lastPop < 1000 ? combo + 1 : 1; lastPop = now;
+    if (combo >= 3) { const c = document.createElement("div"); c.className = "combo"; c.textContent = "x" + combo + (combo >= 8 ? " 🔥" : "!"); c.style.left = cx + "px"; c.style.top = cy - 34 + "px"; hero.appendChild(c); setTimeout(() => c.remove(), 800); }
+    $("popCount").textContent = counterText();
+    if (!blitz) {   // no captions during Bubble Blitz
+      const lab = document.createElement("div"); lab.className = "pop-label";
+      lab.textContent = emoji + " " + name + " — " + line; lab.style.left = cx + "px"; lab.style.top = cy + "px";
+      hero.appendChild(lab); setTimeout(() => lab.remove(), 1500);
+    }
+    if (!FUN.reduced) for (let i = 0; i < 6; i++) {
+      const s = document.createElement("span"); s.className = "spark"; s.textContent = i % 2 ? "✨" : emoji;
+      const a = Math.PI * 2 * i / 6; s.style.left = cx - 11 + "px"; s.style.top = cy - 11 + "px";
+      s.style.setProperty("--dx", Math.cos(a) * 60 + "px"); s.style.setProperty("--dy", Math.sin(a) * 60 + "px");
+      hero.appendChild(s); setTimeout(() => s.remove(), 750);
+    }
+    if (!blitz && popped === 25) { FUN.confetti(); FUN.toast("🏆 25 bubbles! Now try a Blitz for the record!"); }
+  }
+
+  // ---------- Bubble Blitz: 30-second record ----------
+  function startBlitz() {
+    if (blitz) return;
+    if (FUN.reduced) field.innerHTML = "";
+    blitz = { n: 0, left: 30 }; document.body.classList.add("blitz-on");
+    document.querySelector(".blitz").classList.add("on"); hero.classList.add("blitzing");
+    $("blitzBtn").hidden = true;
+    hero.scrollIntoView({ behavior: "smooth", block: "center" });
+    const ban = document.createElement("div"); ban.className = "blitz-banner"; ban.textContent = "🫧 BUBBLE BLITZ — pop as many as you can!"; hero.appendChild(ban);
+    setTimeout(() => ban.remove(), 2500);
+    $("popCount").textContent = counterText();
+    blitz.spawner = setInterval(() => { spawn(); spawn(); }, 420);
+    blitz.clock = setInterval(() => {
+      blitz.left--; $("popCount").textContent = counterText();
+      if (blitz.left <= 0) endBlitz();
+    }, 1000);
+  }
+  function endBlitz() {
+    clearInterval(blitz.spawner); clearInterval(blitz.clock);
+    const n = blitz.n; blitz = null; document.body.classList.remove("blitz-on");
+    document.querySelector(".blitz").classList.remove("on"); hero.classList.remove("blitzing"); $("blitzBtn").hidden = false;
+    const best = API.store.get(BEST_KEY, 0);
+    if (n > best) API.store.set(BEST_KEY, n);
+    $("popCount").textContent = counterText();
+    $("blitzScore").textContent = n;
+    $("blitzText").textContent = "bubbles in 30 seconds!" + (n > best ? " 🎉 New personal best!" : best ? " (your best: " + best + ")" : "");
+    if (n > 0) SCORES.mountSave($("blitzSave"), { game: "bubbles", day: T, reading: "", score: n, detail: "", repeat: true, scoresHref: "scores.html" });
+    else { $("blitzSave").innerHTML = ""; $("blitzSave").className = ""; }
+    $("blitzEnd").showModal();
+    if (n > best && n > 0) FUN.confetti(["🫧", "✨", "🏆"], 24);
+  }
+  const sb = $("soundBtn"), showSound = () => sb.textContent = FUN.soundOn() ? "🔊" : "🔇";
+  sb.onclick = () => { FUN.setSound(!FUN.soundOn()); showSound(); if (FUN.soundOn()) FUN.pop(70); };
+  showSound();
+  // ---------- tapping bubbles (fast + forgiving, works on iPhone) ----------
+  // Pops on the instant the finger touches down (not on release), and counts a tap
+  // that lands a little outside a moving bubble.
+  function tapAt(x, y) {
+    let best = null, bestD = Infinity;
+    field.querySelectorAll(".bubble").forEach(b => {
+      if (b._popped) return;
+      const r = b.getBoundingClientRect(), rad = r.width / 2;
+      const d = Math.hypot(x - (r.left + rad), y - (r.top + rad));
+      if (d < rad + 18 && d - rad < bestD) { bestD = d - rad; best = b; }
+    });
+    if (best) { pop(best, ...best._info); return true; }
+    return false;
+  }
+  field.addEventListener("pointerdown", e => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (tapAt(e.clientX, e.clientY)) e.preventDefault();
+  });
+
+  $("blitzBtn").onclick = startBlitz;
+  $("blitzAgain").onclick = () => { $("blitzEnd").close(); startBlitz(); };
+  $("blitzClose").onclick = () => $("blitzEnd").close();
+  $("popCount").textContent = counterText();
+  if (FUN.reduced) { for (let i = 0; i < 8; i++) spawn(); field.querySelectorAll(".bubble").forEach((b, i) => { b.style.animation = "none"; b.style.bottom = 10 + (i * 37) % 70 + "%"; }); }
+  else { for (let i = 0; i < 5; i++) setTimeout(spawn, i * 500); setInterval(spawn, 1300); }
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>
