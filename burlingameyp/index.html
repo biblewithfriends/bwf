@@ -19,13 +19,13 @@
 <meta property="og:image" content="https://biblewfriends.org/burlingameyp/assets/icons/icon-512.png?v=12">
 <style>
   /* ---------- the notebook page top ---------- */
-  .hero { position: relative; overflow: hidden; padding: 56px 0 80px; min-height: 320px; text-align: center; border-radius: 0 0 44px 44px;
+  .hero { position: relative; overflow: hidden; padding: 48px 0 72px; min-height: 260px; text-align: center; border-radius: 0 0 44px 44px;
     background: #c4dda7; }
   .chalk { position: absolute; inset: 0; pointer-events: none; font: 600 1.25rem var(--font-display); color: rgba(36,64,47,.28); }
   .chalk span { position: absolute; white-space: nowrap; }
   .hero .content { position: relative; z-index: 3; pointer-events: none; }
   .hero .content a { pointer-events: auto; }
-  .hero h1 { margin: 0; font-size: clamp(3rem, 11vw, 6.4rem); line-height: .98; }
+  .hero h1 { margin: 0; font-size: clamp(2.5rem, 9vw, 5.2rem); line-height: .98; }
   .hero h1 > span:first-child { font-size: .5em; display: inline-block; margin-bottom: 8px; }
   .hero h1 .y { display: inline; }
   .hero p.full { display: inline-block; margin: 20px 0 0; font-family: var(--font-display); font-size: 1.3rem; background: var(--pink); border: 1.5px solid var(--line);
@@ -146,7 +146,7 @@
   @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
   @keyframes shake { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(-14deg) scale(1.08); } 35% { transform: rotate(12deg) scale(1.08); } 55% { transform: rotate(-9deg); } 75% { transform: rotate(6deg); } }
   @keyframes sayIn { from { transform: scale(.3); opacity: 0; } }
-  @media (max-width: 640px) { .hero { padding-bottom: 96px; min-height: 0; } .cup { width: 70px; bottom: 12px; } .cup .say { font-size: .75rem; } }
+  @media (max-width: 640px) { .hero { padding-top: 36px; padding-bottom: 104px; min-height: 0; } .cup { width: 64px; bottom: 12px; } .cup .say { font-size: .75rem; } }
   .reading-big { position: relative; overflow: hidden; }
   #todayReading { position: static; }
   .stamp { position: absolute; right: 18px; top: 16px; font: 600 1.25rem var(--font-display); color: var(--red); border: 3px solid var(--red); border-radius: 12px; padding: 2px 12px; transform: rotate(-12deg); opacity: .85; }
@@ -189,7 +189,6 @@
 <header class="hero" id="blitzTop">
   <div class="wrap content">
     <h1><span>Church in Burlingame</span><br><span>Young People</span></h1>
-    <p class="full">Burlingame YP</p>
   </div>
   <button class="cup" id="cup" type="button" aria-label="Shake the boba cup">
     <span class="say" id="cupSay" hidden></span>
