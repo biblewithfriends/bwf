@@ -44,6 +44,10 @@ def convert(text, name):
     if name == "overcomers.html":      # the sunset sky becomes a green sky as you climb
         text = text.replace("hsl(calc(88 - var(--sky) * 62), calc(45% + var(--sky) * 45%), calc(90% - var(--sky) * 4%))",
                             "hsl(calc(100 + var(--sky) * 45), calc(40% + var(--sky) * 15%), calc(90% - var(--sky) * 10%))")
+    if name.endswith(".html"):      # no zooming in on a double tap (or when tapping a text box)
+        text = text.replace('content="width=device-width, initial-scale=1"', 'content="width=device-width, initial-scale=1, maximum-scale=1"')
+    if name == "common.css":
+        text += "\n/* Brother Philip's site: no double-tap zoom anywhere */\nhtml, body, a, button, input, textarea, select, label, [role=button] { touch-action: manipulation; }\n"
     if name == "site.webmanifest":
         text = text.replace('"name": "Church in Burlingame YP"', '"name": "Burlingame YP · Brother Philip"')
     return text

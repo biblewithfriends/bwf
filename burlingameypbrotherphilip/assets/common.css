@@ -135,3 +135,6 @@ footer.site p:first-child { cursor: pointer; user-select: none; }
   .topnav .links a .t { display: block; font-size: .7rem; font-weight: 700; }
   .topnav .links a:hover { transform: none; }
 }
+
+/* Brother Philip's site: no double-tap zoom anywhere */
+html, body, a, button, input, textarea, select, label, [role=button] { touch-action: manipulation; }
