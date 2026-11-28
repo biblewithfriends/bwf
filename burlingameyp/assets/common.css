@@ -117,3 +117,21 @@ footer.site p:first-child { cursor: pointer; user-select: none; }
   .topnav .links { flex-wrap: nowrap; }
   .topnav .links a { padding: 5px 6px; }
 }
+
+/* ---------- top bar: clear, tappable buttons (v24) ---------- */
+.topnav { background: rgba(234, 242, 220, .96); border-bottom: 1.5px solid var(--line); box-shadow: 0 6px 18px -12px rgba(36, 64, 47, .45); }
+.topnav .links { gap: 8px; }
+.topnav .links a { background: var(--paper); border: 1.5px solid var(--line); box-shadow: 0 3px 0 rgba(36, 64, 47, .16); padding: 7px 15px; font-size: .95rem; }
+.topnav .links a:hover { background: #fff; transform: translateY(-2px); }
+.topnav .links a:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(36, 64, 47, .16); }
+.topnav .links a[aria-current="page"] { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 3px 0 rgba(0, 0, 0, .25); }
+/* phones: the buttons get their own row, each with its icon and its name */
+@media (max-width: 700px) {
+  .topnav .wrap { flex-wrap: wrap; gap: 6px; padding: 8px 0 9px; }
+  .topnav .logo { font-size: 1.15rem; }
+  .topnav .logo img { width: 26px; height: 26px; margin-right: 7px; }
+  .topnav .links { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; flex-wrap: nowrap; }
+  .topnav .links a { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 2px 5px; font-size: 1.15rem; line-height: 1.1; border-radius: 14px; }
+  .topnav .links a .t { display: block; font-size: .7rem; font-weight: 700; }
+  .topnav .links a:hover { transform: none; }
+}

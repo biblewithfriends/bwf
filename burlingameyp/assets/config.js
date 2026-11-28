@@ -2,7 +2,7 @@
 //  Church in Burlingame YP — site settings (the only site file you edit)
 // ============================================================
 // Version of the site files on GitHub (goes up by 1 with each update)
-window.SITE_VERSION = 23;
+window.SITE_VERSION = 24;
 
 window.QBOX_CONFIG = {
   // Paste your Apps Script Web App URL here (ends in /exec).

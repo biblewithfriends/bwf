@@ -194,7 +194,34 @@
     if (k.includes(" ")) return input.includes(" " + k);
     return input.trim().split(" ").some(w => w.startsWith(k) || (k.length >= 5 && (lev(w, k) <= 1 || lev(w.slice(0, k.length), k) <= 1)));
   }
-  function grade(raw, p) { const inp = norm(raw); let best = null; p.a.forEach(a => { if (a.k.some(k => keyHits(inp, k)) && (!best || a.s > best.s)) best = a; }); return best; }
+  // ---------- autocorrect: forgive spelling mistakes ----------
+  // "sound-alike" form: ph→f, ck→k, ie/ei→i, z→s, doubled letters once, drop h after a consonant
+  const squash = w => w.replace(/ph/g, "f").replace(/ck|q/g, "k").replace(/ie|ei|y/g, "i").replace(/z/g, "s").replace(/([bcdfgjklmnpqrstvwx])h/g, "$1").replace(/(.)\1+/g, "$1");
+  const allowed = n => n <= 3 ? 0 : n <= 5 ? 1 : n <= 9 ? 2 : 3;
+  // how far the typed answer is from a key (Infinity = not close enough)
+  function keyDist(input, key) {
+    const k = key.toLowerCase(), kw = k.split(" ").length, words = input.trim().split(" ").filter(Boolean);
+    let best = Infinity;
+    for (let i = 0; i + kw <= words.length; i++) {
+      const w = words.slice(i, i + kw).join(" ");
+      for (const cand of [w, w.replace(/e?s$/, ""), w.slice(0, k.length + 1)]) {
+        if (!cand) continue;
+        const d = Math.min(lev(cand, k), squash(cand) === squash(k) && k.length >= 4 ? 0.5 : Infinity, lev(squash(cand), squash(k)) + 0.5);
+        if (d <= allowed(k.length) && d < best) best = d;
+      }
+    }
+    return best / Math.max(k.length, 1);
+  }
+  function grade(raw, p) {
+    const inp = norm(raw); let best = null;
+    p.a.forEach(a => { if (a.k.some(k => keyHits(inp, k)) && (!best || a.s > best.s)) best = a; });
+    if (best) return best;
+    // nothing matched exactly → try the closest spelling
+    let fix = null, fd = Infinity;
+    p.a.forEach(a => a.k.forEach(k => { const d = keyDist(inp, k); if (d < fd || (d === fd && fix && a.s > fix.s)) { fd = d; fix = a; } }));
+    if (fix && fd < Infinity) return Object.assign({ fixed: true }, fix);
+    return null;
+  }
   const tier = s => !s ? "🫧 Didn’t find that one in the chapter" : s >= 85 ? "🌟 LEGENDARY — almost nobody gets that" : s >= 60 ? "💎 Deep cut!" : s >= 35 ? "👍 Solid pick" : "😴 Popular pick — small step up";
   const emo = s => !s ? "🫧" : s >= 85 ? "🌟" : s >= 60 ? "💎" : s >= 35 ? "🧗" : "🌱";
 
@@ -238,10 +265,10 @@
     total += s; results.push(s); setAlt(total * 10);
     $("rpts").textContent = (s ? "+" : "") + s * 10 + " m";
     $("rtier").textContent = raw ? tier(s) : "⏰ Time’s up!";
-    $("ryours").textContent = raw ? `You said: “${raw}”${hit ? " → " + hit.t : ""}` : "";
+    $("ryours").textContent = raw ? `You said: “${raw}”${hit ? (hit.fixed ? " → ✏️ autocorrected to " : " → ") + hit.t : ""}` : "";
     const o = $("rothers"); o.innerHTML = "";
     p.a.slice().sort((a, b) => b.s - a.s).forEach(a => {
-      const sp = document.createElement("span"); if (a === hit) sp.className = "hit";
+      const sp = document.createElement("span"); if (hit && a.t === hit.t && a.s === hit.s) sp.className = "hit";
       sp.textContent = a.t; const b = document.createElement("b"); b.textContent = a.s * 10; sp.appendChild(b); o.appendChild(sp);
     });
     $("nextBtn").textContent = qi === prompts.length - 1 ? "See my climb ▸" : "Next ▸";
