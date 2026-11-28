@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Question Page · Burlingame YP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/common.css">
+<link rel="icon" type="image/svg+xml" href="assets/icons/logo-rounded.svg?v=12">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=12">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=12">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#274024">
+<meta name="apple-mobile-web-app-title" content="Burlingame YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameypbrotherphilip/assets/icons/icon-512.png?v=12">
+<style>
+  .hero { padding: 44px 0 40px; text-align: center; border-radius: 0 0 44px 44px; background: radial-gradient(circle at 88% 30%, var(--yellow) 0 50px, transparent 51px), linear-gradient(180deg, #e7f9f3, var(--pink)); }
+  
+  .hero h1 { font-size: clamp(3rem, 11vw, 5.6rem); margin: 0; display: inline-block; }
+  .hero h1 .q { display: inline; }
+  .hero p { margin: 8px 0 0; font-weight: 700; font-size: 1.15rem; }
+  section { padding: 46px 0 20px; }
+  .ask-grid { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 760px; margin: 0 auto; }
+  .ask-verse { text-align: center; } .ask-verse .verse { margin: 0; font-size: 1.1rem; }
+  @media (max-width: 860px) { .ask-grid { grid-template-columns: 1fr; } }
+  /* the question sheet: ruled paper */
+  .stitched { padding: 28px; position: relative; }
+  .ask label.big { display: block; font-family: var(--font-display); font-size: 1.9rem; margin-bottom: 8px; }
+  .ask textarea { min-height: 182px; resize: vertical; font-size: 1.05rem; background: #f4faf1; }
+  .count { text-align: right; font-size: .8rem; font-weight: 700; color: var(--soft); margin-top: 4px; }
+  .switch { display: flex; align-items: center; gap: 12px; margin: 14px 0 6px; cursor: pointer; user-select: none; }
+  .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .switch .track { flex: none; width: 58px; height: 32px; border-radius: 999px; border: 1.5px solid var(--line); background: #e5e9e2; position: relative; transition: background .2s; }
+  .switch .track::after { content: ""; position: absolute; top: 1px; left: 1px; width: 26px; height: 26px; border-radius: 50%; background: #ffffff; border: 1.5px solid var(--line);
+    display: grid; place-items: center; font-size: 13px; transition: left .2s; }
+  .switch input:checked + .track { background: var(--matcha-light); }
+  .switch input:checked + .track::after { left: 27px; }
+  .switch input:focus-visible + .track { outline: 3px solid var(--red); outline-offset: 2px; }
+  .switch b { font-size: 1.05rem; }
+  .switch small { display: block; color: var(--soft); }
+  .name-row { margin: 10px 0 4px; }
+  .name-row p { margin: 6px 0 0; font-size: .85rem; font-weight: 700; color: var(--soft); }
+  .send-row { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .err { color: var(--red); font-weight: 700; margin: 0; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .sent { text-align: center; padding: 20px 0; }
+  .sent .big { font-size: 3.6rem; }
+  .sent h3 { font-size: 2.2rem; margin: 6px 0; }
+  .sent p { font-weight: 700; color: var(--soft); }
+  /* sticky notes */
+  .side { display: grid; gap: 22px; }
+  .note { padding: 18px 22px 20px; border: 0; border-radius: 22px; box-shadow: none; }
+  .note h3 { margin: 0 0 6px; font-size: 1.5rem; }
+  .note p, .note li { margin: 0; }
+  .note ul { margin: 4px 0 0; padding-left: 20px; }
+  .note.yellow { background: var(--note-yellow); }
+  .note.green { background: var(--matcha-light); }
+  .note.pink { background: var(--pink); }
+  .verse { font-style: italic; } .verse b { font-style: normal; display: block; margin-top: 6px; }
+  .scoreboard { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 20px; }
+  .score { background: var(--paper); border-radius: 20px; padding: 6px 18px; text-align: center; }
+  .score b { display: block; font: 600 2rem var(--font-display); }
+  .score small { font-weight: 700; color: var(--soft); font-size: .8rem; }
+  .search { max-width: 460px; margin: 0 0 30px; position: relative; }
+  .search input { padding-left: 44px; border-radius: var(--wob2); }
+  .search::before { content: "🔎"; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
+  .answers { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px 26px; }
+  .qa { padding: 22px 22px 18px; position: relative; }
+  .qa:nth-child(odd) { } .qa:nth-child(even) { }
+  .qa .badge { position: absolute; top: -16px; right: 14px; font-size: 26px; }
+  .qa .label { font-weight: 700; font-size: .82rem; color: var(--matcha); }
+  .qa .question { font-family: var(--font-display); font-size: 1.5rem; margin: 0 0 12px; line-height: 1.15; overflow-wrap: anywhere; }
+  .qa .answer { background: linear-gradient(transparent 0, transparent 100%), var(--matcha-light); border-radius: 16px; padding: 12px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .qa .date { margin-top: 10px; font-size: .8rem; color: var(--soft); font-weight: 700; }
+  .idea { background: none; border: 0; font: 700 .9rem var(--font-body); color: var(--matcha); cursor: pointer; padding: 4px 0; }
+  .idea:hover { text-decoration: underline wavy; }
+  .idea span { display: inline-block; transition: transform .4s cubic-bezier(.3, 2, .5, 1); }
+  .idea:active span { transform: rotate(360deg) scale(1.4); }
+  .hero h1 { animation: qIn .7s cubic-bezier(.3, 1.8, .5, 1) both; }
+  @keyframes qIn { from { transform: scale(.4) rotate(-10deg); opacity: 0; } }
+  .note { transition: transform .2s cubic-bezier(.3, 1.8, .5, 1); }
+  .note:hover { transform: rotate(-1.5deg) scale(1.03); }
+  .qa:hover { transform: translateY(-5px) rotate(-1deg); }
+</style>
+</head>
+<body>
+<div id="demoBanner" class="demo-banner" hidden>👀 Preview mode — questions are saved only in this browser until the Apps Script link is added</div>
+
+<nav class="topnav"><div class="wrap">
+  <a class="logo" href="./"><img src="assets/icons/logo-rounded.svg" alt="" width="30" height="30">Burlingame <b>YP</b></a>
+  <div class="links">
+    <a href="./">🏠<span class="t"> Home</span></a>
+    <a href="tree.html">🌿<span class="t"> Tree</span></a>
+    <a href="qbox.html" aria-current="page">❓<span class="t"> Questions</span></a>
+    <a href="games/">🎮<span class="t"> Games</span></a>
+    <a href="games/scores.html">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<div class="ticker"><div class="lbl">YP be like</div><div class="viewport"><div class="ticker-track" id="ticker"></div></div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Question Page</h1>
+    <p>Ask anything. Stay anonymous if you want. ✨</p>
+  </div>
+</header>
+
+
+<section id="ask">
+  <div class="wrap">
+    <div class="ask-grid">
+      <div class="card stitched ask">
+        <div id="askForm">
+          <label class="big" for="question">What’s on your mind?</label>
+          <textarea id="question" maxlength="2000" placeholder="Big, small, funny, deep, faith stuff, life stuff, feelings — all welcome."></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center"><button class="idea" type="button" id="idea"><span>🎲</span> Stuck? Roll for an idea</button><div class="count" id="count">0 / 2000</div></div>
+
+          <label class="switch">
+            <input type="checkbox" id="anon" checked>
+            <span class="track" aria-hidden="true"></span>
+            <span><b id="anonTitle">Stay anonymous</b></span>
+          </label>
+          <div class="name-row" id="nameRow" hidden>
+            <label class="sr-only" for="name">Your name</label>
+            <input id="name" maxlength="60" placeholder="Your name" autocomplete="name">
+            <p>🔒 Your name goes only to the serving ones — it’s never shown on this site.</p>
+          </div>
+          <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="send-row">
+            <button class="btn" type="button" id="sendBtn">🏐 Send it</button>
+            <p class="err" id="err" role="alert"></p>
+          </div>
+        </div>
+        <div class="sent" id="sent" hidden>
+          <div class="big">🎉</div>
+          <h3>Sent!</h3>
+          <p id="sentText">The serving ones got it. Watch for the answer below.</p>
+          <button class="btn white" type="button" id="againBtn">Ask another</button>
+        </div>
+      </div>
+
+      <div class="card note pink ask-verse">
+        <p class="verse">“Ask and it shall be given to you; seek and you shall find; knock and it shall be opened to you.”<b>— Matthew 7:7</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="lanes" aria-hidden="true"></div>
+
+<section id="answers">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="kicker">the spike!</span>
+      <h2><span class="doodle">Answered questions</span> 💬</h2>
+      <p>New answers show up here. Check back after your boba break 🧋</p>
+    </div>
+    <div class="scoreboard">
+      <div class="score"><b id="scoreCount">00</b><small>Answered</small></div>
+      <div class="score"><b id="scoreNew">--</b><small>Newest</small></div>
+    </div>
+    <div class="search">
+      <label class="sr-only" for="search">Search answered questions</label>
+      <input id="search" type="search" placeholder="Search… (try “God”, “school”, “math”)">
+    </div>
+    <div id="list" class="answers" aria-live="polite"><div class="empty"><span class="big">⛸️</span>Gliding in the answers…</div></div>
+  </div>
+</section>
+
+<footer class="site"><div class="wrap"><p>Made with 🧋 boba, 🍵 matcha, 🍬 candy & a lot of 🎵 hymn-singing.</p>  <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p>
+</div></footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/bible.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/fun.js"></script>
+<script>
+(() => {
+  const { FUN, API } = window;
+  const $ = id => document.getElementById(id);
+  if (API.demo) $("demoBanner").hidden = false;
+
+  // ---------- ask ----------
+  const q = $("question"), anon = $("anon"), name = $("name");
+  q.addEventListener("input", () => $("count").textContent = q.value.length + " / 2000");
+  anon.addEventListener("change", () => {
+    $("nameRow").hidden = anon.checked;
+    $("anonTitle").textContent = anon.checked ? "Stay anonymous" : "Add my name";
+    if (!anon.checked) name.focus();
+  });
+  const IDEAS = ["How do I know God hears my prayers?", "What do I do when my friends don’t believe?", "Is it okay to have doubts?", "How do I read the Bible without getting bored?",
+    "Why do we call on the Lord’s name?", "What should I do when I’m stressed about school?", "How do I forgive someone who hurt me?", "Does God care who wins my volleyball game?", "What’s your favorite verse and why?"];
+  $("idea").onclick = () => { q.placeholder = "Maybe: " + IDEAS[(Math.random() * IDEAS.length) | 0]; FUN.note((Math.random() * 6) | 0, 0.14); q.focus(); };
+  let sending = false;
+  $("sendBtn").addEventListener("click", async () => {
+    if (sending) return;
+    $("err").textContent = "";
+    const text = q.value.trim();
+    if (!text) { $("err").textContent = "Type your question first ✍️"; q.focus(); return; }
+    if (!anon.checked && !name.value.trim()) { $("err").textContent = "Add your name, or flip back to anonymous"; name.focus(); return; }
+    sending = true; $("sendBtn").disabled = true; $("sendBtn").textContent = "Sending…";
+    try {
+      await API.post({ action: "ask", question: text, anonymous: anon.checked, name: anon.checked ? "" : name.value.trim(), website: $("website").value });
+      $("sentText").textContent = anon.checked ? "Sent anonymously. Watch for the answer below 👀" : "Sent with your name — only the serving ones can see it.";
+      $("askForm").hidden = true; $("sent").hidden = false;
+      q.value = ""; $("count").textContent = "0 / 2000";
+      FUN.confetti(); FUN.fanfare();
+    } catch (e) { $("err").textContent = "Couldn’t send: " + e.message + ". Try again?"; }
+    sending = false; $("sendBtn").disabled = false; $("sendBtn").textContent = "🏐 Send it";
+  });
+  $("againBtn").onclick = () => { $("sent").hidden = true; $("askForm").hidden = false; q.focus(); };
+
+  // ---------- answers ----------
+  const badges = ["🏐","🏀","🏃","🧮","🍬","🎸","🥁","🤽","🧶","🎨","🎵","📖","⚽","👟","🏈","⛸️","🧋","🍵","🍭"];
+  let items = [];
+  const fmt = (s, o) => { const d = new Date(s + (String(s).length === 10 ? "T12:00:00" : "")); return isNaN(d) ? "" : d.toLocaleDateString(undefined, o); };
+  function render() {
+    const s = $("search").value.trim().toLowerCase(), list = $("list");
+    const shown = items.filter(it => !s || (it.question + " " + it.answer).toLowerCase().includes(s));
+    list.innerHTML = "";
+    if (!shown.length) { list.innerHTML = s ? '<div class="empty"><span class="big">🤔</span>No answers match that yet — ask it above!</div>' : '<div class="empty"><span class="big">🏐</span>No answers yet. Be the first to serve a question!</div>'; return; }
+    shown.forEach(it => {
+      const c = document.createElement("article"); c.className = "card qa";
+      const b = document.createElement("div"); b.className = "badge"; b.textContent = badges[Number(it.id) % badges.length];
+      const l1 = document.createElement("div"); l1.className = "label"; l1.textContent = "Someone asked";
+      const qq = document.createElement("div"); qq.className = "question"; qq.textContent = it.question;
+      const l2 = document.createElement("div"); l2.className = "label"; l2.textContent = "The serving ones say"; l2.style.marginBottom = "6px";
+      const aa = document.createElement("div"); aa.className = "answer"; aa.textContent = it.answer;
+      c.append(b, l1, qq, l2, aa);
+      if (it.answered) { const d = document.createElement("div"); d.className = "date"; d.textContent = "Answered " + fmt(it.answered, { month: "short", day: "numeric", year: "numeric" }); c.appendChild(d); }
+      list.appendChild(c);
+    });
+  }
+  $("search").addEventListener("input", render);
+  FUN.ticker($("ticker"), []);
+  API.public().then(d => {
+    items = d.answers || [];
+    FUN.ticker($("ticker"), d.quotes);
+    $("scoreCount").textContent = String(items.length).padStart(2, "0");
+    $("scoreNew").textContent = items[0] && items[0].answered ? fmt(items[0].answered, { month: "numeric", day: "numeric" }) : "--";
+    render();
+  }).catch(() => { $("list").innerHTML = '<div class="empty"><span class="big">🏐</span>Couldn’t load answers right now. Refresh in a bit!</div>'; });
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>

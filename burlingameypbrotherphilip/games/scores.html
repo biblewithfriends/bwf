@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>High Scores 🏆 · Burlingame YP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/common.css">
+<link rel="icon" type="image/svg+xml" href="../assets/icons/logo-rounded.svg?v=12">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=12">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=12">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#274024">
+<meta name="apple-mobile-web-app-title" content="Burlingame YP">
+<meta property="og:image" content="https://biblewfriends.org/burlingameypbrotherphilip/assets/icons/icon-512.png?v=12">
+<style>
+  .hero { padding: 40px 0 36px; text-align: center; border-radius: 0 0 44px 44px; background: linear-gradient(180deg, #d1eeb7, var(--yellow)); }
+  .hero h1 { display: inline-block; font-size: clamp(2.8rem, 10vw, 5rem); margin: 0; padding: 0 12px; }
+  .hero p { font-weight: 700; margin: 6px 0 0; }
+  main { padding: 30px 0 20px; }
+  .wrap { width: min(720px, 100% - 28px); }
+  .seg { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .seg button { font: 700 1rem var(--font-body); border: 1.5px solid var(--line); border-radius: var(--wob); padding: 7px 16px; background: var(--paper); cursor: pointer; color: var(--ink); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #ffffff; }
+  .seg.small button { font-size: .85rem; padding: 4px 12px; }
+  .seg.small button[aria-pressed="true"] { background: var(--yellow); color: var(--ink); }
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px; align-items: end; margin: 30px 0 20px; }
+  .pod { text-align: center; padding: 14px 8px 18px; border-radius: 22px; box-shadow: var(--shadow); }
+  .pod .medal { font-size: 2.2rem; }
+  .pod .nm { font-family: var(--font-display); font-size: 1.4rem; overflow-wrap: anywhere; line-height: 1.1; }
+  .pod .sc { font-weight: 700; color: var(--soft); font-size: .9rem; }
+  .pod.p1 { background: var(--note-yellow); min-height: 168px; } .pod.p2 { background: var(--purple); min-height: 140px; } .pod.p3 { background: var(--pink); min-height: 122px; }
+  .pod.empty { opacity: .5; }
+  ol.board { list-style: none; padding: 0; margin: 0; background: var(--paper); box-shadow: var(--shadow); border-radius: var(--radius); overflow: hidden; }
+  ol.board li { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 1.5px dashed rgba(39, 64, 36,.3); }
+  ol.board li:last-child { border-bottom: 0; }
+  ol.board li.me { background: var(--yellow); }
+  ol.board .rk { font: 600 1.4rem var(--font-display); text-align: center; }
+  ol.board .nm { font-weight: 700; overflow-wrap: anywhere; } ol.board .nm small { display: block; color: var(--soft); font-weight: 400; }
+  ol.board .sc { font-weight: 700; text-align: right; white-space: nowrap; }
+  .play { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .pod { animation: podUp .6s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .pod.p1 { animation-delay: .25s; } .pod.p3 { animation-delay: .12s; }
+  @keyframes podUp { from { transform: translateY(70px) scale(.7); opacity: 0; } }
+  .pod.p1 .medal { display: inline-block; animation: medal 1.6s ease-in-out infinite; }
+  @keyframes medal { 0%, 100% { transform: rotate(-10deg) scale(1); } 50% { transform: rotate(10deg) scale(1.2); } }
+  ol.board li { transition: transform .15s cubic-bezier(.3, 1.8, .5, 1); }
+  ol.board li:hover { transform: scale(1.03) translateX(4px); background: var(--note-yellow); }
+  .hero h1 { animation: flutter 2.6s ease-in-out infinite; display: inline-block; }
+  @keyframes flutter { 50% { transform: translateY(-5px) rotate(-2deg); } }
+</style>
+</head>
+<body>
+<div id="demoBanner" class="demo-banner" hidden>👀 Preview mode — sample scores until the Apps Script link is added</div>
+<nav class="topnav"><div class="wrap" style="width:min(1040px,100% - 32px)">
+  <a class="logo" href="../"><img src="../assets/icons/logo-rounded.svg" alt="" width="30" height="30">Burlingame <b>YP</b></a>
+  <div class="links">
+    <a href="../">🏠<span class="t"> Home</span></a>
+    <a href="../tree.html">🌿<span class="t"> Tree</span></a>
+    <a href="../qbox.html">❓<span class="t"> Questions</span></a>
+    <a href="./">🎮<span class="t"> Games</span></a>
+    <a href="scores.html" aria-current="page">🏆<span class="t"> Scores</span></a>
+  </div>
+</div></nav>
+
+<header class="hero"><h1>High Scores 🏆</h1><p>Who’s on top this week?</p></header>
+
+<main class="wrap">
+  <div class="seg" id="gameSeg" role="group" aria-label="Game">
+    <button type="button" data-g="transformed">🦋 Transformed</button>
+    <button type="button" data-g="overcomers">🧗 Overcomers</button>
+    <button type="button" data-g="bubbles">🫧 Bubble Blitz</button>
+  </div>
+  <div class="seg small" id="rangeSeg" role="group" aria-label="Time range">
+    <button type="button" data-r="week">This week</button>
+    <button type="button" data-r="all">All time</button>
+  </div>
+  <div class="podium" id="podium"></div>
+  <ol class="board" id="board"><li>Loading…</li></ol>
+  <div class="play">
+    <a class="btn" id="playLink" href="transformed.html">Play now ▸</a>
+    <a class="btn white" href="../">🏠 Home</a>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap"><p>Best score per nickname. Kind nicknames only, please 🙂</p>  <p class="ver" style="font-size:.8rem;opacity:.6">Version <span class="site-ver"></span></p>
+</div></footer>
+
+<script src="../assets/config.js"></script>
+<script src="../assets/bible.js"></script>
+<script src="../assets/api.js"></script>
+<script src="../assets/fun.js"></script>
+<script src="scoreboard.js"></script>
+<script>
+(() => {
+  const { API, DATES, SCORES, FUN } = window;
+  const $ = id => document.getElementById(id);
+  if (API.demo) $("demoBanner").hidden = false;
+  const qs = new URLSearchParams(location.search);
+  let game = ["overcomers", "bubbles"].includes(qs.get("game")) ? qs.get("game") : "transformed", range = "week", all = [];
+  const me = SCORES.myName().toLowerCase();
+
+  function filter() {
+    const T = DATES.today(), mon = DATES.sunday(T);
+    return all.filter(s => range === "all" || (range === "today" ? s.day === T : s.day >= mon && s.day <= T));
+  }
+  function render() {
+    document.querySelectorAll("#gameSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === game));
+    document.querySelectorAll("#rangeSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.r === range));
+    $("playLink").href = game === "bubbles" ? "bubbles.html" : game + ".html";
+    $("playLink").textContent = "Play " + SCORES.GAMES[game].name + " ▸";
+    const list = SCORES.best(filter(), game);
+    const pod = $("podium"); pod.innerHTML = "";
+    [[1, "🥈", "p2"], [0, "🥇", "p1"], [2, "🥉", "p3"]].forEach(([i, m, c]) => {
+      const s = list[i], d = document.createElement("div"); d.className = "pod " + c + (s ? "" : " empty");
+      d.innerHTML = '<div class="medal"></div><div class="nm"></div><div class="sc"></div>';
+      d.querySelector(".medal").textContent = m;
+      d.querySelector(".nm").textContent = s ? s.name : "—";
+      d.querySelector(".sc").textContent = s ? SCORES.show(game, s) : "open spot!";
+      pod.appendChild(d);
+    });
+    const b = $("board"); b.innerHTML = "";
+    if (!list.length) { b.innerHTML = '<li style="display:block;text-align:center">No scores yet — go set one! 🏁</li>'; return; }
+    list.slice(0, 30).forEach((s, i) => {
+      const li = document.createElement("li"); if (me && s.name.toLowerCase() === me) li.className = "me";
+      const rk = document.createElement("span"); rk.className = "rk"; rk.textContent = i + 1;
+      const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = s.name;
+      const sm = document.createElement("small"); sm.textContent = (s.reading || "") + (range !== "today" ? " · " + DATES.label(s.day) : ""); nm.appendChild(sm);
+      const sc = document.createElement("span"); sc.className = "sc"; sc.textContent = SCORES.show(game, s) + (game === "overcomers" && s.detail ? " " + s.detail : "");
+      li.append(rk, nm, sc); b.appendChild(li);
+    });
+  }
+  document.querySelectorAll("#gameSeg button").forEach(b => b.onclick = () => { game = b.dataset.g; render(); });
+  document.querySelectorAll("#rangeSeg button").forEach(b => b.onclick = () => { range = b.dataset.r; render(); });
+  render();
+  API.scores().then(d => { all = d.scores || []; render(); }).catch(() => { $("board").innerHTML = "<li>Couldn’t load scores right now.</li>"; });
+})();
+</script>
+<script>document.querySelectorAll(".site-ver").forEach(e => e.textContent = window.SITE_VERSION || "");</script>
+</body>
+</html>
