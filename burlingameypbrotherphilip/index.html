@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://biblewfriends.org/burlingameypbrotherphilip/assets/icons/icon-512.png?v=12">
 <style>
   /* ---------- the notebook page top ---------- */
-  .hero { position: relative; overflow: hidden; padding: 48px 0 72px; min-height: 260px; text-align: center; border-radius: 0 0 44px 44px;
+  .hero { position: relative; overflow: hidden; padding: 48px 0 52px; min-height: 0; text-align: center; border-radius: 0 0 44px 44px;
     background: #b8dda7; }
   .chalk { position: absolute; inset: 0; pointer-events: none; font: 600 1.25rem var(--font-display); color: rgba(39, 64, 36,.28); }
   .chalk span { position: absolute; white-space: nowrap; }
@@ -146,7 +146,15 @@
   @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
   @keyframes shake { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(-14deg) scale(1.08); } 35% { transform: rotate(12deg) scale(1.08); } 55% { transform: rotate(-9deg); } 75% { transform: rotate(6deg); } }
   @keyframes sayIn { from { transform: scale(.3); opacity: 0; } }
-  @media (max-width: 640px) { .hero { padding-top: 36px; padding-bottom: 104px; min-height: 0; } .cup { width: 64px; bottom: 12px; } .cup .say { font-size: .75rem; } }
+  @media (max-width: 640px) { .hero { padding-top: 34px; padding-bottom: 38px; } .cup .say { font-size: .75rem; } }
+  /* the boba cup sits right beside "Young People", sized to that line */
+  .titlerow { display: flex; align-items: flex-end; justify-content: center; gap: .18em; font-size: clamp(2.5rem, 9vw, 5.2rem); }
+  .titlerow h1 { font-size: 1em; }
+  .titlerow .cup, .titlerow .cup-space { position: relative; left: auto; bottom: auto; flex: none; width: 1.02em; margin-bottom: .02em; }
+  .titlerow .cup { pointer-events: auto; font-size: inherit; }
+  .titlerow .cup .say { font-size: .85rem; }
+  @media (max-width: 370px) { .titlerow { font-size: 2.1rem; } }
+  @media (max-width: 420px) { .titlerow .cup-space { display: none; } .titlerow { gap: .12em; } .titlerow .cup .say { font-size: .75rem; left: 40%; } }
   .reading-big { position: relative; overflow: hidden; }
   #todayReading { position: static; }
   .stamp { position: absolute; right: 18px; top: 16px; font: 600 1.25rem var(--font-display); color: var(--red); border: 3px solid var(--red); border-radius: 12px; padding: 2px 12px; transform: rotate(-12deg); opacity: .85; }
@@ -188,21 +196,24 @@
 
 <header class="hero" id="blitzTop">
   <div class="wrap content">
-    <h1><span>Church in Burlingame</span><br><span>Young People</span></h1>
+    <div class="titlerow">
+    <button class="cup" id="cup" type="button" aria-label="Shake the boba cup">
+      <span class="say" id="cupSay" hidden></span>
+      <svg viewBox="0 0 120 170" aria-hidden="true">
+        <rect x="66" y="0" width="11" height="74" rx="5.5" fill="#a4ead0" stroke="#274024" stroke-width="3" transform="rotate(12 71 37)"/>
+        <path d="M18 48h84l-10 108a10 10 0 0 1-10 9H38a10 10 0 0 1-10-9z" fill="#fffdf8" stroke="#274024" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M25 80h70l-7 76a7 7 0 0 1-7 6H39a7 7 0 0 1-7-6z" fill="#b7dc90"/>
+        <rect x="10" y="38" width="100" height="15" rx="7.5" fill="#acd79a" stroke="#274024" stroke-width="4"/>
+        <g fill="#2d3b1c"><circle cx="43" cy="151" r="7"/><circle cx="60" cy="154" r="7"/><circle cx="77" cy="151" r="7"/><circle cx="51" cy="138" r="7"/><circle cx="69" cy="139" r="7"/><circle cx="85" cy="137" r="6"/><circle cx="36" cy="137" r="6"/></g>
+        <circle cx="47" cy="103" r="4.5" fill="#274024"/><circle cx="73" cy="103" r="4.5" fill="#274024"/>
+        <path d="M52 112q8 9 16 0" fill="none" stroke="#274024" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="38" cy="112" r="5.5" fill="#a4ead0" opacity=".65"/><circle cx="82" cy="112" r="5.5" fill="#a4ead0" opacity=".65"/>
+      </svg>
+    </button>
+      <h1><span>Church in Burlingame</span><br><span>Young People</span></h1>
+      <span class="cup-space" aria-hidden="true"></span>
+    </div>
   </div>
-  <button class="cup" id="cup" type="button" aria-label="Shake the boba cup">
-    <span class="say" id="cupSay" hidden></span>
-    <svg viewBox="0 0 120 170" aria-hidden="true">
-      <rect x="66" y="0" width="11" height="74" rx="5.5" fill="#a4ead0" stroke="#274024" stroke-width="3" transform="rotate(12 71 37)"/>
-      <path d="M18 48h84l-10 108a10 10 0 0 1-10 9H38a10 10 0 0 1-10-9z" fill="#fffdf8" stroke="#274024" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M25 80h70l-7 76a7 7 0 0 1-7 6H39a7 7 0 0 1-7-6z" fill="#b7dc90"/>
-      <rect x="10" y="38" width="100" height="15" rx="7.5" fill="#acd79a" stroke="#274024" stroke-width="4"/>
-      <g fill="#2d3b1c"><circle cx="43" cy="151" r="7"/><circle cx="60" cy="154" r="7"/><circle cx="77" cy="151" r="7"/><circle cx="51" cy="138" r="7"/><circle cx="69" cy="139" r="7"/><circle cx="85" cy="137" r="6"/><circle cx="36" cy="137" r="6"/></g>
-      <circle cx="47" cy="103" r="4.5" fill="#274024"/><circle cx="73" cy="103" r="4.5" fill="#274024"/>
-      <path d="M52 112q8 9 16 0" fill="none" stroke="#274024" stroke-width="3.5" stroke-linecap="round"/>
-      <circle cx="38" cy="112" r="5.5" fill="#a4ead0" opacity=".65"/><circle cx="82" cy="112" r="5.5" fill="#a4ead0" opacity=".65"/>
-    </svg>
-  </button>
 </header>
 
 
